@@ -24,12 +24,13 @@ class UserProvider with ChangeNotifier {
     var result;
     await UserAPI().fetchDetail().then((data) {
       result = data;
-      printLog(result.toString());
+      print(result);
+      // printLog(result.toString());
 
-      UserModel userModel = UserModel.fromJson(result['user']);
-      if (result['poin'] != null) {
-        point = PointModel.fromJson(result['poin']);
-      }
+      UserModel userModel = UserModel.fromJson(result);
+      // if (result['poin'] != null) {
+      //   point = PointModel.fromJson(result['poin']);
+      // }
       Session().saveUser(userModel);
 
       this.setUser(userModel);

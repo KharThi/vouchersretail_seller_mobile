@@ -171,10 +171,11 @@ class Session {
     data.setString("avatarLink", user.avatarLink ?? '');
     data.setString("email", user.email!);
     data.setString("phoneNumber", user.phoneNumber!);
-    data.setString("createAt", user.createAt!);
-    data.setString("updateAt", user.updateAt!);
-    data.setString("deleteAt", user.deleteAt!);
+    data.setString("createAt", user.createAt ?? '');
+    data.setString("updateAt", user.updateAt ?? '');
+    data.setString("deleteAt", user.deleteAt ?? '');
     data.setString("status", user.status!);
+
     // data.setString("email", user.email!);
     // data.setString("cookie", cookie);
     data.setString("role", user.role!);

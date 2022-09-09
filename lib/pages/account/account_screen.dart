@@ -117,7 +117,7 @@ class _AccountScreenState extends State<AccountScreen> {
                               fontWeight: FontWeight.w500),
                         )
                       : Text(
-                          "${AppLocalizations.of(context)!.translate('hello')}, ${Session.data.getString('firstname')!.length > 10 ? Session.data.getString('firstname')!.substring(0, 10) + '... ' : Session.data.getString('firstname')} !",
+                          "${AppLocalizations.of(context)!.translate('hello')}, ${Session.data.getString('username')} !",
                           style: TextStyle(
                               color: secondaryColor,
                               fontSize: responsiveFont(14),
@@ -405,8 +405,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Widget buildPointCard() {
     final point = Provider.of<UserProvider>(context, listen: false);
-    String fullName =
-        "${Session.data.getString('firstname')} ${Session.data.getString('lastname')}";
+    String fullName = "${Session.data.getString('username')}";
 
     if (point.point == null) {
       return Container();

@@ -5,9 +5,11 @@ import 'package:nyoba/constant/global_url.dart';
 import 'package:nyoba/services/session.dart';
 import 'package:nyoba/utils/utility.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginAPI {
   loginByDefault(String? username, String? password) async {
+    SharedPreferences data2 = await SharedPreferences.getInstance();
     Map data = {'email': username, 'password': password};
     // var response = await baseAPI.postAsync(
     //   '$loginDefault',
@@ -23,7 +25,7 @@ class LoginAPI {
         body: body);
     print("object");
     // return response;
-
+    data2.setString("jwt", response2.body);
     // var dataResponse = await json.decode(response2.body);
     print("Bearer " + response2.body);
     // print("Response 1" + dataResponse.toString());
