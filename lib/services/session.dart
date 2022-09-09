@@ -164,35 +164,33 @@ class Session {
     return bigPictureStyleInformation;
   }
 
-  Future saveUser(UserModel user, String cookie) async {
+  Future saveUser(UserModel user) async {
     data.setBool('isLogin', true);
     data.setInt("id", user.id!);
-    data.setString("username", user.username!);
-    data.setString("avatar", user.avatar ?? '');
-    data.setString("firstname", user.firstname!);
-    data.setString("lastname", user.lastname!);
-    data.setString("displayname", user.displayName!);
-    data.setString("nickname", user.nickname!);
-    data.setString("nicename", user.niceName!);
-    data.setString("description", user.description!);
+    data.setString("username", user.userName ?? '');
+    data.setString("avatarLink", user.avatarLink ?? '');
     data.setString("email", user.email!);
-    data.setString("cookie", cookie);
-    data.setString("role", user.role!.isNotEmpty ? user.role!.first : "");
+    data.setString("phoneNumber", user.phoneNumber!);
+    data.setString("createAt", user.createAt!);
+    data.setString("updateAt", user.updateAt!);
+    data.setString("deleteAt", user.deleteAt!);
+    data.setString("status", user.status!);
+    // data.setString("email", user.email!);
+    // data.setString("cookie", cookie);
+    data.setString("role", user.role!);
   }
 
   void removeUser() async {
     data.setBool('isLogin', false);
     data.remove("id");
     data.remove("username");
-    data.remove("avatar");
-    data.remove("firstname");
-    data.remove("lastname");
-    data.remove("displayname");
-    data.remove("nickname");
-    data.remove("nicename");
-    data.remove("description");
+    data.remove("avatarLink");
     data.remove("email");
-    data.remove("cookie");
+    data.remove("phoneNumber");
+    data.remove("createAt");
+    data.remove("updateAt");
+    data.remove("deleteAt");
+    data.remove("status");
     data.remove("role");
   }
 

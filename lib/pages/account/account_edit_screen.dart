@@ -31,9 +31,9 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
   void initState() {
     super.initState();
     controllerEmail.text = widget.userModel!.email!;
-    controllerUsername.text = widget.userModel!.username!;
-    controllerFirstname.text = widget.userModel!.firstname!;
-    controllerLastname.text = widget.userModel!.lastname!;
+    controllerUsername.text = widget.userModel!.userName!;
+    // controllerFirstname.text = widget.userModel!.firstname!;
+    // controllerLastname.text = widget.userModel!.lastname!;
   }
 
   @override

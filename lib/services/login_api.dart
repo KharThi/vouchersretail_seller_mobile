@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 class LoginAPI {
   loginByDefault(String? username, String? password) async {
-    Map data = {'email': username, 'passwrod': password};
+    Map data = {'email': username, 'password': password};
     // var response = await baseAPI.postAsync(
     //   '$loginDefault',
     //   data,
@@ -34,6 +34,7 @@ class LoginAPI {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + response2.body
         });
+    print("Bearer " + response2.body);
     var dataResponse2 = await json.decode(response.body);
     print("Response 2" + dataResponse2.toString());
     return dataResponse2;

@@ -40,9 +40,11 @@ class LoginProvider with ChangeNotifier {
         result = data;
         print("Data" + data.toString());
 
-        if (result['cookie'] != null) {
-          UserModel user = UserModel.fromJson(result['user']);
-          Session().saveUser(user, result['cookie']);
+        if (result['email'] != null) {
+          print("object");
+          UserModel user = UserModel.fromJson(result);
+          print("User :" + user.toString().toString());
+          Session().saveUser(user);
           Session.data.setString("login_type", 'default');
           final home = Provider.of<HomeProvider>(context, listen: false);
 

@@ -70,18 +70,18 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
   buildDetail(UserModel user) {
     return Column(
       children: [
-        buildTable(
-            AppLocalizations.of(context)!.translate('first_name')!,
-            user.firstname!.isEmpty
-                ? AppLocalizations.of(context)!.translate('not_set')
-                : user.firstname),
-        buildTable(
-            AppLocalizations.of(context)!.translate('last_name')!,
-            user.lastname!.isEmpty
-                ? AppLocalizations.of(context)!.translate('not_set')
-                : user.lastname),
+        // buildTable(
+        //     AppLocalizations.of(context)!.translate('first_name')!,
+        //     user.firstname!.isEmpty
+        //         ? AppLocalizations.of(context)!.translate('not_set')
+        //         : user.firstname),
+        // buildTable(
+        //     AppLocalizations.of(context)!.translate('last_name')!,
+        //     user.lastname!.isEmpty
+        //         ? AppLocalizations.of(context)!.translate('not_set')
+        //         : user.lastname),
         buildTable(AppLocalizations.of(context)!.translate('username')!,
-            user.username),
+            user.userName),
         buildTable("Email", user.email),
         Container(
           width: double.infinity,

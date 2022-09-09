@@ -30,7 +30,7 @@ class UserProvider with ChangeNotifier {
       if (result['poin'] != null) {
         point = PointModel.fromJson(result['poin']);
       }
-      Session().saveUser(userModel, Session.data.getString('cookie')!);
+      Session().saveUser(userModel);
 
       this.setUser(userModel);
 
