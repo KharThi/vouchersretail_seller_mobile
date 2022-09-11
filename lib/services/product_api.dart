@@ -3,6 +3,10 @@ import 'package:nyoba/constant/global_url.dart';
 import 'package:nyoba/models/product_model.dart';
 import 'package:nyoba/services/session.dart';
 import 'package:nyoba/utils/utility.dart';
+//PQ voucher
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 class ProductAPI {
   fetchProduct(
@@ -134,5 +138,23 @@ class ProductAPI {
   productVariations({String? productId = ''}) async {
     var response = await baseAPI.getAsync('$product/$productId/variations');
     return response;
+  }
+
+  //PQ voucher
+
+  fetchProducts() async {
+    SharedPreferences data = await SharedPreferences.getInstance();
+    String? jwt = data.getString("jwt");
+
+    var response = await http.get(
+        Uri.parse(
+            "https://webapp-220831200534.azurewebsites.net/api/v1/products"),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + jwt!
+        });
+    var dataResponse = await json.decode(response.body);
+    print(dataResponse);
+    return dataResponse;
   }
 }

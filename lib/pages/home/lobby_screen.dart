@@ -23,6 +23,7 @@ import 'package:nyoba/provider/home_provider.dart';
 import 'package:nyoba/provider/product_provider.dart';
 import 'package:nyoba/provider/wallet_provider.dart';
 import 'package:nyoba/services/session.dart';
+import 'package:nyoba/widgets/home/grid_item_pq.dart';
 import 'package:nyoba/widgets/home/wallet_card.dart';
 import 'package:nyoba/widgets/home/flashsale/flash_sale_countdown.dart';
 import 'package:provider/provider.dart';
@@ -81,6 +82,7 @@ class _LobbyScreenState extends State<LobbyScreen>
             page++;
           });
           loadRecommendationProduct(products.productRecommendation.products);
+          loadProduct();
         }
       }
     });
@@ -164,6 +166,19 @@ class _LobbyScreenState extends State<LobbyScreen>
   loadRecommendationProduct(include) async {
     await Provider.of<HomeProvider>(context, listen: false)
         .fetchMoreRecommendation(include, page: page)
+        .then((value) {
+      this.setState(() {});
+      Future.delayed(Duration(milliseconds: 3500), () {
+        print('Delayed Done');
+        this.setState(() {});
+      });
+    });
+  }
+
+//voucher PQ
+  loadProduct() async {
+    await Provider.of<HomeProvider>(context, listen: false)
+        .fetchProducts()
         .then((value) {
       this.setState(() {});
       Future.delayed(Duration(milliseconds: 3500), () {
@@ -337,6 +352,55 @@ class _LobbyScreenState extends State<LobbyScreen>
         ],
       ),
     );
+
+    // start copy above
+    Widget buildProduct = Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: EdgeInsets.only(left: 15, top: 15),
+            child: Text(
+              AppLocalizations.of(context)!.translate('title_hap_3')!,
+              style: TextStyle(
+                  fontSize: responsiveFont(14), fontWeight: FontWeight.w600),
+            ),
+          ),
+          Container(
+              margin: EdgeInsets.only(left: 15, bottom: 10, right: 15),
+              child: Text(
+                AppLocalizations.of(context)!.translate('description_hap_3')!,
+                style: TextStyle(
+                  fontSize: responsiveFont(12),
+                  color: Colors.black,
+                ),
+                textAlign: TextAlign.justify,
+              )),
+          //recommendation item
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            child: GridView.builder(
+              primary: false,
+              shrinkWrap: true,
+              itemCount: home.products.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  crossAxisCount: 2,
+                  childAspectRatio: 78 / 125),
+              itemBuilder: (context, i) {
+                return GridItemPQ(
+                  i: i,
+                  itemCount: home.products.length,
+                  product: home.products[i],
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+    //end copy
 
     String fullName =
         "${Session.data.getString('firstname')} ${Session.data.getString('lastname')}";
@@ -1071,6 +1135,15 @@ class _LobbyScreenState extends State<LobbyScreen>
                       color: HexColor("EEEEEE"),
                     ),
                     buildRecommendation,
+                    Container(
+                      height: 15,
+                    ),
+                    Container(
+                      width: double.infinity,
+                      height: 7,
+                      color: HexColor("EEEEEE"),
+                    ),
+                    buildProduct,
                     if (home.loadingMore) customLoading()
                   ],
                 ),

@@ -1,5 +1,7 @@
 import 'package:nyoba/services/session.dart';
 import 'package:nyoba/utils/utility.dart';
+//PQ voucher
+import 'dart:convert';
 
 class ProductModel {
   int? id, productStock, ratingCount, cartQuantity, variantId;
@@ -370,4 +372,73 @@ class ProductVideo {
         name = json['name'],
         host = json['host'],
         content = json['content'];
+}
+
+//PQ vouvher
+
+// To parse this JSON data, do
+//
+//     final product = productFromJson(jsonString);
+
+Product productFromJson(String str) => Product.fromJson(json.decode(str));
+
+String productToJson(Product data) => json.encode(data.toJson());
+
+class Product {
+  Product({
+    this.id,
+    this.description,
+    this.summary,
+    this.bannerImg,
+    this.content,
+    this.price,
+    this.isForKid,
+    this.type,
+    this.createAt,
+    this.updateAt,
+    this.deleteAt,
+    this.status,
+  });
+
+  int? id;
+  String? description;
+  String? summary;
+  String? bannerImg;
+  String? content;
+  int? price;
+  bool? isForKid;
+  String? type;
+  String? createAt;
+  String? updateAt;
+  String? deleteAt;
+  String? status;
+  factory Product.fromJson(Map<String, dynamic> json) => Product(
+        id: json["id"],
+        description: json["description"],
+        summary: json["summary"],
+        bannerImg: json["bannerImg"],
+        content: json["content"],
+        price: json["price"],
+        isForKid: json["isForKid"],
+        type: json["type"],
+        createAt: json["createAt"],
+        updateAt: json["updateAt"],
+        deleteAt: json["deleteAt"],
+        status: json["status"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "description": description,
+        "summary": summary,
+        "bannerImg": bannerImg,
+        "content": content,
+        "price": price,
+        "isForKid": isForKid,
+        "type": type,
+        "createAt": createAt,
+        "updateAt": updateAt,
+        "deleteAt": deleteAt,
+        "status": status,
+      };
 }

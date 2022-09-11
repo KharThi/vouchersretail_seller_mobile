@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:nyoba/constant/global_url.dart';
 import 'package:nyoba/models/banner_mini_model.dart';
 import 'package:nyoba/models/banner_model.dart';
 import 'package:nyoba/models/categories_model.dart';
@@ -64,6 +65,11 @@ class HomeProvider with ChangeNotifier {
   List<ProductExtendHomeModel> specialProducts = [];
   List<ProductExtendHomeModel> bestProducts = [];
   List<ProductExtendHomeModel> recommendationProducts = [];
+
+  //PQ voucher
+
+  List<Product> products = [];
+
   List<ProductModel> tempProducts = [];
 
   /*Intro Page Status*/
@@ -127,7 +133,6 @@ class HomeProvider with ChangeNotifier {
           for (Map item in responseJson['products_flash_sale']) {
             flashSales.add(FlashSaleHomeModel.fromJson(item));
           }
-          /*End*/
 
           /*Add Data Mini Banner Home*/
           bannerSpecial.clear();
@@ -160,7 +165,8 @@ class HomeProvider with ChangeNotifier {
           for (Map item in responseJson['products_recomendation']) {
             recommendationProducts.add(ProductExtendHomeModel.fromJson(item));
           }
-          /*End*/
+
+          fetchProducts();
 
           /*Add Data General Settings*/
           for (Map item in responseJson['general_settings']['empty_image']) {
@@ -331,5 +337,24 @@ class HomeProvider with ChangeNotifier {
   setPackageInfo(value) {
     packageInfo = value;
     notifyListeners();
+  }
+
+  //PQ Voucher
+  Future<Map<String, dynamic>?> fetchProducts() async {
+    loading = true;
+    var result;
+    await ProductAPI().fetchProducts().then((data) {
+      result = data;
+      print(result);
+      Product product = Product.fromJson(result);
+
+      loading = false;
+      notifyListeners();
+    });
+
+    loading = false;
+    notifyListeners();
+    print(result);
+    return result;
   }
 }
