@@ -82,7 +82,7 @@ class GridItemPQ extends StatelessWidget {
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [Text("data")],
+                              children: [Text(product!.summary!)],
                             ),
                           ),
                           buildButtonCart(context, product)

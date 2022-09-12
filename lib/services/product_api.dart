@@ -151,10 +151,20 @@ class ProductAPI {
             "https://webapp-220831200534.azurewebsites.net/api/v1/products"),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + jwt!
+          // "Authorization": "Bearer " + jwt!
         });
     var dataResponse = await json.decode(response.body);
-    print(dataResponse);
-    return dataResponse;
+    // List returnData = new List.empty(growable: true);
+    // returnData = dataResponse["data"];
+
+    Iterable list = dataResponse['data'];
+
+    final Data = list.cast<Map<String, dynamic>>();
+    final listData = await Data.map<Product>((json) {
+      return Product.fromJson(json);
+    }).toList();
+
+    // print(dataResponse);
+    return listData;
   }
 }

@@ -380,9 +380,15 @@ class ProductVideo {
 //
 //     final product = productFromJson(jsonString);
 
-Product productFromJson(String str) => Product.fromJson(json.decode(str));
+// To parse this JSON data, do
+//
+//     final product = productFromJson(jsonString);
 
-String productToJson(Product data) => json.encode(data.toJson());
+List<Product> productFromJson(String str) =>
+    List<Product>.from(json.decode(str).map((x) => Product.fromJson(x)));
+
+String productToJson(List<Product> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Product {
   Product({
@@ -412,6 +418,7 @@ class Product {
   String? updateAt;
   String? deleteAt;
   String? status;
+
   factory Product.fromJson(Map<String, dynamic> json) => Product(
         id: json["id"],
         description: json["description"],

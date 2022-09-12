@@ -166,7 +166,7 @@ class HomeProvider with ChangeNotifier {
             recommendationProducts.add(ProductExtendHomeModel.fromJson(item));
           }
 
-          fetchProducts();
+          // fetchProducts();
 
           /*Add Data General Settings*/
           for (Map item in responseJson['general_settings']['empty_image']) {
@@ -356,5 +356,25 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
     print(result);
     return result;
+  }
+
+  Future<List<Product>?> fetchProductsV2() async {
+    loading = true;
+    var result;
+    List<Product> list = List.empty(growable: true);
+    await ProductAPI().fetchProducts().then((data) {
+      result = data;
+      // print(result);
+      // Map<String, dynamic> data2 = jsonDecode(result);
+
+      list = data.cast<Product>();
+      // loading = false;
+      // notifyListeners();
+    });
+
+    loading = false;
+    notifyListeners();
+    // print(result);
+    return list;
   }
 }

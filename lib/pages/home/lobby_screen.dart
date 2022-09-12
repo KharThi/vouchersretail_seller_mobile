@@ -65,10 +65,12 @@ class _LobbyScreenState extends State<LobbyScreen>
   int page = 1;
   String? selectedCategory;
   ScrollController _scrollController = new ScrollController();
+  List<Product> listProduct = List.empty(growable: true);
 
   @override
   void initState() {
     super.initState();
+    loadProduct();
     printLog('Init', name: 'Init Home');
     final products = Provider.of<ProductProvider>(context, listen: false);
     final home = Provider.of<HomeProvider>(context, listen: false);
@@ -178,9 +180,14 @@ class _LobbyScreenState extends State<LobbyScreen>
 //voucher PQ
   loadProduct() async {
     await Provider.of<HomeProvider>(context, listen: false)
-        .fetchProducts()
+        .fetchProductsV2()
         .then((value) {
-      this.setState(() {});
+      this.setState(() {
+        listProduct = value!;
+        // for (var element in listProduct) {
+        //   print(element.description);
+        // }
+      });
       Future.delayed(Duration(milliseconds: 3500), () {
         print('Delayed Done');
         this.setState(() {});
@@ -382,7 +389,7 @@ class _LobbyScreenState extends State<LobbyScreen>
             child: GridView.builder(
               primary: false,
               shrinkWrap: true,
-              itemCount: home.products.length,
+              itemCount: listProduct.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisSpacing: 10,
                   mainAxisSpacing: 10,
@@ -391,8 +398,8 @@ class _LobbyScreenState extends State<LobbyScreen>
               itemBuilder: (context, i) {
                 return GridItemPQ(
                   i: i,
-                  itemCount: home.products.length,
-                  product: home.products[i],
+                  itemCount: listProduct.length,
+                  product: listProduct[i],
                 );
               },
             ),
