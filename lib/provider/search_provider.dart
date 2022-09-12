@@ -16,6 +16,9 @@ class SearchProvider with ChangeNotifier {
   List<ProductModel> listSearchProducts = [];
   List<ProductModel> listTempProducts = [];
 
+  List<Product> listSearchProducts2 = [];
+  List<Product> listTempProducts2 = [];
+
   String? productWishlist;
 
   Future<bool> searchProducts(String search, int page) async {
@@ -46,6 +49,39 @@ class SearchProvider with ChangeNotifier {
         loadingSearch = false;
         notifyListeners();
       }
+    });
+    return true;
+  }
+
+  Future<bool> searchProducts2(String search, int page) async {
+    loadingSearch = true;
+    await ProductAPI().searchProduct(search: search, page: page).then((data) {
+      // if (data.statusCode == 200) {
+      // final responseJson = json.decode(data.body);
+
+      // printLog(responseJson.toString(), name: 'Wishlist');
+      listTempProducts.clear();
+      if (page == 1) listSearchProducts2.clear();
+      if (search.isNotEmpty) {
+        for (Map<String, dynamic> item in data) {
+          listSearchProducts2.add(Product.fromJson(item));
+        }
+      }
+      loadingSearch = false;
+      notifyListeners();
+      // loadVariationData(load: loadingSearch, listProduct: listTempProducts2)
+      //     .then((value) {
+      //   listTempProducts.forEach((element) {
+      //     listSearchProducts.add(element);
+      //   });
+      //   loadingSearch = false;
+      //   notifyListeners();
+      // });
+      // } else {
+      //   print("Load Failed");
+      //   loadingSearch = false;
+      //   notifyListeners();
+      // }
     });
     return true;
   }

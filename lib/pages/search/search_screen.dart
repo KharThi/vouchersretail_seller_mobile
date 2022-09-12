@@ -7,6 +7,7 @@ import 'package:nyoba/widgets/product/list_item_product.dart';
 import 'package:provider/provider.dart';
 
 import '../../app_localizations.dart';
+import '../../widgets/product/list_item_product2.dart';
 
 class SearchScreen extends StatefulWidget {
   SearchScreen({Key? key}) : super(key: key);
@@ -23,14 +24,14 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Future search() async {
     await Provider.of<SearchProvider>(context, listen: false)
-        .searchProducts(searchController.text, page)
+        .searchProducts2(searchController.text, page)
         .then((value) => this.setState(() {}));
   }
 
   @override
   void initState() {
     final productSearch =
-        Provider.of<SearchProvider>(context, listen: false).listSearchProducts;
+        Provider.of<SearchProvider>(context, listen: false).listSearchProducts2;
     super.initState();
     productSearch.clear();
     _scrollController.addListener(() {
@@ -60,14 +61,12 @@ class _SearchScreenState extends State<SearchScreen> {
               child: customLoading(),
             );
           }
-          if (value.listSearchProducts.isEmpty) {
+          if (value.listSearchProducts2.isEmpty) {
             return buildSearchEmpty(
               context,
               searchController.text.isEmpty
-                  ? AppLocalizations.of(context)!
-                  .translate('search_here')
-                  : AppLocalizations.of(context)!
-                  .translate('cant_find_prod'),
+                  ? AppLocalizations.of(context)!.translate('search_here')
+                  : AppLocalizations.of(context)!.translate('cant_find_prod'),
             );
           }
           return Container(
@@ -75,11 +74,11 @@ class _SearchScreenState extends State<SearchScreen> {
                 shrinkWrap: true,
                 controller: _scrollController,
                 physics: ScrollPhysics(),
-                itemCount: value.listSearchProducts.length,
+                itemCount: value.listSearchProducts2.length,
                 itemBuilder: (context, i) {
-                  return ListItemProduct(
-                    itemCount: value.listSearchProducts.length,
-                    product: value.listSearchProducts[i],
+                  return ListItemProduct2(
+                    itemCount: value.listSearchProducts2.length,
+                    product: value.listSearchProducts2[i],
                     i: i,
                   );
                 }),
@@ -164,8 +163,8 @@ class _SearchScreenState extends State<SearchScreen> {
                             ),
                           ),
                           prefixIcon: Icon(Icons.search),
-                          hintText: AppLocalizations.of(context)!
-                              .translate('search'),
+                          hintText:
+                              AppLocalizations.of(context)!.translate('search'),
                           hintStyle: TextStyle(fontSize: responsiveFont(10)),
                         ),
                       ),
