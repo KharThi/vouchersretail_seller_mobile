@@ -4,9 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:nyoba/pages/product/product_detail_screen.dart';
 import 'package:nyoba/models/product_model.dart';
+import 'package:nyoba/pages/product/product_detail_screen_combo.dart';
 import 'package:nyoba/utils/currency_format.dart';
 import 'package:nyoba/utils/utility.dart';
 import 'package:hexcolor/hexcolor.dart';
+
+import '../../pages/product/product_detail_screen_voucher.dart';
 
 class ListItemProduct2 extends StatelessWidget {
   final Product? product;
@@ -18,12 +21,21 @@ class ListItemProduct2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ProductDetail(
-                      productId: product!.id.toString(),
-                    )));
+        if (product!.type == "Voucher") {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProductDetailVoucher(
+                        productId: product!.id.toString(),
+                      )));
+        } else {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ProductDetailCombo(
+                        productId: product!.id.toString(),
+                      )));
+        }
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 2),
@@ -96,16 +108,16 @@ class ListItemProduct2 extends StatelessWidget {
                               text: TextSpan(
                                 style: TextStyle(color: Colors.black),
                                 children: <TextSpan>[
-                                  TextSpan(
-                                      text: stringToCurrency(
-                                          double.parse(
-                                              product!.price.toString()),
-                                          context),
-                                      style: TextStyle(
-                                          decoration:
-                                              TextDecoration.lineThrough,
-                                          fontSize: responsiveFont(9),
-                                          color: HexColor("C4C4C4"))),
+                                  // TextSpan(
+                                  //     text: stringToCurrency(
+                                  //         double.parse(
+                                  //             product!.price.toString()),
+                                  //         context),
+                                  //     style: TextStyle(
+                                  //         decoration:
+                                  //             TextDecoration.lineThrough,
+                                  //         fontSize: responsiveFont(9),
+                                  //         color: HexColor("C4C4C4"))),
                                 ],
                               ),
                             ),
@@ -144,7 +156,10 @@ class ListItemProduct2 extends StatelessWidget {
                                           : TextSpan(
                                               text: product!.price.toString() ==
                                                       product!.price.toString()
-                                                  ? '${stringToCurrency(100, context)}'
+                                                  ?
+                                                  // '${stringToCurrency(100, context)}' +
+                                                  product!.price.toString() +
+                                                      " Vnd"
                                                   : '${stringToCurrency(100, context)} - ${stringToCurrency(50, context)}',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600,

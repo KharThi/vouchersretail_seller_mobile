@@ -29,7 +29,7 @@ class GridItemPQ extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => ProductDetail(
-                            productId: product!.id.toString(),
+                            productId: product!.summary.toString(),
                           )));
             },
             child: Column(
@@ -39,27 +39,27 @@ class GridItemPQ extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // AspectRatio(
-                      //   aspectRatio: 1 / 1,
-                      //   child: Container(
-                      //     decoration: BoxDecoration(
-                      //       borderRadius: BorderRadius.circular(5),
-                      //     ),
-                      //     child: CachedNetworkImage(
-                      //       imageUrl: product!.bannerImg!,
-                      //       placeholder: (context, url) => customLoading(),
-                      //       errorWidget: (context, url, error) => Icon(
-                      //         Icons.image_not_supported_rounded,
-                      //         size: 25,
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
+                      AspectRatio(
+                        aspectRatio: 1 / 1,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: CachedNetworkImage(
+                            imageUrl: product!.bannerImg.toString(),
+                            placeholder: (context, url) => customLoading(),
+                            errorWidget: (context, url, error) => Icon(
+                              Icons.image_not_supported_rounded,
+                              size: 25,
+                            ),
+                          ),
+                        ),
+                      ),
                       Container(
                         margin:
                             EdgeInsets.symmetric(vertical: 3, horizontal: 5),
                         child: Text(
-                          product!.id!.toString(),
+                          product!.summary!.toString(),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(fontSize: responsiveFont(10)),
@@ -82,7 +82,9 @@ class GridItemPQ extends StatelessWidget {
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [Text(product!.summary!)],
+                              children: [
+                                Text(product!.price.toString() + " Vnd")
+                              ],
                             ),
                           ),
                           buildButtonCart(context, product)

@@ -58,6 +58,43 @@ class ProductAPI {
     return response;
   }
 
+  fetchDetailProductVoucher(String? productId) async {
+    // var response = await baseAPI.getAsync('$product/$productId');
+    // return response;
+    SharedPreferences data = await SharedPreferences.getInstance();
+    String? jwt = data.getString("jwt");
+
+    var response = await http.get(
+        Uri.parse(
+            "https://webapp-220831200534.azurewebsites.net/api/v1/vouchers?ProductId=" +
+                productId.toString()),
+        headers: {
+          "Content-Type": "application/json",
+          // "Authorization": "Bearer " + jwt!
+        });
+    Map<String, dynamic> dataResponse = await json.decode(response.body);
+    return dataResponse["data"];
+  }
+
+  fetchDetailProductCombo(String? productId) async {
+    // var response = await baseAPI.getAsync('$product/$productId');
+    // return response;
+    SharedPreferences data = await SharedPreferences.getInstance();
+    String? jwt = data.getString("jwt");
+
+    var response = await http.get(
+        Uri.parse(
+            "https://webapp-220831200534.azurewebsites.net/api/v1/combos?ProductId=" +
+                productId.toString()),
+        headers: {
+          "Content-Type": "application/json",
+          // "Authorization": "Bearer " + jwt!
+        });
+    Map<String, dynamic> dataResponse = await json.decode(response.body);
+    print("object" + productId.toString());
+    return dataResponse["data"];
+  }
+
   fetchDetailProductSlug(String? slug) async {
     var response = await baseAPI.getAsync('$product/?slug=$slug');
     return response;
@@ -79,6 +116,7 @@ class ProductAPI {
           "Content-Type": "application/json",
           // "Authorization": "Bearer " + jwt!
         });
+    print(response.body);
     Map<String, dynamic> dataResponse = await json.decode(response.body);
     return dataResponse["data"];
   }
