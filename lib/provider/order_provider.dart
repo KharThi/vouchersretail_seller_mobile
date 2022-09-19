@@ -239,6 +239,104 @@ class OrderProvider with ChangeNotifier {
     }
   }
 
+  Future buyNowVoucher(context, Voucher? product, int? quantity,
+      Future<dynamic> Function() onFinishBuyNow) async {
+    if (Session.data.getBool('isLogin')!) {
+      CartModel cart = new CartModel();
+      cart.listItem = [];
+      cart.listItem!.add(new CartProductItem(
+          productId: product!.id, quantity: quantity, variationId: 1));
+
+      //init list coupon
+      cart.listCoupon = [];
+
+      //add to cart model
+      cart.paymentMethod = "xendit_bniva";
+      cart.paymentMethodTitle = "Bank Transfer - BNI";
+      cart.setPaid = true;
+      cart.customerId = Session.data.getInt('id');
+      cart.status = 'completed';
+      cart.token = Session.data.getString('cookie');
+
+      //Encode Json
+      final jsonOrder = json.encode(cart);
+      printLog(jsonOrder, name: 'Json Order');
+
+      //Convert Json to bytes
+      var bytes = utf8.encode(jsonOrder);
+
+      //Convert bytes to base64
+      var order = base64.encode(bytes);
+
+      //Generate link WebView checkout
+      await Provider.of<OrderProvider>(context, listen: false)
+          .checkout(order)
+          .then((value) async {
+        printLog(value, name: 'Link Order');
+        await Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CheckoutWebView(
+                      url: value,
+                      onFinish: onFinishBuyNow,
+                    )));
+      });
+    } else {
+      Navigator.pop(context);
+      snackBar(context,
+          message: AppLocalizations.of(context)!.translate('you_login_first')!);
+    }
+  }
+
+  Future buyNowCombo(context, Combo? product, int? quantity,
+      Future<dynamic> Function() onFinishBuyNow) async {
+    if (Session.data.getBool('isLogin')!) {
+      CartModel cart = new CartModel();
+      cart.listItem = [];
+      cart.listItem!.add(new CartProductItem(
+          productId: product!.id, quantity: quantity, variationId: 1));
+
+      //init list coupon
+      cart.listCoupon = [];
+
+      //add to cart model
+      cart.paymentMethod = "xendit_bniva";
+      cart.paymentMethodTitle = "Bank Transfer - BNI";
+      cart.setPaid = true;
+      cart.customerId = Session.data.getInt('id');
+      cart.status = 'completed';
+      cart.token = Session.data.getString('cookie');
+
+      //Encode Json
+      final jsonOrder = json.encode(cart);
+      printLog(jsonOrder, name: 'Json Order');
+
+      //Convert Json to bytes
+      var bytes = utf8.encode(jsonOrder);
+
+      //Convert bytes to base64
+      var order = base64.encode(bytes);
+
+      //Generate link WebView checkout
+      await Provider.of<OrderProvider>(context, listen: false)
+          .checkout(order)
+          .then((value) async {
+        printLog(value, name: 'Link Order');
+        await Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CheckoutWebView(
+                      url: value,
+                      onFinish: onFinishBuyNow,
+                    )));
+      });
+    } else {
+      Navigator.pop(context);
+      snackBar(context,
+          message: AppLocalizations.of(context)!.translate('you_login_first')!);
+    }
+  }
+
   Future loadItemOrder(context) async {
     loadDataOrder = true;
     if (detailOrder != null) {

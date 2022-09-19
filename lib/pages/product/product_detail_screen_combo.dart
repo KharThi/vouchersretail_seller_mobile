@@ -10,6 +10,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:nyoba/models/variation_model.dart';
 import 'package:nyoba/pages/category/brand_product_screen.dart';
 import 'package:nyoba/pages/order/cart_screen.dart';
+import 'package:nyoba/pages/product/modal_sheet_cart/modal_sheet_cart_combo.dart';
 import 'package:nyoba/pages/product/product_detail_screen_voucher.dart';
 import 'package:nyoba/pages/product/product_more_screen.dart';
 import 'package:nyoba/pages/product/modal_sheet_cart/modal_sheet_cart.dart';
@@ -676,14 +677,13 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                                     // productModel!.inventory! >= 1
                                     ) {
                                   showMaterialModalBottomSheet(
-                                      context: context,
-                                      builder: (context) => Container()
-                                      // ModalSheetCart(
-                                      //   product: productModel,
-                                      //   type: 'add',
-                                      //   loadCount: loadCartCount,
-                                      // ),
-                                      );
+                                    context: context,
+                                    builder: (context) => ModalSheetCartCombo(
+                                      product: productModel,
+                                      type: 'add',
+                                      loadCount: loadCartCount,
+                                    ),
+                                  );
                                 } else {
                                   snackBar(context,
                                       message: AppLocalizations.of(context)!
@@ -726,20 +726,19 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                           height: 30.h,
                           child: TextButton(
                             onPressed: () {
-                              // if (productModel!.stockStatus != 'outofstock' &&
-                              //     productModel!.productStock! >= 1) {
-                              //   showMaterialModalBottomSheet(
-                              //     context: context,
-                              //     builder: (context) => ModalSheetCart(
-                              //       product: productModel,
-                              //       type: 'buy',
-                              //     ),
-                              //   );
-                              // } else {
-                              //   snackBar(context,
-                              //       message: AppLocalizations.of(context)!
-                              //           .translate('product_out_stock')!);
-                              // }
+                              if (productModel!.vouchers != null) {
+                                showMaterialModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => ModalSheetCartCombo(
+                                    product: productModel,
+                                    type: 'buy',
+                                  ),
+                                );
+                              } else {
+                                snackBar(context,
+                                    message: AppLocalizations.of(context)!
+                                        .translate('product_out_stock')!);
+                              }
                             },
                             child: Text(
                               "Đặt ngay",
@@ -1272,12 +1271,12 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
             model.product!.description.toString(),
             textStyle: TextStyle(color: HexColor("929292")),
           ),
-          productModel!.vouchers != null
+          productModel!.vouchers!.length != 0
               ? SizedBox(
                   height: 5,
                 )
               : Container(),
-          productModel!.vouchers != null
+          productModel!.vouchers!.length != 0
               ? Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -1288,12 +1287,12 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                   ),
                 )
               : Container(),
-          productModel!.vouchers != null
+          productModel!.vouchers!.length != 0
               ? SizedBox(
                   height: 5,
                 )
               : Container(),
-          productModel!.vouchers != null
+          productModel!.vouchers!.length != 0
               ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[

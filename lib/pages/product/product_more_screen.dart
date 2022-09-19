@@ -253,8 +253,10 @@ class _ProductMoreScreenState extends State<ProductMoreScreen> {
                         2,
                         AppLocalizations.of(context)!
                             .translate('highest_price')!),
-                    tabStyle(3,
-                        AppLocalizations.of(context)!.translate('lowest_price')!),
+                    tabStyle(
+                        3,
+                        AppLocalizations.of(context)!
+                            .translate('lowest_price')!),
                   ],
                 ),
               ),
@@ -463,14 +465,14 @@ class _ProductMoreScreenState extends State<ProductMoreScreen> {
                             borderRadius: new BorderRadius.circular(5))),
                     onPressed: () {
                       if (!isOutOfStock && productDetail.productStock! >= 1) {
-                        showMaterialModalBottomSheet(
-                          context: context,
-                          builder: (context) => ModalSheetCart(
-                            product: productDetail,
-                            type: 'add',
-                            loadCount: loadCartCount,
-                          ),
-                        );
+                        // showMaterialModalBottomSheet(
+                        //   context: context,
+                        //   builder: (context) => ModalSheetCart(
+                        //     product: productDetail,
+                        //     type: 'add',
+                        //     loadCount: loadCartCount,
+                        //   ),
+                        // );
                       } else {
                         snackBar(context,
                             message: AppLocalizations.of(context)!
@@ -492,7 +494,7 @@ class _ProductMoreScreenState extends State<ProductMoreScreen> {
                           style: TextStyle(
                               fontSize: responsiveFont(9),
                               color:
-                              isOutOfStock ? Colors.grey : secondaryColor),
+                                  isOutOfStock ? Colors.grey : secondaryColor),
                         )
                       ],
                     )),
@@ -504,9 +506,10 @@ class _ProductMoreScreenState extends State<ProductMoreScreen> {
     );
   }
 
-  buildStock(ProductModel productDetail, stock){
-    if (productDetail.stockStatus == 'outofstock'){
-      return Text("${AppLocalizations.of(context)!.translate('out_stock')}",
+  buildStock(ProductModel productDetail, stock) {
+    if (productDetail.stockStatus == 'outofstock') {
+      return Text(
+        "${AppLocalizations.of(context)!.translate('out_stock')}",
         style: TextStyle(fontSize: responsiveFont(8)),
       );
     }

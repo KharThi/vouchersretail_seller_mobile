@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:nyoba/constant/global_url.dart';
 import 'package:nyoba/models/product_model.dart';
 import 'package:nyoba/pages/order/order_success_screen.dart';
 import 'package:nyoba/provider/order_provider.dart';
@@ -16,21 +18,23 @@ import 'package:slugify/slugify.dart';
 
 import '../../../app_localizations.dart';
 
-class ModalSheetCart extends StatefulWidget {
-  final ProductModel? product;
+class ModalSheetCartCombo extends StatefulWidget {
+  final Combo? product;
   final String? type;
+  // final int? quantity;
   final Future<dynamic> Function()? loadCount;
-  ModalSheetCart({Key? key, this.product, this.type, this.loadCount})
+  ModalSheetCartCombo({Key? key, this.product, this.type, this.loadCount})
       : super(key: key);
 
   @override
-  _ModalSheetCartState createState() => _ModalSheetCartState();
+  _ModalSheetCartComboState createState() => _ModalSheetCartComboState();
 }
 
-class _ModalSheetCartState extends State<ModalSheetCart> {
+class _ModalSheetCartComboState extends State<ModalSheetCartCombo> {
   int index = 0;
   int indexColor = 0;
   int counter = 1;
+  int? quantity = 1;
 
   List<ProductAttributeModel> attributes = [];
   List<ProductVariation> variation = [];
@@ -180,44 +184,44 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
   @override
   void initState() {
     super.initState();
-    widget.product!.cartQuantity = 1;
-    initVariation();
+    // widget.quantity = 1;
+    // initVariation();
   }
 
   /*init variation & check if variation true*/
-  initVariation() {
-    if (widget.product!.attributes!.isNotEmpty &&
-        widget.product!.type == 'variable') {
-      widget.product!.attributes!.forEach((element) {
-        if (element.variation == true) {
-          print("Variation True");
-          setState(() {
-            attributes.add(element);
-            element.selectedVariant = element.options!.first;
-            if (element.id != 0 && element.id != null) {
-              var _value =
-                  element.options!.first.toString().replaceAll('.', '-');
-              variation.add(new ProductVariation(
-                  id: element.id,
-                  value: slugify(_value).replaceAll('--', '-'),
-                  columnName: 'pa_${slugify(element.name!)}'));
-            } else {
-              variation.add(new ProductVariation(
-                  id: element.id,
-                  value: element.options!.first,
-                  columnName: element.name));
-            }
-          });
-        }
-      });
-      checkProductVariant(widget.product!);
-    }
-    if (widget.product!.type == 'simple' && widget.product!.productStock != 0) {
-      setState(() {
-        isAvailable = true;
-      });
-    }
-  }
+  // initVariation() {
+  //   if (widget.product!.attributes!.isNotEmpty &&
+  //       widget.product!.type == 'variable') {
+  //     widget.product!.attributes!.forEach((element) {
+  //       if (element.variation == true) {
+  //         print("Variation True");
+  //         setState(() {
+  //           attributes.add(element);
+  //           element.selectedVariant = element.options!.first;
+  //           if (element.id != 0 && element.id != null) {
+  //             var _value =
+  //                 element.options!.first.toString().replaceAll('.', '-');
+  //             variation.add(new ProductVariation(
+  //                 id: element.id,
+  //                 value: slugify(_value).replaceAll('--', '-'),
+  //                 columnName: 'pa_${slugify(element.name!)}'));
+  //           } else {
+  //             variation.add(new ProductVariation(
+  //                 id: element.id,
+  //                 value: element.options!.first,
+  //                 columnName: element.name));
+  //           }
+  //         });
+  //       }
+  //     });
+  //     checkProductVariant(widget.product!);
+  //   }
+  //   if (widget.product!.type == 'simple' && widget.product!.productStock != 0) {
+  //     setState(() {
+  //       isAvailable = true;
+  //     });
+  //   }
+  // }
 
   Future onFinishBuyNow() async {
     await Navigator.pushReplacement(
@@ -227,7 +231,7 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
   buyNow() async {
     print("Buy Now");
     await Provider.of<OrderProvider>(context, listen: false)
-        .buyNow(context, widget.product, onFinishBuyNow);
+        .buyNowCombo(context, widget.product, quantity, onFinishBuyNow);
   }
 
   @override
@@ -263,7 +267,7 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
                         ),
                         baseColor: Colors.grey[300]!,
                         highlightColor: Colors.grey[100]!)
-                    : !isAvailable
+                    : false
                         ? Container(
                             alignment: Alignment.center,
                             child: Text(
@@ -280,8 +284,9 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
                                   Container(
                                     alignment: Alignment.center,
                                     child: Text(
-                                      AppLocalizations.of(context)!
-                                          .translate('qty')!,
+                                      // AppLocalizations.of(context)!
+                                      //     .translate('qty')!
+                                      "Số lượng",
                                       style: TextStyle(
                                           fontSize: responsiveFont(12)),
                                     ),
@@ -297,18 +302,13 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
                                         child: InkWell(
                                           onTap: () {
                                             setState(() {
-                                              if (widget
-                                                      .product!.cartQuantity! >
-                                                  1) {
-                                                widget.product!.cartQuantity =
-                                                    widget.product!
-                                                            .cartQuantity! -
-                                                        1;
+                                              if (quantity! > 1) {
+                                                quantity = quantity! - 1;
+                                                print(quantity);
                                               }
                                             });
                                           },
-                                          child: widget.product!.cartQuantity! >
-                                                  1
+                                          child: quantity! > 1
                                               ? Image.asset(
                                                   "images/cart/minusDark.png")
                                               : Image.asset(
@@ -318,8 +318,7 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
                                       SizedBox(
                                         width: 10,
                                       ),
-                                      Text((widget.product!.cartQuantity)
-                                          .toString()),
+                                      Text((quantity).toString()),
                                       SizedBox(
                                         width: 10,
                                       ),
@@ -328,25 +327,23 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
                                         height: 16.h,
                                         child: InkWell(
                                             onTap:
-                                                widget.product!.productStock! <=
-                                                            widget.product!
-                                                                .cartQuantity! ||
-                                                        isOutStock
-                                                    ? null
-                                                    : () {
-                                                        setState(() {
-                                                          widget.product!
-                                                              .cartQuantity = widget
-                                                                  .product!
-                                                                  .cartQuantity! +
-                                                              1;
-                                                        });
-                                                      },
-                                            child: widget.product!
-                                                            .productStock! >
-                                                        widget.product!
-                                                            .cartQuantity! &&
-                                                    !isOutStock
+                                                // isOutStock
+                                                //     ? null
+                                                //     :
+                                                () {
+                                              setState(() {
+                                                // widget.product!
+                                                //     .cartQuantity = widget
+                                                //         .product!
+                                                //         .cartQuantity! +
+                                                //     1;
+                                                // if (quantity! > 1) {
+                                                quantity = quantity! + 1;
+                                                print(quantity);
+                                                // }
+                                              });
+                                            },
+                                            child: !isOutStock
                                                 ? Image.asset(
                                                     "images/cart/plus.png")
                                                 : Image.asset(
@@ -356,31 +353,33 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
                                   ),
                                 ],
                               ),
-                              widget.product!.type == 'simple'
+                              true
                                   ? Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.end,
                                       children: [
                                         Text(
-                                          stringToCurrency(
-                                              double.parse(widget
-                                                      .product!.productPrice)
-                                                  .toDouble(),
-                                              context),
+                                          // stringToCurrency(
+                                          //     double.parse(widget.product!.price
+                                          //             .toString())
+                                          //         .toDouble(),
+                                          //     context),
+                                          (widget.product!.price! * quantity!)
+                                                  .toString() +
+                                              " Vnd",
                                           style: TextStyle(
                                               color: secondaryColor,
                                               fontWeight: FontWeight.w500),
                                         ),
-                                        Text(
-                                          widget.product!.productStock == 999
-                                              ? '${AppLocalizations.of(context)!.translate('stock')} : ${AppLocalizations.of(context)!.translate('available')}'
-                                              : '${AppLocalizations.of(context)!.translate('stock')} : ${widget.product!.productStock}',
-                                        )
+                                        // Text(
+                                        //   quantity == 999
+                                        //       ? '${AppLocalizations.of(context)!.translate('stock')} : ${AppLocalizations.of(context)!.translate('available')}'
+                                        //       : '${AppLocalizations.of(context)!.translate('stock')} : ${quantity}',
+                                        // )
                                       ],
                                     )
                                   : Visibility(
-                                      visible:
-                                          widget.product!.type == 'variable',
+                                      visible: true,
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.end,
@@ -402,8 +401,7 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
                             ],
                           )),
             Visibility(
-              visible: widget.product!.productStock == null ||
-                  widget.product!.productStock == 0,
+              visible: quantity == null || quantity == 0,
               child: Container(
                 alignment: Alignment.center,
                 margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -450,9 +448,8 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
                     onPressed: !isAvailable || load || isOutStock
                         ? null
                         : () {
-                            if (widget.product!.productStock != null &&
-                                widget.product!.productStock != 0) {
-                              addCart(widget.product!);
+                            if (quantity != null && quantity != 0) {
+                              // addCart(widget.product!);
                             } else {
                               Navigator.pop(context);
                               snackBar(context,
@@ -470,8 +467,9 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
                               : secondaryColor,
                         ),
                         Text(
-                          AppLocalizations.of(context)!
-                              .translate('add_to_cart')!,
+                          // AppLocalizations.of(context)!
+                          //     .translate('add_to_cart')!
+                          "Thêm vào giỏ hàng",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: responsiveFont(9),
@@ -515,13 +513,14 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
                 width: double.infinity,
                 height: 30.h,
                 child: TextButton(
-                  onPressed: !isAvailable || load
-                      ? null
-                      : () {
-                          buyNow();
-                        },
+                  onPressed: null,
+                  // !isAvailable || load
+                  //     ? null
+                  //     : () {
+                  //         buyNow();
+                  //       },
                   child: Text(
-                    AppLocalizations.of(context)!.translate('buy_now')!,
+                    "Mua ngay",
                     style: TextStyle(
                         color: Colors.white, fontSize: responsiveFont(10)),
                   ),
@@ -592,7 +591,7 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
                               }
                             }
                           });
-                          checkProductVariant(widget.product!);
+                          // checkProductVariant(widget.product!);
                         },
                         child: attributes[index].id == 0
                             ? sizeButton(

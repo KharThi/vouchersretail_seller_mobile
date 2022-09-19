@@ -586,7 +586,7 @@ class _LobbyScreenState extends State<LobbyScreen>
                       ],
                     ),
                     // wallet
-                    WalletCard(showBtnMore: true),
+                    // WalletCard(showBtnMore: true),
                     Container(
                       height: 15,
                     ),

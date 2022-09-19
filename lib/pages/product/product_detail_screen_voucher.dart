@@ -10,6 +10,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:nyoba/models/variation_model.dart';
 import 'package:nyoba/pages/category/brand_product_screen.dart';
 import 'package:nyoba/pages/order/cart_screen.dart';
+import 'package:nyoba/pages/product/modal_sheet_cart/modal_sheet_cart_voucher.dart';
 import 'package:nyoba/pages/product/product_more_screen.dart';
 import 'package:nyoba/pages/product/modal_sheet_cart/modal_sheet_cart.dart';
 import 'package:nyoba/pages/wishlist/wishlist_screen.dart';
@@ -672,14 +673,13 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
                                 if (productModel!.inventory != 0 &&
                                     productModel!.inventory! >= 1) {
                                   showMaterialModalBottomSheet(
-                                      context: context,
-                                      builder: (context) => Container()
-                                      // ModalSheetCart(
-                                      //   product: productModel,
-                                      //   type: 'add',
-                                      //   loadCount: loadCartCount,
-                                      // ),
-                                      );
+                                    context: context,
+                                    builder: (context) => ModalSheetCartVoucher(
+                                      product: productModel,
+                                      type: 'add',
+                                      loadCount: loadCartCount,
+                                    ),
+                                  );
                                 } else {
                                   snackBar(context,
                                       message: AppLocalizations.of(context)!
@@ -729,7 +729,7 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
                               //     productModel!.productStock! >= 1) {
                               //   showMaterialModalBottomSheet(
                               //     context: context,
-                              //     builder: (context) => ModalSheetCart(
+                              //     builder: (context) => ModalSheetCartVoucher(
                               //       product: productModel,
                               //       type: 'buy',
                               //     ),
