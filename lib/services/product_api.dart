@@ -121,6 +121,27 @@ class ProductAPI {
     return dataResponse["data"];
   }
 
+  searchCustomer({String search = '', String category = '', int? page}) async {
+    // var response = await baseAPI.getAsync(
+    //     '$product?search=$search&category=$category&page=$page&status=publish');
+    // return response;
+
+    SharedPreferences data = await SharedPreferences.getInstance();
+    String? jwt = data.getString("jwt");
+
+    var response = await http.get(
+        Uri.parse(
+            "https://webapp-220831200534.azurewebsites.net/api/v1/customers?UserName=" +
+                search),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + jwt.toString()
+        });
+    print(response.body);
+    Map<String, dynamic> dataResponse = await json.decode(response.body);
+    return dataResponse["data"];
+  }
+
   checkVariationProduct(int? productId, List<ProductVariation>? list) async {
     Map data = {"product_id": productId, "variation": list};
     printLog(data.toString());

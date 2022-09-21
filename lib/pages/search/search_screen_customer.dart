@@ -3,20 +3,21 @@ import 'package:nyoba/pages/search/qr_scanner_screen.dart';
 import 'package:nyoba/provider/home_provider.dart';
 import 'package:nyoba/provider/search_provider.dart';
 import 'package:nyoba/utils/utility.dart';
+import 'package:nyoba/widgets/customer/list_item_customer.dart';
 import 'package:nyoba/widgets/product/list_item_product.dart';
 import 'package:provider/provider.dart';
 
 import '../../app_localizations.dart';
 import '../../widgets/product/list_item_product2.dart';
 
-class SearchScreen extends StatefulWidget {
-  SearchScreen({Key? key}) : super(key: key);
+class SearchScreenCustomer extends StatefulWidget {
+  SearchScreenCustomer({Key? key}) : super(key: key);
 
   @override
-  _SearchScreenState createState() => _SearchScreenState();
+  _SearchScreenCustomerState createState() => _SearchScreenCustomerState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
+class _SearchScreenCustomerState extends State<SearchScreenCustomer> {
   TextEditingController searchController = new TextEditingController();
   ScrollController _scrollController = new ScrollController();
 
@@ -24,20 +25,20 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Future search() async {
     await Provider.of<SearchProvider>(context, listen: false)
-        .searchProducts2(searchController.text, page)
+        .searchCustomer(searchController.text, page)
         .then((value) => this.setState(() {}));
   }
 
   @override
   void initState() {
-    final productSearch =
-        Provider.of<SearchProvider>(context, listen: false).listSearchProducts2;
+    final customerSearch =
+        Provider.of<SearchProvider>(context, listen: false).listSearchCustomer;
     super.initState();
-    productSearch.clear();
+    customerSearch.clear();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        if (productSearch.length % 10 == 0) {
+        if (customerSearch.length % 10 == 0) {
           setState(() {
             page++;
           });
@@ -52,7 +53,7 @@ class _SearchScreenState extends State<SearchScreen> {
     final searchProvider = Provider.of<SearchProvider>(context, listen: false);
     final settingProvider = Provider.of<HomeProvider>(context, listen: false);
 
-    Widget buildProduct = Container(
+    Widget buildCustomer = Container(
       child: ListenableProvider.value(
         value: searchProvider,
         child: Consumer<SearchProvider>(builder: (context, value, child) {
@@ -61,7 +62,7 @@ class _SearchScreenState extends State<SearchScreen> {
               child: customLoading(),
             );
           }
-          if (value.listSearchProducts2.isEmpty) {
+          if (value.listSearchCustomer.isEmpty) {
             return buildSearchEmpty(
               context,
               searchController.text.isEmpty
@@ -74,11 +75,11 @@ class _SearchScreenState extends State<SearchScreen> {
                 shrinkWrap: true,
                 controller: _scrollController,
                 physics: ScrollPhysics(),
-                itemCount: value.listSearchProducts2.length,
+                itemCount: value.listSearchCustomer.length,
                 itemBuilder: (context, i) {
-                  return ListItemProduct2(
-                    itemCount: value.listSearchProducts2.length,
-                    product: value.listSearchProducts2[i],
+                  return ListItemCustomer(
+                    itemCount: value.listSearchCustomer.length,
+                    customer: value.listSearchCustomer[i],
                     i: i,
                   );
                 }),
@@ -176,7 +177,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           setState(() {
                             searchController.clear();
                             page = 1;
-                            searchProvider.listSearchProducts.clear();
+                            searchProvider.listSearchCustomer.clear();
                           });
                           search();
                         },
@@ -190,7 +191,7 @@ class _SearchScreenState extends State<SearchScreen> {
       body: Column(
         children: [
           Expanded(
-            child: buildProduct,
+            child: buildCustomer,
           ),
           if (searchProvider.loadingSearch && page != 1) customLoading()
         ],

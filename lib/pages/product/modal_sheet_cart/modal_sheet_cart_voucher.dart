@@ -20,6 +20,7 @@ import 'package:slugify/slugify.dart';
 
 import '../../../app_localizations.dart';
 import '../../search/search_screen.dart';
+import '../../search/search_screen_customer.dart';
 
 class ModalSheetCartVoucher extends StatefulWidget {
   final Voucher? product;
@@ -522,7 +523,8 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => SearchScreen()));
+                                  builder: (context) =>
+                                      SearchScreenCustomer()));
                         },
                         icon: Icon(Icons.add),
                         label: Text("Bấm vào đây để thêm khách"),

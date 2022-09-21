@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:nyoba/models/customer.dart';
 import 'package:nyoba/models/product_model.dart';
 import 'package:nyoba/models/variation_model.dart';
 import 'package:nyoba/pages/product/product_detail_screen.dart';
@@ -18,6 +19,9 @@ class SearchProvider with ChangeNotifier {
 
   List<Product> listSearchProducts2 = [];
   List<Product> listTempProducts2 = [];
+
+  List<Customer> listSearchCustomer = [];
+  List<Customer> listTempCustomer = [];
 
   String? productWishlist;
 
@@ -65,6 +69,39 @@ class SearchProvider with ChangeNotifier {
       if (search.isNotEmpty) {
         for (Map<String, dynamic> item in data) {
           listSearchProducts2.add(Product.fromJson(item));
+        }
+      }
+      loadingSearch = false;
+      notifyListeners();
+      // loadVariationData(load: loadingSearch, listProduct: listTempProducts2)
+      //     .then((value) {
+      //   listTempProducts.forEach((element) {
+      //     listSearchProducts.add(element);
+      //   });
+      //   loadingSearch = false;
+      //   notifyListeners();
+      // });
+      // } else {
+      //   print("Load Failed");
+      //   loadingSearch = false;
+      //   notifyListeners();
+      // }
+    });
+    return true;
+  }
+
+  Future<bool> searchCustomer(String search, int page) async {
+    loadingSearch = true;
+    await ProductAPI().searchCustomer(search: search, page: page).then((data) {
+      // if (data.statusCode == 200) {
+      // final responseJson = json.decode(data.body);
+
+      // printLog(responseJson.toString(), name: 'Wishlist');
+      // listTempCustomer.clear();
+      if (page == 1) listSearchCustomer.clear();
+      if (search.isNotEmpty) {
+        for (Map<String, dynamic> item in data) {
+          listSearchCustomer.add(Customer.fromJson(item));
         }
       }
       loadingSearch = false;
