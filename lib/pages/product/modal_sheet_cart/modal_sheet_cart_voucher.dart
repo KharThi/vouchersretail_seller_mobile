@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:nyoba/constant/global_url.dart';
+import 'package:nyoba/models/customer.dart';
 import 'package:nyoba/models/product_model.dart';
 import 'package:nyoba/pages/order/order_success_screen.dart';
 import 'package:nyoba/provider/order_provider.dart';
@@ -17,6 +19,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:slugify/slugify.dart';
 
 import '../../../app_localizations.dart';
+import '../../search/search_screen.dart';
 
 class ModalSheetCartVoucher extends StatefulWidget {
   final Voucher? product;
@@ -38,6 +41,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
 
   List<ProductAttributeModel> attributes = [];
   List<ProductVariation> variation = [];
+  List<Customer> customers = [];
 
   bool load = false;
   bool isAvailable = false;
@@ -49,6 +53,22 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
   int? variationStock = 0;
   Map<String, dynamic>? variationResult;
   String? variationName;
+
+  String _selectedDate = 'Bấm vào để chọn ngày';
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? d = await showDatePicker(
+      locale: const Locale("vi", "VN"),
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2050),
+    );
+    if (d != null)
+      setState(() {
+        _selectedDate = new DateFormat.yMMMMd("vi_VN").format(d);
+      });
+  }
 
   /*add to cart*/
   void addCart(ProductModel product) async {
@@ -184,6 +204,38 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
   @override
   void initState() {
     super.initState();
+    customers.add(Customer(
+        id: 1,
+        customerName: "string",
+        userInfo: UserInfo(
+            id: 1,
+            email: "user@example.com",
+            avatarLink: "string",
+            userName: "Khả Thi",
+            role: "Admin",
+            phoneNumber: "1234567890",
+            createAt: null,
+            updateAt: null,
+            deleteAt: null,
+            status: "Disable"),
+        userInfoId: 1,
+        cartId: 0));
+    customers.add(Customer(
+        id: 1,
+        customerName: "string",
+        userInfo: UserInfo(
+            id: 1,
+            email: "user@example.com",
+            avatarLink: "string",
+            userName: "Khả Thi 2",
+            role: "Admin",
+            phoneNumber: "1234567890",
+            createAt: null,
+            updateAt: null,
+            deleteAt: null,
+            status: "Disable"),
+        userInfoId: 1,
+        cartId: 0));
     // widget.quantity = 1;
     // initVariation();
   }
@@ -236,300 +288,417 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Visibility(
-                visible: attributes.isNotEmpty,
-                child: ListView.builder(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    physics: ScrollPhysics(),
-                    itemCount: attributes.length,
-                    itemBuilder: (context, i) {
-                      return buildVariations(i);
-                    })),
-            Container(
-              height: 1,
-              width: double.infinity,
-              color: HexColor("c4c4c4"),
-              margin: EdgeInsets.only(bottom: 15),
-            ),
-            Container(
-                margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
-                child: load
-                    ? Shimmer.fromColors(
-                        child: Container(
-                          height: 25.h,
-                          color: Colors.white,
-                        ),
-                        baseColor: Colors.grey[300]!,
-                        highlightColor: Colors.grey[100]!)
-                    : false
-                        ? Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              AppLocalizations.of(context)!
-                                  .translate('select_var_not_avail')!,
-                              textAlign: TextAlign.center,
-                            ),
-                          )
-                        : Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Container(
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      // AppLocalizations.of(context)!
-                                      //     .translate('qty')!
-                                      "Số lượng",
-                                      style: TextStyle(
-                                          fontSize: responsiveFont(12)),
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Wrap(
+        direction: Axis.horizontal,
+        spacing: 8,
+        runSpacing: 12,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Visibility(
+                  visible: attributes.isNotEmpty,
+                  child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      physics: ScrollPhysics(),
+                      itemCount: attributes.length,
+                      itemBuilder: (context, i) {
+                        return buildVariations(i);
+                      })),
+              Container(
+                height: 1,
+                width: double.infinity,
+                color: HexColor("c4c4c4"),
+                margin: EdgeInsets.only(bottom: 15),
+              ),
+              Container(
+                  margin: EdgeInsets.only(left: 15, right: 15, bottom: 15),
+                  child: load
+                      ? Shimmer.fromColors(
+                          child: Container(
+                            height: 25.h,
+                            color: Colors.white,
+                          ),
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!)
+                      : false
+                          ? Container(
+                              alignment: Alignment.center,
+                              child: Text(
+                                AppLocalizations.of(context)!
+                                    .translate('select_var_not_avail')!,
+                                textAlign: TextAlign.center,
+                              ),
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        // AppLocalizations.of(context)!
+                                        //     .translate('qty')!
+                                        "Số lượng",
+                                        style: TextStyle(
+                                            fontSize: responsiveFont(12)),
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 25,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Container(
-                                        width: 16.w,
-                                        height: 16.h,
-                                        child: InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              if (quantity! > 1) {
-                                                quantity = quantity! - 1;
-                                                print(quantity);
-                                              }
-                                            });
-                                          },
-                                          child: quantity! > 1
-                                              ? Image.asset(
-                                                  "images/cart/minusDark.png")
-                                              : Image.asset(
-                                                  "images/cart/minus.png"),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text((quantity).toString()),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Container(
-                                        width: 16.w,
-                                        height: 16.h,
-                                        child: InkWell(
-                                            onTap:
-                                                // isOutStock
-                                                //     ? null
-                                                //     :
-                                                () {
+                                    SizedBox(
+                                      width: 25,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 16.w,
+                                          height: 16.h,
+                                          child: InkWell(
+                                            onTap: () {
                                               setState(() {
-                                                // widget.product!
-                                                //     .cartQuantity = widget
-                                                //         .product!
-                                                //         .cartQuantity! +
-                                                //     1;
-                                                // if (quantity! > 1) {
-                                                quantity = quantity! + 1;
-                                                print(quantity);
-                                                // }
+                                                if (quantity! > 1) {
+                                                  quantity = quantity! - 1;
+                                                  print(quantity);
+                                                }
                                               });
                                             },
-                                            child: !isOutStock
+                                            child: quantity! > 1
                                                 ? Image.asset(
-                                                    "images/cart/plus.png")
+                                                    "images/cart/minusDark.png")
                                                 : Image.asset(
-                                                    "images/cart/plusDark.png")),
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              true
-                                  ? Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Text(
-                                          // stringToCurrency(
-                                          //     double.parse(widget.product!.price
-                                          //             .toString())
-                                          //         .toDouble(),
-                                          //     context),
-                                          (widget.product!.price! * quantity!)
-                                                  .toString() +
-                                              " Vnd",
-                                          style: TextStyle(
-                                              color: secondaryColor,
-                                              fontWeight: FontWeight.w500),
+                                                    "images/cart/minus.png"),
+                                          ),
                                         ),
-                                        // Text(
-                                        //   quantity == 999
-                                        //       ? '${AppLocalizations.of(context)!.translate('stock')} : ${AppLocalizations.of(context)!.translate('available')}'
-                                        //       : '${AppLocalizations.of(context)!.translate('stock')} : ${quantity}',
-                                        // )
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text((quantity).toString()),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Container(
+                                          width: 16.w,
+                                          height: 16.h,
+                                          child: InkWell(
+                                              onTap:
+                                                  // isOutStock
+                                                  //     ? null
+                                                  //     :
+                                                  () {
+                                                setState(() {
+                                                  // widget.product!
+                                                  //     .cartQuantity = widget
+                                                  //         .product!
+                                                  //         .cartQuantity! +
+                                                  //     1;
+                                                  // if (quantity! > 1) {
+                                                  quantity = quantity! + 1;
+                                                  print(quantity);
+                                                  // }
+                                                });
+                                              },
+                                              child: !isOutStock
+                                                  ? Image.asset(
+                                                      "images/cart/plus.png")
+                                                  : Image.asset(
+                                                      "images/cart/plusDark.png")),
+                                        ),
                                       ],
-                                    )
-                                  : Visibility(
-                                      visible: true,
-                                      child: Column(
+                                    ),
+                                  ],
+                                ),
+                                true
+                                    ? Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.end,
                                         children: [
                                           Text(
-                                            stringToCurrency(
-                                                variationPrice, context),
+                                            // stringToCurrency(
+                                            //     double.parse(widget.product!.price
+                                            //             .toString())
+                                            //         .toDouble(),
+                                            //     context),
+                                            (widget.product!.price! * quantity!)
+                                                    .toString() +
+                                                " Vnd",
                                             style: TextStyle(
                                                 color: secondaryColor,
                                                 fontWeight: FontWeight.w500),
                                           ),
-                                          Text(
-                                            variationStock == 999
-                                                ? '${AppLocalizations.of(context)!.translate('stock')} : ${AppLocalizations.of(context)!.translate('in_stock')}'
-                                                : '${AppLocalizations.of(context)!.translate('stock')} : $variationStock',
-                                          )
+                                          // Text(
+                                          //   quantity == 999
+                                          //       ? '${AppLocalizations.of(context)!.translate('stock')} : ${AppLocalizations.of(context)!.translate('available')}'
+                                          //       : '${AppLocalizations.of(context)!.translate('stock')} : ${quantity}',
+                                          // )
                                         ],
-                                      ))
-                            ],
-                          )),
-            Visibility(
-              visible: quantity == null || quantity == 0,
-              child: Container(
-                alignment: Alignment.center,
-                margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                child: Text(
-                  "Current product stock is not available",
-                  style: TextStyle(color: Colors.red),
+                                      )
+                                    : Visibility(
+                                        visible: true,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Text(
+                                              stringToCurrency(
+                                                  variationPrice, context),
+                                              style: TextStyle(
+                                                  color: secondaryColor,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                            Text(
+                                              variationStock == 999
+                                                  ? '${AppLocalizations.of(context)!.translate('stock')} : ${AppLocalizations.of(context)!.translate('in_stock')}'
+                                                  : '${AppLocalizations.of(context)!.translate('stock')} : $variationStock',
+                                            )
+                                          ],
+                                        ))
+                              ],
+                            )),
+              Visibility(
+                visible: quantity == null || quantity == 0,
+                child: Container(
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                  child: Text(
+                    "Current product stock is not available",
+                    style: TextStyle(color: Colors.red),
+                  ),
                 ),
               ),
-            )
-          ],
-        ),
-        Visibility(
-          visible: widget.type == 'add',
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    color: Colors.black54,
-                    blurRadius: 15.0,
-                  )
-                ],
+              Container(
+                height: 1,
+                width: double.infinity,
+                color: HexColor("c4c4c4"),
+                margin: EdgeInsets.only(bottom: 15),
               ),
-              height: 45.h,
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: 8),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Container(
+                  alignment: Alignment.center,
+                  child: Text(
+                    // AppLocalizations.of(context)!
+                    //     .translate('qty')!
+                    "   Danh Sách khách hàng",
+                    style: TextStyle(fontSize: responsiveFont(12)),
+                  ),
+                ),
+              ]),
+              Container(
+                  // height: 25.h,
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    children: [
+                      Column(
+                        children: customers.map((personone) {
+                          return Container(
+                            child: Card(
+                              child: ListTile(
+                                title: Text(
+                                    personone.userInfo!.userName.toString()),
+                                subtitle: Text(""),
+                                trailing: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      primary: Colors.redAccent),
+                                  child: Icon(Icons.delete),
+                                  onPressed: () {
+                                    //delete action for this button
+                                    customers.removeWhere((element) {
+                                      return element.id == personone.id;
+                                    }); //go through the loop and match content to delete from list
+                                    setState(() {
+                                      //refresh UI after deleting element from list
+                                    });
+                                  },
+                                ),
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SearchScreen()));
+                        },
+                        icon: Icon(Icons.add),
+                        label: Text("Bấm vào đây để thêm khách"),
+                      ),
+                    ],
+                  )),
+              Container(
+                height: 1,
+                width: double.infinity,
+                color: HexColor("c4c4c4"),
+                margin: EdgeInsets.only(bottom: 15),
+              ),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Container(
+                  alignment: Alignment.center,
+                  child: Text(
+                    // AppLocalizations.of(context)!
+                    //     .translate('qty')!
+                    "   Vui lòng chọn ngày",
+                    style: TextStyle(fontSize: responsiveFont(12)),
+                  ),
+                ),
+              ]),
+              Container(
+                  // height: 25.h,
+                  padding: EdgeInsets.all(10),
+                  child: Column(children: [
+                    Container(
+                      child: Card(
+                        child: ListTile(
+                          title: InkWell(
+                            child: Text(_selectedDate),
+                            onTap: () {
+                              _selectDate(context);
+                            },
+                          ),
+                          subtitle: Text(""),
+                          trailing: IconButton(
+                            icon: Icon(Icons.calendar_today),
+                            tooltip: 'Tap to open date picker',
+                            onPressed: () {
+                              // showDatePicker(
+                              //   context: context,
+                              //   initialDate: DateTime.now(),
+                              //   firstDate: DateTime(2015, 8),
+                              //   lastDate: DateTime(2101),
+                              // );
+                              _selectDate(context);
+                            },
+                          ),
+                        ),
+                      ),
+                    )
+                  ]
+                      // }).toList(),
+                      ))
+            ],
+          ),
+          Visibility(
+            visible: widget.type == 'add',
+            child: Align(
+              alignment: Alignment.bottomCenter,
               child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 15),
-                width: 132.w,
-                height: 30.h,
-                child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                        side: BorderSide(
-                          color: !isAvailable || load || isOutStock
-                              ? Colors.grey
-                              : secondaryColor, //Color of the border
-                          //Style of the border
-                        ),
-                        alignment: Alignment.center,
-                        shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(5))),
-                    onPressed: !isAvailable || load || isOutStock
-                        ? null
-                        : () {
-                            if (quantity != null && quantity != 0) {
-                              // addCart(widget.product!);
-                            } else {
-                              Navigator.pop(context);
-                              snackBar(context,
-                                  message: 'Product out ouf stock.');
-                            }
-                          },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.add,
-                          size: responsiveFont(9),
-                          color: !isAvailable || load || isOutStock
-                              ? Colors.grey
-                              : secondaryColor,
-                        ),
-                        Text(
-                          // AppLocalizations.of(context)!
-                          //     .translate('add_to_cart')!
-                          "Thêm vào giỏ hàng",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: responsiveFont(9),
-                              color: !isAvailable || load || isOutStock
-                                  ? Colors.grey
-                                  : secondaryColor),
-                        )
-                      ],
-                    )),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: Colors.black54,
+                      blurRadius: 15.0,
+                    )
+                  ],
+                ),
+                height: 45.h,
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 15),
+                  width: 132.w,
+                  height: 30.h,
+                  child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                          side: BorderSide(
+                            color: !isAvailable || load || isOutStock
+                                ? Colors.grey
+                                : secondaryColor, //Color of the border
+                            //Style of the border
+                          ),
+                          alignment: Alignment.center,
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(5))),
+                      onPressed: !isAvailable || load || isOutStock
+                          ? null
+                          : () {
+                              if (quantity != null && quantity != 0) {
+                                // addCart(widget.product!);
+                              } else {
+                                Navigator.pop(context);
+                                snackBar(context,
+                                    message: 'Product out ouf stock.');
+                              }
+                            },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.add,
+                            size: responsiveFont(9),
+                            color: !isAvailable || load || isOutStock
+                                ? Colors.grey
+                                : secondaryColor,
+                          ),
+                          Text(
+                            // AppLocalizations.of(context)!
+                            //     .translate('add_to_cart')!
+                            "Thêm vào giỏ hàng",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: responsiveFont(9),
+                                color: !isAvailable || load || isOutStock
+                                    ? Colors.grey
+                                    : secondaryColor),
+                          )
+                        ],
+                      )),
+                ),
               ),
             ),
           ),
-        ),
-        Visibility(
-          visible: widget.type == 'buy',
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: <BoxShadow>[
-                  BoxShadow(
-                    color: Colors.black54,
-                    blurRadius: 15.0,
-                  )
-                ],
-              ),
-              height: 45.h,
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: 8),
+          Visibility(
+            visible: widget.type == 'buy',
+            child: Align(
+              alignment: Alignment.bottomCenter,
               child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 15),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: !isAvailable || load
-                            ? [Colors.black12, Colors.grey]
-                            : [primaryColor, secondaryColor])),
+                  color: Colors.white,
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: Colors.black54,
+                      blurRadius: 15.0,
+                    )
+                  ],
+                ),
+                height: 45.h,
                 width: double.infinity,
-                height: 30.h,
-                child: TextButton(
-                  onPressed: null,
-                  // !isAvailable || load
-                  //     ? null
-                  //     : () {
-                  //         buyNow();
-                  //       },
-                  child: Text(
-                    "Mua ngay",
-                    style: TextStyle(
-                        color: Colors.white, fontSize: responsiveFont(10)),
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 15),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: !isAvailable || load
+                              ? [Colors.black12, Colors.grey]
+                              : [primaryColor, secondaryColor])),
+                  width: double.infinity,
+                  height: 30.h,
+                  child: TextButton(
+                    onPressed: null,
+                    // !isAvailable || load
+                    //     ? null
+                    //     : () {
+                    //         buyNow();
+                    //       },
+                    child: Text(
+                      "Mua ngay",
+                      style: TextStyle(
+                          color: Colors.white, fontSize: responsiveFont(10)),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 
