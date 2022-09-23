@@ -9,7 +9,7 @@ class ProductPhotoView extends StatefulWidget {
   _ProductPhotoViewState createState() => _ProductPhotoViewState();
 }
 
-class _ProductPhotoViewState extends State<ProductPhotoView>{
+class _ProductPhotoViewState extends State<ProductPhotoView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,9 +17,8 @@ class _ProductPhotoViewState extends State<ProductPhotoView>{
         children: [
           Container(
               child: PhotoView(
-                imageProvider: NetworkImage(widget.image),
-              )
-          ),
+            imageProvider: NetworkImage(widget.image),
+          )),
           Positioned(
             top: 25,
             left: 15,
@@ -27,7 +26,10 @@ class _ProductPhotoViewState extends State<ProductPhotoView>{
               onTap: () => Navigator.pop(context),
               child: Container(
                 padding: EdgeInsets.all(5),
-                child: Icon(Icons.cancel, color: Colors.white,),
+                child: Icon(
+                  Icons.cancel,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),

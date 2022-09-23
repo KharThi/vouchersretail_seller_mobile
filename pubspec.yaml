@@ -118,6 +118,7 @@ flutter:
     - images/blog/
     - images/cart/
     - images/order/
+    - images/pq/
     - images/product_detail/
     - images/search/
     - i18n/en.json
