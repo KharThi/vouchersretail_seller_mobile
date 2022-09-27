@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:nyoba/models/cart_model.dart';
+import 'package:nyoba/models/customer.dart';
 import 'package:nyoba/models/order_model.dart';
 import 'package:nyoba/models/product_model.dart';
 import 'package:nyoba/pages/auth/login_screen.dart';
@@ -28,6 +29,8 @@ class OrderProvider with ChangeNotifier {
   int orderPage = 1;
 
   List<ProductModel?> listProductOrder = [];
+
+  List<Customer?> listCustomerOrder = [];
 
   OrderModel? detailOrder;
   int cartCount = 0;

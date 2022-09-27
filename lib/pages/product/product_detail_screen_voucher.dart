@@ -31,6 +31,7 @@ import 'package:nyoba/widgets/product/product_detail_shimmer.dart';
 import 'package:nyoba/widgets/youtube/youtube_player.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../app_localizations.dart';
 import '../../models/product_model.dart';
 import '../../utils/utility.dart';
@@ -319,7 +320,7 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
             size: 80,
           )
         ];
-        if (productModel!.product!.bannerImg.toString().isNotEmpty
+        if (productModel!.bannerImg.toString().isNotEmpty
             //|| productModel!.videos!.isNotEmpty
             ) {
           itemSlider = [
@@ -329,14 +330,13 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
                     context,
                     MaterialPageRoute(
                         builder: (context) => ProductPhotoView(
-                              image:
-                                  productModel!.product!.bannerImg.toString(),
+                              image: productModel!.bannerImg.toString(),
                             )));
               },
               child: AspectRatio(
                 aspectRatio: 1 / 1,
                 child: CachedNetworkImage(
-                  imageUrl: productModel!.product!.bannerImg.toString(),
+                  imageUrl: productModel!.bannerImg.toString(),
                   placeholder: (context, url) => customLoading(),
                   errorWidget: (context, url, error) => Icon(
                     Icons.image_not_supported_rounded,
@@ -358,13 +358,13 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
                         context,
                         MaterialPageRoute(
                             builder: (context) => ProductPhotoView(
-                                  image: productModel!.product!.bannerImg,
+                                  image: productModel!.bannerImg,
                                 )));
                   },
                   child: AspectRatio(
                     aspectRatio: 1 / 1,
                     child: CachedNetworkImage(
-                      imageUrl: productModel!.product!.bannerImg.toString(),
+                      imageUrl: productModel!.bannerImg.toString(),
                       placeholder: (context, url) => customLoading(),
                       errorWidget: (context, url, error) => Icon(
                         Icons.image_not_supported_rounded,
@@ -378,7 +378,7 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
           color: Colors.white,
           child: Scaffold(
             floatingActionButton: ContactFAB(),
-            appBar: appBar(productModel!.product!) as PreferredSizeWidget?,
+            appBar: appBar(productModel!) as PreferredSizeWidget?,
             body: Stack(
               children: [
                 SmartRefresher(
@@ -679,7 +679,12 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
                                       type: 'add',
                                       loadCount: loadCartCount,
                                     ),
-                                  );
+                                  ).whenComplete(() async {
+                                    SharedPreferences prefrences =
+                                        await SharedPreferences.getInstance();
+                                    await prefrences
+                                        .remove("list_customer_order");
+                                  });
                                 } else {
                                   snackBar(context,
                                       message: AppLocalizations.of(context)!
@@ -725,20 +730,23 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
                           height: 30.h,
                           child: TextButton(
                             onPressed: () {
-                              // if (productModel!.stockStatus != 'outofstock' &&
-                              //     productModel!.productStock! >= 1) {
-                              //   showMaterialModalBottomSheet(
-                              //     context: context,
-                              //     builder: (context) => ModalSheetCartVoucher(
-                              //       product: productModel,
-                              //       type: 'buy',
-                              //     ),
-                              //   );
-                              // } else {
-                              //   snackBar(context,
-                              //       message: AppLocalizations.of(context)!
-                              //           .translate('product_out_stock')!);
-                              // }
+                              if (productModel!.inventory != 0) {
+                                showMaterialModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => ModalSheetCartVoucher(
+                                    product: productModel,
+                                    type: 'buy',
+                                  ),
+                                ).whenComplete(() async {
+                                  SharedPreferences prefrences =
+                                      await SharedPreferences.getInstance();
+                                  await prefrences
+                                      .remove("list_customer_order");
+                                });
+                              } else {
+                                snackBar(context,
+                                    message: "Sản phẩm đã hết hàng");
+                              }
                             },
                             child: Text(
                               "Đặt ngay",
@@ -1268,7 +1276,7 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
             height: 5,
           ),
           HtmlWidget(
-            model.product!.description.toString(),
+            model.description.toString(),
             textStyle: TextStyle(color: HexColor("929292")),
           ),
         ],
@@ -1294,7 +1302,11 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
                               // text: stringToCurrency(
                               //     double.parse(productModel!.price.toString()),
                               //     context),
-                              text: productModel!.price.toString() + " Vnd",
+                              text: productModel!.prices!.isNotEmpty
+                                  ? productModel!.prices!.first.price
+                                          .toString() +
+                                      " Vnd"
+                                  : "Null",
                               style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: responsiveFont(15),
@@ -1373,7 +1385,9 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
                           // text: stringToCurrency(
                           //     double.parse(productModel!.price.toString()),
                           //     context),
-                          text: productModel!.price.toString() + " Vnd",
+                          text: productModel!.prices!.isNotEmpty
+                              ? productModel!.prices!.first.toString() + " Vnd"
+                              : "Null",
                           style: TextStyle(
                               decoration: TextDecoration.lineThrough,
                               fontSize: responsiveFont(12),
@@ -1441,7 +1455,7 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
             height: 10,
           ),
           HtmlWidget(
-            "Loại sản phẩm " + model.product!.type.toString(),
+            "Loại sản phẩm Voucher",
             textStyle: TextStyle(
                 color: HexColor("929292"), fontSize: responsiveFont(10)),
           ),
@@ -1450,7 +1464,7 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
     );
   }
 
-  Widget appBar(Product model) {
+  Widget appBar(Voucher model) {
     return AppBar(
       backgroundColor: Colors.white,
       leading: IconButton(

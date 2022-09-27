@@ -66,8 +66,8 @@ class _SearchScreenCustomerState extends State<SearchScreenCustomer> {
             return buildSearchEmpty(
               context,
               searchController.text.isEmpty
-                  ? AppLocalizations.of(context)!.translate('search_here')
-                  : AppLocalizations.of(context)!.translate('cant_find_prod'),
+                  ? "Tìm kiếm khách hàng ở đây"
+                  : "Không tìm thấy khách hàng nào",
             );
           }
           return Container(
@@ -98,26 +98,36 @@ class _SearchScreenCustomerState extends State<SearchScreenCustomer> {
           },
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50), color: primaryColor),
+            // decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(50), color: primaryColor),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: Colors.white),
-                    child: Container(
-                        height: 30,
-                        padding: EdgeInsets.all(5),
-                        child: Image.asset("images/search/barcode_icon.png"))),
+                    // decoration: BoxDecoration(
+                    //     shape: BoxShape.circle, color: Colors.white),
+                    child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SearchScreenCustomer()))
+                        .then((result) => setState(() {
+                              // customers = [];
+                              // getListCustomerOrder();
+                            }));
+                  },
+                  icon: Icon(Icons.add),
+                  label: Text("Bấm vào đây để tạo mới khách hàng"),
+                )),
                 SizedBox(
                   width: 5,
                 ),
-                Text(
-                  "SCAN BARCODE",
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                )
+                // Text(
+                //   "SCAN BARCODE",
+                //   style: TextStyle(
+                //       color: Colors.white, fontWeight: FontWeight.bold),
+                // )
               ],
             ),
           ),
@@ -164,8 +174,7 @@ class _SearchScreenCustomerState extends State<SearchScreenCustomer> {
                             ),
                           ),
                           prefixIcon: Icon(Icons.search),
-                          hintText:
-                              AppLocalizations.of(context)!.translate('search'),
+                          hintText: "Tìm kiếm khách hàng",
                           hintStyle: TextStyle(fontSize: responsiveFont(10)),
                         ),
                       ),

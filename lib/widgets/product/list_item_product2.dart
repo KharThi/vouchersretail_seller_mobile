@@ -102,39 +102,42 @@ class ListItemProduct2 extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          Visibility(
-                            visible: product!.price != 0,
-                            child: RichText(
-                              text: TextSpan(
-                                style: TextStyle(color: Colors.black),
-                                children: <TextSpan>[
-                                  // TextSpan(
-                                  //     text: stringToCurrency(
-                                  //         double.parse(
-                                  //             product!.price.toString()),
-                                  //         context),
-                                  //     style: TextStyle(
-                                  //         decoration:
-                                  //             TextDecoration.lineThrough,
-                                  //         fontSize: responsiveFont(9),
-                                  //         color: HexColor("C4C4C4"))),
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          product!.type == 'simple'
+                          // Visibility(
+                          //   visible: product!.prices!.first.price != 0,
+                          //   child: RichText(
+                          //     text: TextSpan(
+                          //       style: TextStyle(color: Colors.black),
+                          //       children: <TextSpan>[
+                          //         // TextSpan(
+                          //         //     text: stringToCurrency(
+                          //         //         double.parse(
+                          //         //             product!.price.toString()),
+                          //         //         context),
+                          //         //     style: TextStyle(
+                          //         //         decoration:
+                          //         //             TextDecoration.lineThrough,
+                          //         //         fontSize: responsiveFont(9),
+                          //         //         color: HexColor("C4C4C4"))),
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
+                          // SizedBox(
+                          //   width: 5,
+                          // ),
+                          product!.prices?.length.toString() == "1"
                               ? RichText(
                                   text: TextSpan(
                                     style: TextStyle(color: Colors.black),
                                     children: <TextSpan>[
                                       TextSpan(
-                                          text: stringToCurrency(
-                                              double.parse(
-                                                  product!.price.toString()),
-                                              context),
+                                          text: product!.prices?.length != 0
+                                              ? stringToCurrency(
+                                                  double.parse(product!
+                                                      .prices!.first.price
+                                                      .toString()),
+                                                  context)
+                                              : "Null",
                                           style: TextStyle(
                                               fontWeight: FontWeight.w600,
                                               fontSize: responsiveFont(11),
@@ -146,7 +149,7 @@ class ListItemProduct2 extends StatelessWidget {
                                   text: TextSpan(
                                     style: TextStyle(color: Colors.black),
                                     children: <TextSpan>[
-                                      product!.price!.toString().isEmpty
+                                      product!.prices?.length.toString() != "0"
                                           ? TextSpan(
                                               text: '',
                                               style: TextStyle(
@@ -154,13 +157,22 @@ class ListItemProduct2 extends StatelessWidget {
                                                   fontSize: responsiveFont(11),
                                                   color: secondaryColor))
                                           : TextSpan(
-                                              text: product!.price.toString() ==
-                                                      product!.price.toString()
-                                                  ?
+                                              text:
+                                                  // product!.prices!.first.price
+                                                  //             .toString() ==
+                                                  //         product!
+                                                  //             .prices!.first.price
+                                                  //             .toString()
+                                                  //     ?
                                                   // '${stringToCurrency(100, context)}' +
-                                                  product!.price.toString() +
-                                                      " Vnd"
-                                                  : '${stringToCurrency(100, context)} - ${stringToCurrency(50, context)}',
+                                                  product!.prices?.length != 0
+                                                      ? product!.prices!.first
+                                                              .price
+                                                              .toString() +
+                                                          " Vnd"
+                                                      : "Null"
+                                              // : '${stringToCurrency(100, context)} - ${stringToCurrency(50, context)}'
+                                              ,
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: responsiveFont(11),

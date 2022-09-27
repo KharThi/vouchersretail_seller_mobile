@@ -32,6 +32,7 @@ import 'package:nyoba/widgets/product/product_detail_shimmer.dart';
 import 'package:nyoba/widgets/youtube/youtube_player.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../app_localizations.dart';
 import '../../models/product_model.dart';
 import '../../utils/utility.dart';
@@ -322,7 +323,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
             size: 80,
           )
         ];
-        if (productModel!.product!.bannerImg.toString().isNotEmpty
+        if (productModel!.bannerImg.toString().isNotEmpty
             //|| productModel!.videos!.isNotEmpty
             ) {
           itemSlider = [
@@ -332,14 +333,13 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                     context,
                     MaterialPageRoute(
                         builder: (context) => ProductPhotoView(
-                              image:
-                                  productModel!.product!.bannerImg.toString(),
+                              image: productModel!.bannerImg.toString(),
                             )));
               },
               child: AspectRatio(
                 aspectRatio: 1 / 1,
                 child: CachedNetworkImage(
-                  imageUrl: productModel!.product!.bannerImg.toString(),
+                  imageUrl: productModel!.bannerImg.toString(),
                   placeholder: (context, url) => customLoading(),
                   errorWidget: (context, url, error) => Icon(
                     Icons.image_not_supported_rounded,
@@ -361,13 +361,13 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                         context,
                         MaterialPageRoute(
                             builder: (context) => ProductPhotoView(
-                                  image: productModel!.product!.bannerImg,
+                                  image: productModel!.bannerImg,
                                 )));
                   },
                   child: AspectRatio(
                     aspectRatio: 1 / 1,
                     child: CachedNetworkImage(
-                      imageUrl: productModel!.product!.bannerImg.toString(),
+                      imageUrl: productModel!.bannerImg.toString(),
                       placeholder: (context, url) => customLoading(),
                       errorWidget: (context, url, error) => Icon(
                         Icons.image_not_supported_rounded,
@@ -381,7 +381,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
           color: Colors.white,
           child: Scaffold(
             floatingActionButton: ContactFAB(),
-            appBar: appBar(productModel!.product!) as PreferredSizeWidget?,
+            appBar: appBar(productModel!) as PreferredSizeWidget?,
             body: Stack(
               children: [
                 SmartRefresher(
@@ -683,7 +683,12 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                                       type: 'add',
                                       loadCount: loadCartCount,
                                     ),
-                                  );
+                                  ).whenComplete(() async {
+                                    SharedPreferences prefrences =
+                                        await SharedPreferences.getInstance();
+                                    await prefrences
+                                        .remove("list_customer_order");
+                                  });
                                 } else {
                                   snackBar(context,
                                       message: AppLocalizations.of(context)!
@@ -733,7 +738,12 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                                     product: productModel,
                                     type: 'buy',
                                   ),
-                                );
+                                ).whenComplete(() async {
+                                  SharedPreferences prefrences =
+                                      await SharedPreferences.getInstance();
+                                  await prefrences
+                                      .remove("list_customer_order");
+                                });
                               } else {
                                 snackBar(context,
                                     message: AppLocalizations.of(context)!
@@ -1268,7 +1278,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
             height: 5,
           ),
           HtmlWidget(
-            model.product!.description.toString(),
+            model.description.toString(),
             textStyle: TextStyle(color: HexColor("929292")),
           ),
           productModel!.vouchers!.length != 0
@@ -1305,7 +1315,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                                       productId: item.productId.toString(),
                                     ))),
                         title: Text(item.voucherName.toString()),
-                        subtitle: Text("x" + item.inventory.toString()),
+                        subtitle: Text(item.price.toString() + " Vnd"),
                         // leading: {};
                       ),
                   ],
@@ -1334,7 +1344,14 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                               // text: stringToCurrency(
                               //     double.parse(productModel!.price.toString()),
                               //     context),
-                              text: productModel!.price.toString() + " Vnd",
+                              text: productModel!.prices!.isNotEmpty
+                                  ? productModel!.prices!.first.price
+                                          .toString() +
+                                      "to" +
+                                      productModel!.prices!.last.price
+                                          .toString() +
+                                      " Vnd"
+                                  : "null",
                               style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: responsiveFont(15),
@@ -1413,7 +1430,12 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                           // text: stringToCurrency(
                           //     double.parse(productModel!.price.toString()),
                           //     context),
-                          text: productModel!.price.toString() + " Vnd",
+                          text: productModel!.prices!.isNotEmpty
+                              ? productModel!.prices!.first.price.toString() +
+                                  "to" +
+                                  productModel!.prices!.last.price.toString() +
+                                  " Vnd"
+                              : "null",
                           style: TextStyle(
                               decoration: TextDecoration.lineThrough,
                               fontSize: responsiveFont(12),
@@ -1482,7 +1504,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
             height: 10,
           ),
           HtmlWidget(
-            "Loại sản phẩm " + model.product!.type.toString(),
+            "Loại sản phẩm Combo",
             textStyle: TextStyle(
                 color: HexColor("929292"), fontSize: responsiveFont(10)),
           ),
@@ -1491,7 +1513,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
     );
   }
 
-  Widget appBar(Product model) {
+  Widget appBar(Combo model) {
     return AppBar(
       backgroundColor: Colors.white,
       leading: IconButton(

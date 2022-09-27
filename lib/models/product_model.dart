@@ -397,13 +397,9 @@ class Product {
     this.summary,
     this.bannerImg,
     this.content,
-    this.price,
     this.isForKid,
     this.type,
-    this.createAt,
-    this.updateAt,
-    this.deleteAt,
-    this.status,
+    this.prices,
   });
 
   int? id;
@@ -411,13 +407,9 @@ class Product {
   String? summary;
   String? bannerImg;
   String? content;
-  int? price;
   bool? isForKid;
   String? type;
-  String? createAt;
-  String? updateAt;
-  String? deleteAt;
-  String? status;
+  List<Price>? prices;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
         id: json["id"],
@@ -425,13 +417,9 @@ class Product {
         summary: json["summary"],
         bannerImg: json["bannerImg"],
         content: json["content"],
-        price: json["price"],
         isForKid: json["isForKid"],
         type: json["type"],
-        createAt: json["createAt"],
-        updateAt: json["updateAt"],
-        deleteAt: json["deleteAt"],
-        status: json["status"],
+        prices: List<Price>.from(json["prices"].map((x) => Price.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -440,13 +428,41 @@ class Product {
         "summary": summary,
         "bannerImg": bannerImg,
         "content": content,
-        "price": price,
         "isForKid": isForKid,
         "type": type,
-        "createAt": createAt,
-        "updateAt": updateAt,
-        "deleteAt": deleteAt,
-        "status": status,
+        "prices": List<dynamic>.from(prices!.map((x) => x.toJson())),
+      };
+}
+
+class Price {
+  Price({
+    this.id,
+    this.priceLevelName,
+    this.priceLevelId,
+    this.productId,
+    this.price,
+  });
+
+  int? id;
+  String? priceLevelName;
+  int? priceLevelId;
+  int? productId;
+  int? price;
+
+  factory Price.fromJson(Map<String, dynamic> json) => Price(
+        id: json["id"],
+        priceLevelName: json["priceLevelName"],
+        priceLevelId: json["priceLevelId"],
+        productId: json["productId"],
+        price: json["price"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "priceLevelName": priceLevelName,
+        "priceLevelId": priceLevelId,
+        "productId": productId,
+        "price": price,
       };
 }
 
@@ -460,117 +476,75 @@ class Voucher {
   Voucher({
     this.id,
     this.voucherName,
-    this.price,
     this.inventory,
     this.limitPerDay,
     this.isRequireProfileInfo,
     this.startDate,
     this.endDate,
-    this.product,
     this.productId,
     this.serviceId,
+    this.description,
+    this.summary,
+    this.bannerImg,
+    this.content,
+    this.isForKid,
+    this.type,
+    this.prices,
   });
 
   int? id;
   String? voucherName;
-  int? price;
   int? inventory;
   int? limitPerDay;
   bool? isRequireProfileInfo;
-  String? startDate;
-  String? endDate;
-  Product? product;
+  dynamic? startDate;
+  dynamic? endDate;
   int? productId;
   int? serviceId;
+  String? description;
+  String? summary;
+  String? bannerImg;
+  String? content;
+  bool? isForKid;
+  String? type;
+  List<Price>? prices;
 
   factory Voucher.fromJson(Map<String, dynamic> json) => Voucher(
         id: json["id"],
         voucherName: json["voucherName"],
-        price: json["price"],
         inventory: json["inventory"],
         limitPerDay: json["limitPerDay"],
         isRequireProfileInfo: json["isRequireProfileInfo"],
         startDate: json["startDate"],
         endDate: json["endDate"],
-        product: Product.fromJson(json["product"]),
         productId: json["productId"],
         serviceId: json["serviceId"],
+        description: json["description"] == null ? null : json["description"],
+        summary: json["summary"],
+        bannerImg: json["bannerImg"],
+        content: json["content"],
+        isForKid: json["isForKid"],
+        type: json["type"],
+        prices: List<Price>.from(json["prices"].map((x) => Price.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "voucherName": voucherName,
-        "price": price,
         "inventory": inventory,
         "limitPerDay": limitPerDay,
         "isRequireProfileInfo": isRequireProfileInfo,
         "startDate": startDate,
         "endDate": endDate,
-        "product": product?.toJson(),
         "productId": productId,
         "serviceId": serviceId,
-      };
-}
-
-List<Voucher2> voucher2FromJson(String str) =>
-    List<Voucher2>.from(json.decode(str).map((x) => Voucher.fromJson(x)));
-
-String voucher2ToJson(List<Voucher2> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
-class Voucher2 {
-  Voucher2({
-    this.id,
-    this.voucherName,
-    this.price,
-    this.inventory,
-    this.limitPerDay,
-    this.isRequireProfileInfo,
-    this.startDate,
-    this.endDate,
-    // this.product,
-    this.productId,
-    this.serviceId,
-  });
-
-  int? id;
-  String? voucherName;
-  int? price;
-  int? inventory;
-  int? limitPerDay;
-  bool? isRequireProfileInfo;
-  String? startDate;
-  String? endDate;
-  // Product? product;
-  int? productId;
-  int? serviceId;
-
-  factory Voucher2.fromJson(Map<String, dynamic> json) => Voucher2(
-        id: json["id"],
-        voucherName: json["voucherName"],
-        price: json["price"],
-        inventory: json["inventory"],
-        limitPerDay: json["limitPerDay"],
-        isRequireProfileInfo: json["isRequireProfileInfo"],
-        startDate: json["startDate"],
-        endDate: json["endDate"],
-        // product: Product.fromJson(json["product"]),
-        productId: json["productId"],
-        serviceId: json["serviceId"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "voucherName": voucherName,
-        "price": price,
-        "inventory": inventory,
-        "limitPerDay": limitPerDay,
-        "isRequireProfileInfo": isRequireProfileInfo,
-        "startDate": startDate,
-        "endDate": endDate,
-        // "product": product?.toJson(),
-        "productId": productId,
-        "serviceId": serviceId,
+        "description": description == null ? null : description,
+        "summary": summary,
+        "bannerImg": bannerImg,
+        "content": content,
+        "isForKid": isForKid,
+        "type": type,
+        "prices": List<dynamic>.from(prices!.map((x) => x.toJson())),
       };
 }
 
@@ -586,8 +560,13 @@ class Combo {
     this.name,
     this.startDate,
     this.endDate,
-    this.price,
-    this.product,
+    this.description,
+    this.summary,
+    this.bannerImg,
+    this.content,
+    this.isForKid,
+    this.type,
+    this.prices,
     this.productId,
     this.vouchers,
   });
@@ -596,21 +575,31 @@ class Combo {
   String? name;
   String? startDate;
   String? endDate;
-  int? price;
-  Product? product;
+  String? description;
+  String? summary;
+  String? bannerImg;
+  String? content;
+  bool? isForKid;
+  String? type;
+  List<Price>? prices;
   int? productId;
-  List<Voucher2>? vouchers;
+  List<ComboVoucher>? vouchers;
 
   factory Combo.fromJson(Map<String, dynamic> json) => Combo(
         id: json["id"],
         name: json["name"],
         startDate: json["startDate"],
         endDate: json["endDate"],
-        price: json["price"],
-        product: Product.fromJson(json["product"]),
+        description: json["description"],
+        summary: json["summary"],
+        bannerImg: json["bannerImg"],
+        content: json["content"],
+        isForKid: json["isForKid"],
+        type: json["type"],
+        prices: List<Price>.from(json["prices"].map((x) => x)),
         productId: json["productId"],
-        vouchers: List<Voucher2>.from(
-            json["vouchers"].map((x) => Voucher2.fromJson(x))),
+        vouchers: List<ComboVoucher>.from(
+            json["vouchers"].map((x) => ComboVoucher.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -618,9 +607,72 @@ class Combo {
         "name": name,
         "startDate": startDate,
         "endDate": endDate,
-        "price": price,
-        "product": product?.toJson(),
+        "description": description,
+        "summary": summary,
+        "bannerImg": bannerImg,
+        "content": content,
+        "isForKid": isForKid,
+        "type": type,
+        "prices": List<dynamic>.from(prices!.map((x) => x)),
         "productId": productId,
-        "vouchers": List<Voucher>.from(vouchers!.map((x) => x.toJson())),
+        "vouchers": List<dynamic>.from(vouchers!.map((x) => x.toJson())),
+      };
+}
+
+List<ComboVoucher> comboVoucherFromJson(String str) => List<ComboVoucher>.from(
+    json.decode(str).map((x) => ComboVoucher.fromJson(x)));
+
+String comboVoucherToJson(List<ComboVoucher> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class ComboVoucher {
+  ComboVoucher({
+    this.id,
+    this.voucherName,
+    this.price,
+    this.inventory,
+    this.limitPerDay,
+    this.isRequireProfileInfo,
+    this.startDate,
+    this.endDate,
+    this.productId,
+    this.serviceId,
+  });
+
+  int? id;
+  String? voucherName;
+  int? price;
+  int? inventory;
+  int? limitPerDay;
+  bool? isRequireProfileInfo;
+  String? startDate;
+  String? endDate;
+  int? productId;
+  int? serviceId;
+
+  factory ComboVoucher.fromJson(Map<String, dynamic> json) => ComboVoucher(
+        id: json["id"],
+        voucherName: json["voucherName"],
+        price: json["price"],
+        inventory: json["inventory"],
+        limitPerDay: json["limitPerDay"],
+        isRequireProfileInfo: json["isRequireProfileInfo"],
+        startDate: json["startDate"],
+        endDate: json["endDate"],
+        productId: json["productId"],
+        serviceId: json["serviceId"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "voucherName": voucherName,
+        "price": price,
+        "inventory": inventory,
+        "limitPerDay": limitPerDay,
+        "isRequireProfileInfo": isRequireProfileInfo,
+        "startDate": startDate,
+        "endDate": endDate,
+        "productId": productId,
+        "serviceId": serviceId,
       };
 }

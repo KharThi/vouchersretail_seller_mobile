@@ -14,6 +14,7 @@ import 'package:nyoba/services/session.dart';
 import 'package:nyoba/utils/currency_format.dart';
 import 'package:nyoba/utils/utility.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:slugify/slugify.dart';
 
@@ -55,6 +56,8 @@ class _ModalSheetCartComboState extends State<ModalSheetCartCombo> {
   String? variationName;
 
   String _selectedDate = 'Bấm vào để chọn ngày';
+
+  OrderProvider? orderProvider;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? d = await showDatePicker(
@@ -201,41 +204,63 @@ class _ModalSheetCartComboState extends State<ModalSheetCartCombo> {
     });
   }
 
+  getListCustomerOrder() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? musicsString = await prefs.getString('list_customer_order');
+    print("object" + musicsString.toString());
+
+    if (musicsString != null) {
+      for (Map<String, dynamic> item in json.decode(musicsString)) {
+        customers.add(Customer.fromJson(item));
+      }
+      setState(() {});
+      // customers = Customer.fromJson(musicsString);
+      // customers = json.decode(musicsString);
+    }
+  }
+
+  saveListCustomerOrder() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var s = json.encode(customers);
+    prefs.setString('list_customer_order', s);
+  }
+
   @override
   void initState() {
     super.initState();
-    customers.add(Customer(
-        id: 1,
-        customerName: "string",
-        userInfo: UserInfo(
-            id: 1,
-            email: "user@example.com",
-            avatarLink: "string",
-            userName: "Khả Thi",
-            role: "Admin",
-            phoneNumber: "1234567890",
-            createAt: null,
-            updateAt: null,
-            deleteAt: null,
-            status: "Disable"),
-        userInfoId: 1,
-        cartId: 0));
-    customers.add(Customer(
-        id: 1,
-        customerName: "string",
-        userInfo: UserInfo(
-            id: 1,
-            email: "user@example.com",
-            avatarLink: "string",
-            userName: "Khả Thi 2",
-            role: "Admin",
-            phoneNumber: "1234567890",
-            createAt: null,
-            updateAt: null,
-            deleteAt: null,
-            status: "Disable"),
-        userInfoId: 1,
-        cartId: 0));
+    getListCustomerOrder();
+    // customers.add(Customer(
+    //     id: 1,
+    //     customerName: "string",
+    //     userInfo: UserInfo(
+    //         id: 1,
+    //         email: "user@example.com",
+    //         avatarLink: "string",
+    //         userName: "Khả Thi",
+    //         role: "Admin",
+    //         phoneNumber: "1234567890",
+    //         createAt: null,
+    //         updateAt: null,
+    //         deleteAt: null,
+    //         status: "Disable"),
+    //     userInfoId: 1,
+    //     cartId: 0));
+    // customers.add(Customer(
+    //     id: 1,
+    //     customerName: "string",
+    //     userInfo: UserInfo(
+    //         id: 1,
+    //         email: "user@example.com",
+    //         avatarLink: "string",
+    //         userName: "Khả Thi 2",
+    //         role: "Admin",
+    //         phoneNumber: "1234567890",
+    //         createAt: null,
+    //         updateAt: null,
+    //         deleteAt: null,
+    //         status: "Disable"),
+    //     userInfoId: 1,
+    //     cartId: 0));
     // widget.quantity = 1;
     // initVariation();
   }
@@ -421,9 +446,13 @@ class _ModalSheetCartComboState extends State<ModalSheetCartCombo> {
                                             //             .toString())
                                             //         .toDouble(),
                                             //     context),
-                                            (widget.product!.price! * quantity!)
-                                                    .toString() +
-                                                " Vnd",
+                                            widget.product!.prices!.isNotEmpty
+                                                ? (widget.product!.prices!.first
+                                                                .price! *
+                                                            quantity!)
+                                                        .toString() +
+                                                    " Vnd"
+                                                : "null",
                                             style: TextStyle(
                                                 color: secondaryColor,
                                                 fontWeight: FontWeight.w500),
@@ -491,12 +520,13 @@ class _ModalSheetCartComboState extends State<ModalSheetCartCombo> {
                   child: Column(
                     children: [
                       Column(
-                        children: customers.map((personone) {
+                        children:
+                            orderProvider!.listCustomerOrder.map((personone) {
                           return Container(
                             child: Card(
                               child: ListTile(
                                 title: Text(
-                                    personone.userInfo!.userName.toString()),
+                                    personone!.userInfo!.userName.toString()),
                                 subtitle: Text(""),
                                 trailing: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
@@ -504,10 +534,14 @@ class _ModalSheetCartComboState extends State<ModalSheetCartCombo> {
                                   child: Icon(Icons.delete),
                                   onPressed: () {
                                     //delete action for this button
-                                    customers.removeWhere((element) {
-                                      return element.id == personone.id;
+                                    orderProvider!.listCustomerOrder
+                                        .removeWhere((element) {
+                                      return element!.id == personone.id;
                                     }); //go through the loop and match content to delete from list
                                     setState(() {
+                                      saveListCustomerOrder();
+                                      customers = [];
+                                      getListCustomerOrder();
                                       //refresh UI after deleting element from list
                                     });
                                   },
@@ -642,9 +676,9 @@ class _ModalSheetCartComboState extends State<ModalSheetCartCombo> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: responsiveFont(9),
-                                color: !isAvailable || load || isOutStock
-                                    ? Colors.grey
-                                    : secondaryColor),
+                                color: widget.product!.vouchers != null
+                                    ? secondaryColor
+                                    : Colors.grey),
                           )
                         ],
                       )),
@@ -676,7 +710,7 @@ class _ModalSheetCartComboState extends State<ModalSheetCartCombo> {
                       gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
-                          colors: !isAvailable || load
+                          colors: !(widget.product!.vouchers != null)
                               ? [Colors.black12, Colors.grey]
                               : [primaryColor, secondaryColor])),
                   width: double.infinity,

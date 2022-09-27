@@ -15,6 +15,7 @@ import 'package:nyoba/services/session.dart';
 import 'package:nyoba/utils/currency_format.dart';
 import 'package:nyoba/utils/utility.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:slugify/slugify.dart';
 
@@ -205,38 +206,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
   @override
   void initState() {
     super.initState();
-    customers.add(Customer(
-        id: 1,
-        customerName: "string",
-        userInfo: UserInfo(
-            id: 1,
-            email: "user@example.com",
-            avatarLink: "string",
-            userName: "Khả Thi",
-            role: "Admin",
-            phoneNumber: "1234567890",
-            createAt: null,
-            updateAt: null,
-            deleteAt: null,
-            status: "Disable"),
-        userInfoId: 1,
-        cartId: 0));
-    customers.add(Customer(
-        id: 1,
-        customerName: "string",
-        userInfo: UserInfo(
-            id: 1,
-            email: "user@example.com",
-            avatarLink: "string",
-            userName: "Khả Thi 2",
-            role: "Admin",
-            phoneNumber: "1234567890",
-            createAt: null,
-            updateAt: null,
-            deleteAt: null,
-            status: "Disable"),
-        userInfoId: 1,
-        cartId: 0));
+    getListCustomerOrder();
     // widget.quantity = 1;
     // initVariation();
   }
@@ -285,6 +255,27 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
     print("Buy Now");
     await Provider.of<OrderProvider>(context, listen: false)
         .buyNowVoucher(context, widget.product, quantity, onFinishBuyNow);
+  }
+
+  getListCustomerOrder() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? musicsString = await prefs.getString('list_customer_order');
+    print("object" + musicsString.toString());
+
+    if (musicsString != null) {
+      for (Map<String, dynamic> item in json.decode(musicsString)) {
+        customers.add(Customer.fromJson(item));
+      }
+      setState(() {});
+      // customers = Customer.fromJson(musicsString);
+      // customers = json.decode(musicsString);
+    }
+  }
+
+  saveListCustomerOrder() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var s = json.encode(customers);
+    prefs.setString('list_customer_order', s);
   }
 
   @override
@@ -422,9 +413,13 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                             //             .toString())
                                             //         .toDouble(),
                                             //     context),
-                                            (widget.product!.price! * quantity!)
-                                                    .toString() +
-                                                " Vnd",
+                                            widget.product!.prices!.isNotEmpty
+                                                ? (widget.product!.prices!.first
+                                                                .price! *
+                                                            quantity!)
+                                                        .toString() +
+                                                    " Vnd"
+                                                : "null",
                                             style: TextStyle(
                                                 color: secondaryColor,
                                                 fontWeight: FontWeight.w500),
@@ -469,68 +464,83 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                   ),
                 ),
               ),
-              Container(
-                height: 1,
-                width: double.infinity,
-                color: HexColor("c4c4c4"),
-                margin: EdgeInsets.only(bottom: 15),
-              ),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    // AppLocalizations.of(context)!
-                    //     .translate('qty')!
-                    "   Danh Sách khách hàng",
-                    style: TextStyle(fontSize: responsiveFont(12)),
-                  ),
-                ),
-              ]),
-              Container(
-                  // height: 25.h,
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    children: [
-                      Column(
-                        children: customers.map((personone) {
-                          return Container(
-                            child: Card(
-                              child: ListTile(
-                                title: Text(
-                                    personone.userInfo!.userName.toString()),
-                                subtitle: Text(""),
-                                trailing: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      primary: Colors.redAccent),
-                                  child: Icon(Icons.delete),
-                                  onPressed: () {
-                                    //delete action for this button
-                                    customers.removeWhere((element) {
-                                      return element.id == personone.id;
-                                    }); //go through the loop and match content to delete from list
-                                    setState(() {
-                                      //refresh UI after deleting element from list
-                                    });
-                                  },
-                                ),
-                              ),
+              widget.product!.isRequireProfileInfo != false
+                  ? Container(
+                      height: 1,
+                      width: double.infinity,
+                      color: HexColor("c4c4c4"),
+                      margin: EdgeInsets.only(bottom: 15),
+                    )
+                  : Container(),
+              widget.product!.isRequireProfileInfo != false
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                          Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              // AppLocalizations.of(context)!
+                              //     .translate('qty')!
+                              "   Danh Sách khách hàng",
+                              style: TextStyle(fontSize: responsiveFont(12)),
                             ),
-                          );
-                        }).toList(),
-                      ),
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      SearchScreenCustomer()));
-                        },
-                        icon: Icon(Icons.add),
-                        label: Text("Bấm vào đây để thêm khách"),
-                      ),
-                    ],
-                  )),
+                          ),
+                        ])
+                  : Container(),
+              widget.product!.isRequireProfileInfo != false
+                  ? Container(
+                      // height: 25.h,
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                          Column(
+                            children: customers.map((personone) {
+                              return Container(
+                                child: Card(
+                                  child: ListTile(
+                                    title: Text(personone.userInfo!.userName
+                                        .toString()),
+                                    subtitle: Text(""),
+                                    trailing: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          primary: Colors.redAccent),
+                                      child: Icon(Icons.delete),
+                                      onPressed: () {
+                                        //delete action for this button
+                                        customers.removeWhere((element) {
+                                          return element.id == personone.id;
+                                        }); //go through the loop and match content to delete from list
+                                        setState(() {
+                                          saveListCustomerOrder();
+                                          customers = [];
+                                          getListCustomerOrder();
+                                          //refresh UI after deleting element from list
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                          ElevatedButton.icon(
+                            onPressed: () {
+                              Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              SearchScreenCustomer()))
+                                  .then((result) => setState(() {
+                                        customers = [];
+                                        getListCustomerOrder();
+                                      }));
+                            },
+                            icon: Icon(Icons.add),
+                            label: Text("Bấm vào đây để thêm khách"),
+                          ),
+                        ],
+                      ))
+                  : Container(),
               Container(
                 height: 1,
                 width: double.infinity,
@@ -643,9 +653,10 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: responsiveFont(9),
-                                color: !isAvailable || load || isOutStock
-                                    ? Colors.grey
-                                    : secondaryColor),
+                                color: widget.product!.inventory != 0 &&
+                                        widget.product!.inventory! >= 1
+                                    ? secondaryColor
+                                    : Colors.grey),
                           )
                         ],
                       )),
@@ -677,7 +688,8 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                       gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
-                          colors: !isAvailable || load
+                          colors: !(widget.product!.inventory != 0 &&
+                                  widget.product!.inventory! >= 1)
                               ? [Colors.black12, Colors.grey]
                               : [primaryColor, secondaryColor])),
                   width: double.infinity,
