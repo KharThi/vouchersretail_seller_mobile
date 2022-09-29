@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nyoba/pages/customer/customer_add_screen.dart';
 import 'package:nyoba/pages/search/qr_scanner_screen.dart';
 import 'package:nyoba/provider/home_provider.dart';
 import 'package:nyoba/provider/search_provider.dart';
@@ -109,13 +110,9 @@ class _SearchScreenCustomerState extends State<SearchScreenCustomer> {
                     child: ElevatedButton.icon(
                   onPressed: () {
                     Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SearchScreenCustomer()))
-                        .then((result) => setState(() {
-                              // customers = [];
-                              // getListCustomerOrder();
-                            }));
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CustomerAddScreen()));
                   },
                   icon: Icon(Icons.add),
                   label: Text("Bấm vào đây để tạo mới khách hàng"),

@@ -520,13 +520,12 @@ class _ModalSheetCartComboState extends State<ModalSheetCartCombo> {
                   child: Column(
                     children: [
                       Column(
-                        children:
-                            orderProvider!.listCustomerOrder.map((personone) {
+                        children: customers.map((personone) {
                           return Container(
                             child: Card(
                               child: ListTile(
                                 title: Text(
-                                    personone!.userInfo!.userName.toString()),
+                                    personone.userInfo!.userName.toString()),
                                 subtitle: Text(""),
                                 trailing: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
@@ -534,9 +533,8 @@ class _ModalSheetCartComboState extends State<ModalSheetCartCombo> {
                                   child: Icon(Icons.delete),
                                   onPressed: () {
                                     //delete action for this button
-                                    orderProvider!.listCustomerOrder
-                                        .removeWhere((element) {
-                                      return element!.id == personone.id;
+                                    customers.removeWhere((element) {
+                                      return element.id == personone.id;
                                     }); //go through the loop and match content to delete from list
                                     setState(() {
                                       saveListCustomerOrder();
@@ -554,10 +552,14 @@ class _ModalSheetCartComboState extends State<ModalSheetCartCombo> {
                       ElevatedButton.icon(
                         onPressed: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      SearchScreenCustomer()));
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          SearchScreenCustomer()))
+                              .then((result) => setState(() {
+                                    customers = [];
+                                    getListCustomerOrder();
+                                  }));
                         },
                         icon: Icon(Icons.add),
                         label: Text("Bấm vào đây để thêm khách"),
