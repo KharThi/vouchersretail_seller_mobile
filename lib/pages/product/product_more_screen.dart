@@ -1,11 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:nyoba/models/product_model.dart';
 import 'package:nyoba/pages/order/cart_screen.dart';
 import 'package:nyoba/pages/product/product_detail_screen.dart';
-import 'package:nyoba/pages/product/modal_sheet_cart/modal_sheet_cart.dart';
 import 'package:nyoba/provider/order_provider.dart';
 import 'package:nyoba/provider/product_provider.dart';
 import 'package:nyoba/utils/currency_format.dart';

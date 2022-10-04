@@ -21,7 +21,7 @@ class Order {
 
   String? status;
   int? id;
-  DateTime? createDate;
+  String? createDate;
   String? orderStatus;
   int? customerId;
   int? sellerId;
@@ -30,7 +30,7 @@ class Order {
   factory Order.fromJson(Map<String, dynamic> json) => Order(
         status: json["status"],
         id: json["id"],
-        createDate: DateTime.parse(json["createDate"]),
+        createDate: json["createDate"],
         orderStatus: json["orderStatus"],
         customerId: json["customerId"],
         sellerId: json["sellerId"],
@@ -41,7 +41,7 @@ class Order {
   Map<String, dynamic> toJson() => {
         "status": status,
         "id": id,
-        "createDate": createDate!.toIso8601String(),
+        "createDate": createDate,
         "orderStatus": orderStatus,
         "customerId": customerId,
         "sellerId": sellerId,
@@ -64,7 +64,7 @@ class OrderItem {
   int? orderProductId;
   int? priceId;
   int? profileId;
-  DateTime? useDate;
+  String? useDate;
 
   factory OrderItem.fromJson(Map<String, dynamic> json) => OrderItem(
         status: json["status"],
@@ -72,7 +72,7 @@ class OrderItem {
         orderProductId: json["orderProductId"],
         priceId: json["priceId"],
         profileId: json["profileId"],
-        useDate: DateTime.parse(json["useDate"]),
+        useDate: json["useDate"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -81,6 +81,6 @@ class OrderItem {
         "orderProductId": orderProductId,
         "priceId": priceId,
         "profileId": profileId,
-        "useDate": useDate!.toIso8601String(),
+        "useDate": useDate,
       };
 }

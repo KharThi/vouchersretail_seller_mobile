@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/current_remaining_time.dart';
@@ -7,20 +5,17 @@ import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:nyoba/models/variation_model.dart';
 import 'package:nyoba/pages/category/brand_product_screen.dart';
 import 'package:nyoba/pages/order/cart_screen.dart';
 import 'package:nyoba/pages/product/modal_sheet_cart/modal_sheet_cart_combo.dart';
 import 'package:nyoba/pages/product/product_detail_screen_voucher.dart';
 import 'package:nyoba/pages/product/product_more_screen.dart';
-import 'package:nyoba/pages/product/modal_sheet_cart/modal_sheet_cart.dart';
 import 'package:nyoba/pages/wishlist/wishlist_screen.dart';
 import 'package:nyoba/provider/flash_sale_provider.dart';
 import 'package:nyoba/provider/order_provider.dart';
 import 'package:nyoba/provider/product_provider.dart';
 import 'package:nyoba/provider/review_provider.dart';
 import 'package:nyoba/provider/wishlist_provider.dart';
-import 'package:nyoba/services/product_api.dart';
 import 'package:nyoba/services/session.dart';
 import 'package:nyoba/utils/currency_format.dart';
 import 'package:nyoba/utils/share_link.dart';
@@ -29,7 +24,6 @@ import 'package:nyoba/widgets/home/card_item_shimmer.dart';
 import 'package:nyoba/widgets/home/card_item_small.dart';
 import 'package:nyoba/widgets/product/product_photoview.dart';
 import 'package:nyoba/widgets/product/product_detail_shimmer.dart';
-import 'package:nyoba/widgets/youtube/youtube_player.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -991,7 +985,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
 
   Widget thirdPart() {
     final review = Provider.of<ReviewProvider>(context, listen: false);
-    final product = Provider.of<ProductProvider>(context, listen: false);
+    // final product = Provider.of<ProductProvider>(context, listen: false);
 
     Widget buildReview = Container(
       child: ListenableProvider.value(

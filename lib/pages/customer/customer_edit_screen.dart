@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nyoba/models/customer.dart';
-import 'package:nyoba/models/user_model.dart';
 import 'package:nyoba/provider/user_provider.dart';
-import 'package:nyoba/services/session.dart';
 import 'package:provider/provider.dart';
 import '../../app_localizations.dart';
 import '../../utils/utility.dart';

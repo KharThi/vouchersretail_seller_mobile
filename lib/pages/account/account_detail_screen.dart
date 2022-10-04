@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:nyoba/models/user_model.dart';
+import 'package:nyoba/models/seller_model.dart';
 import 'package:nyoba/pages/account/account_edit_screen.dart';
 import 'package:nyoba/provider/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -67,7 +67,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
     );
   }
 
-  buildDetail(UserModel user) {
+  buildDetail(Seller user) {
     return Column(
       children: [
         // buildTable(
@@ -81,8 +81,8 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
         //         ? AppLocalizations.of(context)!.translate('not_set')
         //         : user.lastname),
         buildTable(AppLocalizations.of(context)!.translate('username')!,
-            user.userName),
-        buildTable("Email", user.email),
+            user.sellerName),
+        buildTable("Email", user.userInfo!.email),
         Container(
           width: double.infinity,
           padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),

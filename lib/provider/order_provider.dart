@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:nyoba/models/cart_model.dart';
 import 'package:nyoba/models/customer.dart';
+import 'package:nyoba/models/order.dart';
 import 'package:nyoba/models/order_model.dart';
 import 'package:nyoba/models/product_model.dart';
 import 'package:nyoba/pages/auth/login_screen.dart';
@@ -38,6 +39,15 @@ class OrderProvider with ChangeNotifier {
   Future checkout(order) async {
     var result;
     await OrderAPI().checkoutOrder(order).then((data) {
+      printLog(data, name: 'Link Order From API');
+      result = data;
+    });
+    return result;
+  }
+
+  Future checkoutV2(order) async {
+    var result;
+    await OrderAPI().checkoutOrderV2(order).then((data) {
       printLog(data, name: 'Link Order From API');
       result = data;
     });
@@ -242,8 +252,59 @@ class OrderProvider with ChangeNotifier {
     }
   }
 
+  Future buyNowV2(
+      context, Order? order, Future<dynamic> Function() onFinishBuyNow) async {
+    if (Session.data.getBool('isLogin')!) {
+      // CartModel cart = new CartModel();
+      // cart.listItem = [];
+      // cart.listItem!.add(new CartProductItem(
+      //     productId: product!.id,
+      //     quantity: product.cartQuantity,
+      //     variationId: product.variantId));
+
+      // //init list coupon
+      // cart.listCoupon = [];
+
+      // //add to cart model
+      // cart.paymentMethod = "xendit_bniva";
+      // cart.paymentMethodTitle = "Bank Transfer - BNI";
+      // cart.setPaid = true;
+      // cart.customerId = Session.data.getInt('id');
+      // cart.status = 'completed';
+      // cart.token = Session.data.getString('cookie');
+
+      //Encode Json
+      var jsonOrder = json.encode(order);
+      printLog(jsonOrder, name: 'Json Order');
+
+      //Convert Json to bytes
+      // var bytes = utf8.encode(jsonOrder);
+
+      //Convert bytes to base64
+      // var order = base64.encode(bytes);
+
+      //Generate link WebView checkout
+      await Provider.of<OrderProvider>(context, listen: false)
+          .checkoutV2(order)
+          .then((value) async {
+        printLog(value, name: 'Link Order');
+        await Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CheckoutWebView(
+                      url: value,
+                      onFinish: onFinishBuyNow,
+                    )));
+      });
+    } else {
+      Navigator.pop(context);
+      snackBar(context,
+          message: "Bạn cần đăng nhập để thực hiện chức năng này!");
+    }
+  }
+
   Future buyNowVoucher(context, Voucher? product, int? quantity,
-      Future<dynamic> Function() onFinishBuyNow) async {
+      Customer customer, Future<dynamic> Function() onFinishBuyNow) async {
     if (Session.data.getBool('isLogin')!) {
       CartModel cart = new CartModel();
       cart.listItem = [];

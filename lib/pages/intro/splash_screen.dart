@@ -73,7 +73,7 @@ class _SplashScreenState extends State<SplashScreen> {
             Session.data.setBool('isLogin', false);
             Session.data.setBool('isIntro', false);
           }
-          return Session.data.getBool('isIntro')!
+          return Session.data.getBool('isIntro') != false
               ? HomeScreen()
               : IntroScreen(
                   intro: home.intro,

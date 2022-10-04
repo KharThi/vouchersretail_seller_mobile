@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:nyoba/models/user_model.dart';
+import 'package:nyoba/models/seller_model.dart';
 import 'package:nyoba/provider/user_provider.dart';
 import 'package:nyoba/services/session.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +8,7 @@ import '../../app_localizations.dart';
 import '../../utils/utility.dart';
 
 class AccountEditScreen extends StatefulWidget {
-  final UserModel? userModel;
+  final Seller? userModel;
   AccountEditScreen({Key? key, this.userModel}) : super(key: key);
 
   @override
@@ -30,8 +30,8 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
   @override
   void initState() {
     super.initState();
-    controllerEmail.text = widget.userModel!.email!;
-    controllerUsername.text = widget.userModel!.userName!;
+    controllerEmail.text = widget.userModel!.userInfo!.email!;
+    controllerUsername.text = widget.userModel!.sellerName!;
     // controllerFirstname.text = widget.userModel!.firstname!;
     // controllerLastname.text = widget.userModel!.lastname!;
   }

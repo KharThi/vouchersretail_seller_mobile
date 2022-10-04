@@ -10,14 +10,14 @@ class UserAPI {
   fetchDetail() async {
     // Map data = {"cookie": Session.data.get('cookie')};
     SharedPreferences data2 = await SharedPreferences.getInstance();
-    String? jwt = await data2.getString("jwt");
+    String? jwt = data2.getString("jwt");
     print(jwt);
     var response = await http.get(
         Uri.parse(
-            "https://webapp-220831200534.azurewebsites.net/api/v1/users/current"),
+            "https://webapp-220831200534.azurewebsites.net/api/v1/sellers/current"),
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + jwt!
+          "Authorization": "Bearer " + jwt.toString()
         });
     var dataResponse2 = await json.decode(response.body);
     // var response = await baseAPI.postAsync('$userDetail', data, isCustom: true);

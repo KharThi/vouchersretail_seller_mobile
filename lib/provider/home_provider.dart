@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:nyoba/constant/global_url.dart';
 import 'package:nyoba/models/banner_mini_model.dart';
 import 'package:nyoba/models/banner_model.dart';
 import 'package:nyoba/models/categories_model.dart';
@@ -346,7 +345,7 @@ class HomeProvider with ChangeNotifier {
     await ProductAPI().fetchProducts().then((data) {
       result = data;
       print(result);
-      Product product = Product.fromJson(result);
+      // Product product = Product.fromJson(result);
 
       loading = false;
       notifyListeners();
@@ -360,6 +359,7 @@ class HomeProvider with ChangeNotifier {
 
   Future<List<Product>?> fetchProductsV2() async {
     loading = true;
+    // ignore: unused_local_variable
     var result;
     List<Product> list = List.empty(growable: true);
     await ProductAPI().fetchProducts().then((data) {

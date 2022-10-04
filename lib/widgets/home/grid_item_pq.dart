@@ -1,9 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:nyoba/models/product_model.dart';
-import 'package:nyoba/utils/currency_format.dart';
 import 'package:nyoba/utils/utility.dart';
-import 'package:hexcolor/hexcolor.dart';
 
 import '../../pages/product/product_detail_screen.dart';
 

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nyoba/models/customer.dart';
-import 'package:nyoba/models/user_model.dart';
-import 'package:nyoba/provider/user_provider.dart';
-import 'package:nyoba/services/session.dart';
+import 'package:nyoba/provider/customer_provider.dart';
 import 'package:provider/provider.dart';
-import '../../app_localizations.dart';
 import '../../utils/utility.dart';
 
 class CustomerAddScreen extends StatefulWidget {
@@ -34,6 +31,7 @@ class _CustomerAddScreenState extends State<CustomerAddScreen> {
   @override
   void initState() {
     super.initState();
+    // CustomerProvider.loading = false;
     // controllerEmail.text = widget.userModel!.userInfo!.email!;
     // controllerUsername.text = widget.userModel!.userInfo!.userName!;
     // controllerPhone.text = widget.userModel!.userInfo!.phoneNumber!;
@@ -44,40 +42,60 @@ class _CustomerAddScreenState extends State<CustomerAddScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserProvider>(context, listen: false);
+    final user = Provider.of<CustomerProvider>(context, listen: false);
 
     var save = () async {
-      FocusScopeNode currentFocus = FocusScope.of(context);
+      // FocusScopeNode currentFocus = FocusScope.of(context);
 
-      if (!currentFocus.hasPrimaryFocus) {
-        currentFocus.unfocus();
-      }
+      // if (!currentFocus.hasPrimaryFocus) {
+      //   currentFocus.unfocus();
+      // }
 
-      this.setState(() {});
-      if (controllerPassword.text != controllerPasswordConfirm.text) {
-        snackBar(context,
-            message: 'Your password and confirmation password does not match.');
-      } else {
-        final Future<Map<String, dynamic>?> authResponse = user.updateUser(
-            username: controllerUsername.text,
-            password: controllerPassword.text,
-            firstName: controllerFirstname.text,
-            lastName: controllerLastname.text,
-            oldPassword: controllerOldPassword.text);
-
-        authResponse.then((value) {
-          if (value!['is_success'] == true) {
-            Navigator.pop(context);
-            snackBar(context,
-                message:
-                    AppLocalizations.of(context)!.translate('succ_update_acc')!,
-                color: Colors.green);
-          } else {
-            snackBar(context, message: value['message'], color: Colors.red);
-          }
-          this.setState(() {});
+      // this.setState(() {});
+      // if (controllerPassword.text != controllerPasswordConfirm.text) {
+      //   snackBar(context,
+      //       message: 'Your password and confirmation password does not match.');
+      // } else {
+      Customer customer = new Customer(
+          id: 1,
+          customerName: controllerCustomerName.text,
+          userInfo: UserInfo(
+              id: 1,
+              email: controllerEmail.text,
+              avatarLink: null,
+              userName: controllerUsername.text,
+              role: "Customer",
+              phoneNumber: controllerPhone.text,
+              createAt: null,
+              updateAt: null,
+              deleteAt: null,
+              status: "Active"),
+          userInfoId: 1,
+          cartId: 0);
+      bool check = await user.addCustomer(context, customer);
+      if (check) {
+        setState(() {
+          controllerCustomerName.text = "";
+          controllerEmail.text = "";
+          controllerPhone.text = "";
+          controllerUsername.text = "";
         });
       }
+      user.loading = false;
+
+      // authResponse.then((value) {
+      //   if (value!['is_success'] == true) {
+      //     Navigator.pop(context);
+      //     snackBar(context,
+      //         message:
+      //             AppLocalizations.of(context)!.translate('succ_update_acc')!,
+      //         color: Colors.green);
+      //   } else {
+      //     snackBar(context, message: value['message'], color: Colors.red);
+      //   }
+      //   this.setState(() {});
+      // });
+      // }
     };
 
     return Scaffold(
@@ -105,25 +123,25 @@ class _CustomerAddScreenState extends State<CustomerAddScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 form("Nhập tên của khách hàng", "Tên khách hàng", true,
-                    controllerFirstname,
+                    controllerCustomerName,
                     icon: "akun"),
                 Container(
                   height: 15,
                 ),
                 form("Nhập số điện thoại", "Số điện thoại", true,
-                    controllerLastname,
+                    controllerPhone,
                     icon: "call"),
                 Container(
                   height: 15,
                 ),
                 form("Nhập username khách hành", "Username khách hành", true,
                     controllerUsername,
-                    icon: "akun", enable: false),
+                    icon: "akun", enable: true),
                 Container(
                   height: 15,
                 ),
                 form("Nhập email khách hàng", "Email", true, controllerEmail,
-                    icon: "email", enable: false),
+                    icon: "email", enable: true),
                 Container(
                   height: 15,
                 ),

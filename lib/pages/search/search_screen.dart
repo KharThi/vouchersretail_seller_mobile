@@ -3,7 +3,6 @@ import 'package:nyoba/pages/search/qr_scanner_screen.dart';
 import 'package:nyoba/provider/home_provider.dart';
 import 'package:nyoba/provider/search_provider.dart';
 import 'package:nyoba/utils/utility.dart';
-import 'package:nyoba/widgets/product/list_item_product.dart';
 import 'package:provider/provider.dart';
 
 import '../../app_localizations.dart';

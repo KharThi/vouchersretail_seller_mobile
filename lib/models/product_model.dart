@@ -497,8 +497,8 @@ class Voucher {
   int? inventory;
   int? limitPerDay;
   bool? isRequireProfileInfo;
-  dynamic? startDate;
-  dynamic? endDate;
+  String? startDate;
+  String? endDate;
   int? productId;
   int? serviceId;
   String? description;
@@ -596,7 +596,9 @@ class Combo {
         content: json["content"],
         isForKid: json["isForKid"],
         type: json["type"],
-        prices: List<Price>.from(json["prices"].map((x) => x)),
+        prices: json["prices"] != null
+            ? List<Price>.from(json["prices"].map((x) => x))
+            : List.empty(),
         productId: json["productId"],
         vouchers: List<ComboVoucher>.from(
             json["vouchers"].map((x) => ComboVoucher.fromJson(x))),

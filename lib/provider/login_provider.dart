@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:nyoba/models/login_model.dart';
-import 'package:nyoba/models/user_model.dart';
+import 'package:nyoba/models/seller_model.dart';
 import 'package:nyoba/pages/home/home_screen.dart';
 import 'dart:convert';
 import 'package:nyoba/services/login_api.dart';
@@ -40,9 +40,14 @@ class LoginProvider with ChangeNotifier {
         result = data;
         print("Data" + data.toString());
 
-        if (result['email'] != null) {
+        if (result['sellerName'] != null) {
+          // if (result['role'] != "Seller") {
+          //   snackBar(context,
+          //       message: "Bạn không được phép truy cập vào hệ thống!",
+          //       color: Colors.red);
+          // } else {
           print("object");
-          UserModel user = UserModel.fromJson(result);
+          Seller user = Seller.fromJson(result);
           print("User :" + user.toString().toString());
           Session().saveUser(user);
           Session.data.setString("login_type", 'default');
@@ -55,6 +60,7 @@ class LoginProvider with ChangeNotifier {
                   builder: (BuildContext context) => HomeScreen()),
               (Route<dynamic> route) => false);
           inputDeviceToken();
+          // }
         } else {
           snackBar(context, message: result['message'], color: Colors.red);
         }

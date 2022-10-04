@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:nyoba/app_localizations.dart';
@@ -117,7 +116,7 @@ class _AccountScreenState extends State<AccountScreen> {
                               fontWeight: FontWeight.w500),
                         )
                       : Text(
-                          "${AppLocalizations.of(context)!.translate('hello')}, ${Session.data.getString('username')} !",
+                          "${AppLocalizations.of(context)!.translate('hello')}, ${Session.data.getString('sellerName')} !",
                           style: TextStyle(
                               color: secondaryColor,
                               fontSize: responsiveFont(14),
@@ -405,7 +404,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Widget buildPointCard() {
     final point = Provider.of<UserProvider>(context, listen: false);
-    String fullName = "${Session.data.getString('username')}";
+    String fullName = "${Session.data.getString('sellerName')}";
 
     if (point.point == null) {
       return Container();

@@ -5,11 +5,7 @@ import 'package:nyoba/provider/home_provider.dart';
 import 'package:nyoba/provider/search_provider.dart';
 import 'package:nyoba/utils/utility.dart';
 import 'package:nyoba/widgets/customer/list_item_customer.dart';
-import 'package:nyoba/widgets/product/list_item_product.dart';
 import 'package:provider/provider.dart';
-
-import '../../app_localizations.dart';
-import '../../widgets/product/list_item_product2.dart';
 
 class SearchScreenCustomer extends StatefulWidget {
   SearchScreenCustomer({Key? key}) : super(key: key);

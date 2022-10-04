@@ -5,17 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:nyoba/models/customer.dart';
-import 'package:nyoba/pages/customer/customer_add_screen.dart';
-import 'package:nyoba/pages/product/product_detail_screen.dart';
-import 'package:nyoba/models/product_model.dart';
-import 'package:nyoba/pages/product/product_detail_screen_combo.dart';
-import 'package:nyoba/utils/currency_format.dart';
 import 'package:nyoba/utils/utility.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../pages/customer/customer_edit_screen.dart';
-import '../../pages/product/product_detail_screen_voucher.dart';
 
 class ListItemCustomer extends StatelessWidget {
   final Customer? customer;
@@ -37,7 +30,7 @@ class ListItemCustomer extends StatelessWidget {
           //               )));
           // } else {
           SharedPreferences prefs = await SharedPreferences.getInstance();
-          String? musicsString = await prefs.getString('list_customer_order');
+          String? musicsString = prefs.getString('list_customer_order');
           print("object 1" + musicsString.toString());
           if (musicsString != null) {
             List<Customer> cutomers = [];
@@ -232,7 +225,7 @@ class ListItemCustomer extends StatelessWidget {
                           SharedPreferences prefs =
                               await SharedPreferences.getInstance();
                           String? musicsString =
-                              await prefs.getString('list_customer_order');
+                              prefs.getString('list_customer_order');
                           if (musicsString != null) {
                             List<Customer> cutomers = [];
                             for (Map<String, dynamic> item
@@ -251,6 +244,7 @@ class ListItemCustomer extends StatelessWidget {
                           snackBar(context,
                               message: "Thêm chủ sở hữu thành công!",
                               color: Colors.green);
+                          Navigator.pop(context);
                         },
                       )
                     ],

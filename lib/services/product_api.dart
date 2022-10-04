@@ -70,7 +70,7 @@ class ProductAPI {
                 productId.toString()),
         headers: {
           "Content-Type": "application/json",
-          // "Authorization": "Bearer " + jwt!
+          "Authorization": "Bearer " + jwt.toString()
         });
     Map<String, dynamic> dataResponse = await json.decode(response.body);
     return dataResponse["data"];
@@ -88,7 +88,7 @@ class ProductAPI {
                 productId.toString()),
         headers: {
           "Content-Type": "application/json",
-          // "Authorization": "Bearer " + jwt!
+          "Authorization": "Bearer " + jwt.toString()
         });
     Map<String, dynamic> dataResponse = await json.decode(response.body);
     print("object" + productId.toString());
@@ -114,7 +114,7 @@ class ProductAPI {
                 search),
         headers: {
           "Content-Type": "application/json",
-          // "Authorization": "Bearer " + jwt!
+          "Authorization": "Bearer " + jwt.toString()
         });
     print(response.body);
     Map<String, dynamic> dataResponse = await json.decode(response.body);
@@ -224,7 +224,7 @@ class ProductAPI {
             "https://webapp-220831200534.azurewebsites.net/api/v1/products"),
         headers: {
           "Content-Type": "application/json",
-          // "Authorization": "Bearer " + jwt!
+          "Authorization": "Bearer " + jwt.toString()
         });
     var dataResponse = await json.decode(response.body);
     // List returnData = new List.empty(growable: true);
@@ -232,8 +232,8 @@ class ProductAPI {
 
     Iterable list = dataResponse['data'];
 
-    final Data = list.cast<Map<String, dynamic>>();
-    final listData = await Data.map<Product>((json) {
+    final data2 = list.cast<Map<String, dynamic>>();
+    final listData = data2.map<Product>((json) {
       return Product.fromJson(json);
     }).toList();
 

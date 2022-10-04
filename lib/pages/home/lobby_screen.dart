@@ -24,7 +24,6 @@ import 'package:nyoba/provider/product_provider.dart';
 import 'package:nyoba/provider/wallet_provider.dart';
 import 'package:nyoba/services/session.dart';
 import 'package:nyoba/widgets/home/grid_item_pq.dart';
-import 'package:nyoba/widgets/home/wallet_card.dart';
 import 'package:nyoba/widgets/home/flashsale/flash_sale_countdown.dart';
 import 'package:provider/provider.dart';
 
