@@ -250,7 +250,12 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
   buyNow() async {
     print("Buy Now");
     await Provider.of<OrderProvider>(context, listen: false).buyNowVoucher(
-        context, widget.product, quantity, customers.first, onFinishBuyNow);
+        context,
+        widget.product,
+        quantity,
+        _selectedDate,
+        customers.first,
+        onFinishBuyNow);
   }
 
   getListCustomerOrder() async {

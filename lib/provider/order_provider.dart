@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:nyoba/models/cart_model.dart';
 import 'package:nyoba/models/customer.dart';
 import 'package:nyoba/models/order.dart';
@@ -13,6 +14,7 @@ import 'package:nyoba/services/session.dart';
 import 'package:nyoba/utils/utility.dart';
 import 'package:nyoba/widgets/webview/checkout_webview.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../app_localizations.dart';
 import 'coupon_provider.dart';
@@ -303,38 +305,63 @@ class OrderProvider with ChangeNotifier {
     }
   }
 
-  Future buyNowVoucher(context, Voucher? product, int? quantity,
+  Future buyNowVoucher(context, Voucher? product, int? quantity, String date,
       Customer customer, Future<dynamic> Function() onFinishBuyNow) async {
     if (Session.data.getBool('isLogin')!) {
-      CartModel cart = new CartModel();
-      cart.listItem = [];
-      cart.listItem!.add(new CartProductItem(
-          productId: product!.id, quantity: quantity, variationId: 1));
+      // CartModel cart = new CartModel();
+      // cart.listItem = [];
+      // cart.listItem!.add(new CartProductItem(
+      //     productId: product!.id, quantity: quantity, variationId: 1));
 
-      //init list coupon
-      cart.listCoupon = [];
+      // //init list coupon
+      // cart.listCoupon = [];
 
-      //add to cart model
-      cart.paymentMethod = "xendit_bniva";
-      cart.paymentMethodTitle = "Bank Transfer - BNI";
-      cart.setPaid = true;
-      cart.customerId = Session.data.getInt('id');
-      cart.status = 'completed';
-      cart.token = Session.data.getString('cookie');
+      // //add to cart model
+      // cart.paymentMethod = "xendit_bniva";
+      // cart.paymentMethodTitle = "Bank Transfer - BNI";
+      // cart.setPaid = true;
+      // cart.customerId = Session.data.getInt('id');
+      // cart.status = 'completed';
+      // cart.token = Session.data.getString('cookie');
 
       //Encode Json
-      final jsonOrder = json.encode(cart);
+      var now = new DateTime.now();
+      var formatter = new DateFormat('yyyy-MM-dd');
+      String formattedDate = formatter.format(now);
+      SharedPreferences data = await SharedPreferences.getInstance();
+      String? sellerId = data.getInt("id").toString();
+      Map orderItems = {
+        // "user_email": email,
+        // "user_login": username,
+        "status": "Active",
+        "orderProductId": product!.productId,
+        // "priceId": product.prices!.first.id,
+        "profileId": customer.userInfoId,
+        "useDate": date
+      };
+      Map orderData = {
+        // "user_email": email,
+        // "user_login": username,
+        "status": "Active",
+        "createDate": formattedDate,
+
+        "orderStatus": "Processing",
+        "customerId": customer.id,
+        "sellerId": sellerId,
+        "orderItems": orderItems,
+      };
+      final jsonOrder = json.encode(orderData);
       printLog(jsonOrder, name: 'Json Order');
 
       //Convert Json to bytes
-      var bytes = utf8.encode(jsonOrder);
+      // var bytes = utf8.encode(jsonOrder);
 
-      //Convert bytes to base64
-      var order = base64.encode(bytes);
+      // //Convert bytes to base64
+      // var order = base64.encode(bytes);
 
       //Generate link WebView checkout
       await Provider.of<OrderProvider>(context, listen: false)
-          .checkout(order)
+          .checkoutV2(jsonOrder)
           .then((value) async {
         printLog(value, name: 'Link Order');
         await Navigator.push(
@@ -348,7 +375,7 @@ class OrderProvider with ChangeNotifier {
     } else {
       Navigator.pop(context);
       snackBar(context,
-          message: AppLocalizations.of(context)!.translate('you_login_first')!);
+          message: "Bạn cần đăng nhập trước khi thực hiện chức năng này!");
     }
   }
 
