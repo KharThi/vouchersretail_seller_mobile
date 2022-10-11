@@ -23,7 +23,7 @@ class RegisterAPI {
     var body = json.encode(data);
     var response = await http.post(
         Uri.parse(
-            "https://webapp-220831200534.azurewebsites.net/api/v1/login/signup"),
+            "https://webapp-221010174451.azurewebsites.net/api/v1/login/signup"),
         headers: {"Content-Type": "application/json"},
         body: body);
     print(body);

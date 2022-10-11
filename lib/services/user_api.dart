@@ -14,7 +14,7 @@ class UserAPI {
     print(jwt);
     var response = await http.get(
         Uri.parse(
-            "https://webapp-220831200534.azurewebsites.net/api/v1/sellers/current"),
+            "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/current"),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + jwt.toString()

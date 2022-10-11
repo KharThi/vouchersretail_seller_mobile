@@ -53,6 +53,7 @@ class _ModalSheetCartComboState extends State<ModalSheetCartCombo> {
   String? variationName;
 
   String _selectedDate = 'Bấm vào để chọn ngày';
+  String _forCallApiDate = "";
 
   OrderProvider? orderProvider;
 
@@ -66,6 +67,10 @@ class _ModalSheetCartComboState extends State<ModalSheetCartCombo> {
     );
     if (d != null)
       setState(() {
+        print("date" + d.toString());
+        var formatter = new DateFormat('yyyy-MM-dd');
+        String formattedDate = formatter.format(d);
+        _forCallApiDate = formattedDate;
         _selectedDate = new DateFormat.yMMMMd("vi_VN").format(d);
       });
   }
@@ -304,8 +309,13 @@ class _ModalSheetCartComboState extends State<ModalSheetCartCombo> {
 
   buyNow() async {
     print("Buy Now");
-    await Provider.of<OrderProvider>(context, listen: false)
-        .buyNowCombo(context, widget.product, quantity, onFinishBuyNow);
+    await Provider.of<OrderProvider>(context, listen: false).buyNowCombo(
+        context,
+        widget.product,
+        quantity,
+        _forCallApiDate,
+        customers.first,
+        onFinishBuyNow);
   }
 
   @override

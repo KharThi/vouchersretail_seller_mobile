@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
+import 'package:nyoba/models/customer.dart';
 import 'package:nyoba/services/customer_api.dart';
 import 'package:nyoba/utils/utility.dart';
 
@@ -25,5 +28,25 @@ class CustomerProvider with ChangeNotifier {
       }
     });
     return false;
+  }
+
+  Future<List<Customer>> getListCustomer(context) async {
+    loading = true;
+    List<Customer> customers = List.empty(growable: true);
+    await CustomerAPI().getListCustomer().then((data) {
+      if (data.length != 0 || data != "") {
+        // Iterable l = data;
+        // customers =
+        //     List<Customer>.from(l.map((model) => Customer.fromJson(model)));
+        customers = data;
+        // for (var element in customers) {
+        //   print(element.customerName);
+        // }
+        loading = false;
+        notifyListeners();
+        return customers;
+      }
+    });
+    return customers;
   }
 }

@@ -43,7 +43,7 @@ class CustomerAPI {
 
     var response = await http.post(
         Uri.parse(
-            "https://webapp-220831200534.azurewebsites.net/api/v1/sellers/customers"),
+            "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers"),
         body: body,
         headers: {
           "Content-Type": "application/json",
@@ -52,5 +52,25 @@ class CustomerAPI {
     print(response.body);
     Map<String, dynamic> dataResponse = await json.decode(response.body);
     return dataResponse["data"];
+  }
+
+  getListCustomer() async {
+    SharedPreferences data = await SharedPreferences.getInstance();
+    String? jwt = data.getString("jwt");
+    print("jwt " + jwt.toString());
+
+    var response = await http.get(
+        Uri.parse(
+            "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers"),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + jwt.toString()
+        });
+    // print(response.body);
+    List<dynamic> dataResponse = await json.decode(response.body);
+    Iterable l = json.decode(response.body);
+    List<Customer> customers =
+        List<Customer>.from(l.map((model) => Customer.fromJson(model)));
+    return customers;
   }
 }

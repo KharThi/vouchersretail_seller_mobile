@@ -37,6 +37,8 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
   int counter = 1;
   int? quantity = 1;
 
+  List<int> listQuantity = List.empty(growable: true);
+
   List<ProductAttributeModel> attributes = [];
   List<ProductVariation> variation = [];
   List<Customer> customers = [];
@@ -53,6 +55,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
   String? variationName;
 
   String _selectedDate = 'Bấm vào để chọn ngày';
+  String _forCallApiDate = "";
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? d = await showDatePicker(
@@ -64,6 +67,10 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
     );
     if (d != null)
       setState(() {
+        print("date" + d.toString());
+        var formatter = new DateFormat('yyyy-MM-dd');
+        String formattedDate = formatter.format(d);
+        _forCallApiDate = formattedDate;
         _selectedDate = new DateFormat.yMMMMd("vi_VN").format(d);
       });
   }
@@ -203,6 +210,10 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
   void initState() {
     super.initState();
     getListCustomerOrder();
+    print("object " + widget.product!.prices!.length.toString());
+    for (var i = 0; i < widget.product!.prices!.length; i++) {
+      listQuantity.add(0);
+    }
     // widget.quantity = 1;
     // initVariation();
   }
@@ -252,8 +263,8 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
     await Provider.of<OrderProvider>(context, listen: false).buyNowVoucher(
         context,
         widget.product,
-        quantity,
-        _selectedDate,
+        listQuantity,
+        _forCallApiDate,
         customers.first,
         onFinishBuyNow);
   }
@@ -328,132 +339,147 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                       //         ),
                       //       )
                       //     :
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    // AppLocalizations.of(context)!
-                                    //     .translate('qty')!
-                                    "Số lượng",
-                                    style:
-                                        TextStyle(fontSize: responsiveFont(12)),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 25,
-                                ),
-                                Row(
-                                  children: [
-                                    Container(
-                                      width: 16.w,
-                                      height: 16.h,
-                                      child: InkWell(
-                                        onTap: () {
-                                          setState(() {
-                                            if (quantity! > 1) {
-                                              quantity = quantity! - 1;
-                                              print(quantity);
-                                            }
-                                          });
-                                        },
-                                        child: quantity! > 1
-                                            ? Image.asset(
-                                                "images/cart/minusDark.png")
-                                            : Image.asset(
-                                                "images/cart/minus.png"),
+                      SizedBox(
+                          height: widget.product!.prices!.length * 60,
+                          child: new ListView.builder(
+                            itemCount: widget.product!.prices!.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          // AppLocalizations.of(context)!
+                                          //     .translate('qty')!
+                                          widget.product!.prices![index]
+                                              .priceLevelName
+                                              .toString(),
+                                          style: TextStyle(
+                                              fontSize: responsiveFont(12)),
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text((quantity).toString()),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Container(
-                                      width: 16.w,
-                                      height: 16.h,
-                                      child: InkWell(
-                                          onTap:
-                                              // isOutStock
-                                              //     ? null
-                                              //     :
-                                              () {
-                                            setState(() {
-                                              // widget.product!
-                                              //     .cartQuantity = widget
-                                              //         .product!
-                                              //         .cartQuantity! +
-                                              //     1;
-                                              // if (quantity! > 1) {
-                                              quantity = quantity! + 1;
-                                              print(quantity);
-                                              // }
-                                            });
-                                          },
-                                          child: !isOutStock
-                                              ? Image.asset(
-                                                  "images/cart/plus.png")
-                                              : Image.asset(
-                                                  "images/cart/plusDark.png")),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            // true
-                            //     ?
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  // stringToCurrency(
-                                  //     double.parse(widget.product!.price
-                                  //             .toString())
-                                  //         .toDouble(),
-                                  //     context),
-                                  widget.product!.prices!.isNotEmpty
-                                      ? (widget.product!.prices!.first.price! *
-                                                  quantity!)
-                                              .toString() +
-                                          " Vnd"
-                                      : "null",
-                                  style: TextStyle(
-                                      color: secondaryColor,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                // Text(
-                                //   quantity == 999
-                                //       ? '${AppLocalizations.of(context)!.translate('stock')} : ${AppLocalizations.of(context)!.translate('available')}'
-                                //       : '${AppLocalizations.of(context)!.translate('stock')} : ${quantity}',
-                                // )
-                              ],
-                            )
-                            // : Visibility(
-                            //     visible: true,
-                            //     child: Column(
-                            //       crossAxisAlignment:
-                            //           CrossAxisAlignment.end,
-                            //       children: [
-                            //         Text(
-                            //           stringToCurrency(
-                            //               variationPrice, context),
-                            //           style: TextStyle(
-                            //               color: secondaryColor,
-                            //               fontWeight: FontWeight.w500),
-                            //         ),
-                            //         Text(
-                            //           variationStock == 999
-                            //               ? '${AppLocalizations.of(context)!.translate('stock')} : ${AppLocalizations.of(context)!.translate('in_stock')}'
-                            //               : '${AppLocalizations.of(context)!.translate('stock')} : $variationStock',
-                            //         )
-                            //       ],
-                            //     ))
-                          ],
+                                      SizedBox(
+                                        width: 25,
+                                      ),
+                                      Row(
+                                        children: [
+                                          Container(
+                                            width: 16.w,
+                                            height: 16.h,
+                                            child: InkWell(
+                                              onTap: () {
+                                                setState(() {
+                                                  if (listQuantity[index] > 0) {
+                                                    listQuantity[index] =
+                                                        listQuantity[index] - 1;
+                                                    print(listQuantity[index]);
+                                                  }
+                                                });
+                                              },
+                                              child: listQuantity[index] > 0
+                                                  ? Image.asset(
+                                                      "images/cart/minusDark.png")
+                                                  : Image.asset(
+                                                      "images/cart/minus.png"),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                              (listQuantity[index]).toString()),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Container(
+                                            width: 16.w,
+                                            height: 16.h,
+                                            child: InkWell(
+                                                onTap:
+                                                    // isOutStock
+                                                    //     ? null
+                                                    //     :
+                                                    () {
+                                                  setState(() {
+                                                    // widget.product!
+                                                    //     .cartQuantity = widget
+                                                    //         .product!
+                                                    //         .cartQuantity! +
+                                                    //     1;
+                                                    // if (quantity! > 1) {
+                                                    listQuantity[index] =
+                                                        listQuantity[index] + 1;
+                                                    print(listQuantity[index]);
+                                                    // }
+                                                  });
+                                                },
+                                                child: !isOutStock
+                                                    ? Image.asset(
+                                                        "images/cart/plus.png")
+                                                    : Image.asset(
+                                                        "images/cart/plusDark.png")),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  // true
+                                  //     ?
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        // stringToCurrency(
+                                        //     double.parse(widget.product!.price
+                                        //             .toString())
+                                        //         .toDouble(),
+                                        //     context),
+                                        widget.product!.prices!.isNotEmpty
+                                            ? (widget.product!.prices![index]
+                                                            .price! *
+                                                        listQuantity[index])
+                                                    .toString() +
+                                                " Vnd"
+                                            : "null",
+                                        style: TextStyle(
+                                            color: secondaryColor,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      // Text(
+                                      //   quantity == 999
+                                      //       ? '${AppLocalizations.of(context)!.translate('stock')} : ${AppLocalizations.of(context)!.translate('available')}'
+                                      //       : '${AppLocalizations.of(context)!.translate('stock')} : ${quantity}',
+                                      // )
+                                    ],
+                                  )
+                                  // : Visibility(
+                                  //     visible: true,
+                                  //     child: Column(
+                                  //       crossAxisAlignment:
+                                  //           CrossAxisAlignment.end,
+                                  //       children: [
+                                  //         Text(
+                                  //           stringToCurrency(
+                                  //               variationPrice, context),
+                                  //           style: TextStyle(
+                                  //               color: secondaryColor,
+                                  //               fontWeight: FontWeight.w500),
+                                  //         ),
+                                  //         Text(
+                                  //           variationStock == 999
+                                  //               ? '${AppLocalizations.of(context)!.translate('stock')} : ${AppLocalizations.of(context)!.translate('in_stock')}'
+                                  //               : '${AppLocalizations.of(context)!.translate('stock')} : $variationStock',
+                                  //         )
+                                  //       ],
+                                  //     ))
+                                ],
+                              );
+                            },
+                          ),
                         )),
               Visibility(
                 visible: quantity == null || quantity == 0,
@@ -526,20 +552,27 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                             }).toList(),
                           ),
                           customers.length < 1
-                              ? ElevatedButton.icon(
-                                  onPressed: () {
-                                    Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    SearchScreenCustomer()))
-                                        .then((result) => setState(() {
-                                              customers = [];
-                                              getListCustomerOrder();
-                                            }));
-                                  },
-                                  icon: Icon(Icons.add),
-                                  label: Text("Bấm vào đây để thêm chủ sở hữu"),
+                              ? Container(
+                                  width: 400,
+                                  height: 40,
+                                  margin: const EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 5),
+                                  child: ElevatedButton.icon(
+                                    onPressed: () {
+                                      Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      SearchScreenCustomer()))
+                                          .then((result) => setState(() {
+                                                customers = [];
+                                                getListCustomerOrder();
+                                              }));
+                                    },
+                                    icon: Icon(Icons.add),
+                                    label:
+                                        Text("Bấm vào đây để thêm chủ sở hữu"),
+                                  ),
                                 )
                               : Container(),
                         ],
@@ -699,7 +732,36 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                   width: double.infinity,
                   height: 30.h,
                   child: TextButton(
-                    onPressed: null,
+                    onPressed: () {
+                      bool check1 = false;
+                      bool check2 = customers != null;
+                      bool check3 = _selectedDate != "Bấm vào để chọn ngày";
+                      for (var element in listQuantity) {
+                        if (element > 0) {
+                          check1 = true;
+                        }
+                      }
+                      if (check1) {
+                        if (check2) {
+                          if (check3) {
+                            buyNow();
+                          } else {
+                            snackBar(context,
+                                message:
+                                    'Vui lòng chon ngày sử dụng sản phẩm!');
+                          }
+                        } else {
+                          snackBar(context,
+                              message:
+                                  'Vui lòng chon chủ sở hữu cho đơn hàng!');
+                        }
+                      } else {
+                        Scaffold.of(context).showSnackBar(SnackBar(
+                            content: Text('Ticket Added Sucessfully')));
+                        snackBar(context,
+                            message: 'Bạn chưa chon số lượng cho sản phẩm!');
+                      }
+                    },
                     // !isAvailable || load
                     //     ? null
                     //     : () {

@@ -724,7 +724,8 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
                           height: 30.h,
                           child: TextButton(
                             onPressed: () {
-                              if (productModel!.inventory != 0) {
+                              //for testing
+                              if (productModel!.inventory != -1) {
                                 showMaterialModalBottomSheet(
                                   context: context,
                                   builder: (context) => ModalSheetCartVoucher(

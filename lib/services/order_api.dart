@@ -20,14 +20,76 @@ class OrderAPI {
 
     var response = await http.post(
         Uri.parse(
-            "https://webapp-220831200534.azurewebsites.net/api/v1/sellers/order"),
+            "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/order"),
         body: order,
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + jwt.toString()
         });
     Map<String, dynamic> dataResponse = await json.decode(response.body);
+    print(dataResponse.toString());
     return dataResponse["data"];
+  }
+
+  getCartByCustomerId(int customerId) async {
+    SharedPreferences data = await SharedPreferences.getInstance();
+    String? jwt = data.getString("jwt");
+
+    var response = await http.get(
+        Uri.parse(
+            "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/" +
+                customerId.toString() +
+                "/cart"),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + jwt.toString()
+        });
+    Map<String, dynamic> dataResponse = await json.decode(response.body);
+    print(dataResponse.toString());
+    return dataResponse;
+  }
+
+  addCartItem(int customerId, int quantity, int priceId) async {
+    SharedPreferences data = await SharedPreferences.getInstance();
+    String? jwt = data.getString("jwt");
+    Map customerData = {
+      "status": "Active",
+      "quantity": quantity,
+      "priceId": priceId,
+    };
+    var body = json.encode(customerData);
+
+    var response = await http.post(
+        Uri.parse(
+            "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/" +
+                customerId.toString() +
+                "/cart/items"),
+        body: body,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + jwt.toString()
+        });
+    Map<String, dynamic> dataResponse = await json.decode(response.body);
+    print(dataResponse.toString());
+    return dataResponse;
+  }
+
+  placeOrder(int customerId) async {
+    SharedPreferences data = await SharedPreferences.getInstance();
+    String? jwt = data.getString("jwt");
+
+    var response = await http.post(
+        Uri.parse(
+            "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/" +
+                customerId.toString() +
+                "/place-order"),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + jwt.toString()
+        });
+    Map<String, dynamic> dataResponse = await json.decode(response.body);
+    print(dataResponse.toString());
+    return dataResponse;
   }
 
   listMyOrder(

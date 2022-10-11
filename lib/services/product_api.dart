@@ -66,7 +66,7 @@ class ProductAPI {
 
     var response = await http.get(
         Uri.parse(
-            "https://webapp-220831200534.azurewebsites.net/api/v1/vouchers?ProductId=" +
+            "https://webapp-221010174451.azurewebsites.net/api/v1/vouchers?ProductId=" +
                 productId.toString()),
         headers: {
           "Content-Type": "application/json",
@@ -84,7 +84,7 @@ class ProductAPI {
 
     var response = await http.get(
         Uri.parse(
-            "https://webapp-220831200534.azurewebsites.net/api/v1/combos?ProductId=" +
+            "https://webapp-221010174451.azurewebsites.net/api/v1/combos?ProductId=" +
                 productId.toString()),
         headers: {
           "Content-Type": "application/json",
@@ -110,7 +110,7 @@ class ProductAPI {
 
     var response = await http.get(
         Uri.parse(
-            "https://webapp-220831200534.azurewebsites.net/api/v1/products?Summary=" +
+            "https://webapp-221010174451.azurewebsites.net/api/v1/products?Summary=" +
                 search),
         headers: {
           "Content-Type": "application/json",
@@ -131,7 +131,7 @@ class ProductAPI {
 
     var response = await http.get(
         Uri.parse(
-            "https://webapp-220831200534.azurewebsites.net/api/v1/customers?UserName=" +
+            "https://webapp-221010174451.azurewebsites.net/api/v1/customers?UserName=" +
                 search),
         headers: {
           "Content-Type": "application/json",
@@ -221,7 +221,7 @@ class ProductAPI {
 
     var response = await http.get(
         Uri.parse(
-            "https://webapp-220831200534.azurewebsites.net/api/v1/products"),
+            "https://webapp-221010174451.azurewebsites.net/api/v1/products"),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + jwt.toString()
