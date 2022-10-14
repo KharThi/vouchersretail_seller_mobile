@@ -734,6 +734,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                   child: TextButton(
                     onPressed: () {
                       bool check1 = false;
+                      // ignore: unnecessary_null_comparison
                       bool check2 = customers != null;
                       bool check3 = _selectedDate != "Bấm vào để chọn ngày";
                       for (var element in listQuantity) {
@@ -756,6 +757,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                   'Vui lòng chon chủ sở hữu cho đơn hàng!');
                         }
                       } else {
+                        // ignore: deprecated_member_use
                         Scaffold.of(context).showSnackBar(SnackBar(
                             content: Text('Ticket Added Sucessfully')));
                         snackBar(context,

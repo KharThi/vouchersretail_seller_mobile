@@ -67,6 +67,7 @@ class CustomerAPI {
           "Authorization": "Bearer " + jwt.toString()
         });
     // print(response.body);
+    // ignore: unused_local_variable
     List<dynamic> dataResponse = await json.decode(response.body);
     Iterable l = json.decode(response.body);
     List<Customer> customers =

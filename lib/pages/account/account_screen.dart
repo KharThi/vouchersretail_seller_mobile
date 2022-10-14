@@ -1,16 +1,10 @@
-import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:launch_review/launch_review.dart';
 import 'package:nyoba/app_localizations.dart';
-import 'package:nyoba/constant/constants.dart';
-import 'package:nyoba/pages/language/language_screen.dart';
 import 'package:nyoba/pages/account/account_detail_screen.dart';
 import 'package:nyoba/pages/home/home_screen.dart';
 import 'package:nyoba/pages/point/my_point_screen.dart';
-import 'package:nyoba/pages/review/review_screen.dart';
 import 'package:nyoba/provider/app_provider.dart';
 import 'package:nyoba/provider/home_provider.dart';
 import 'package:nyoba/provider/user_provider.dart';
@@ -19,9 +13,7 @@ import 'package:nyoba/widgets/webview/webview.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import '../wishlist/wishlist_screen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../order/my_order_screen.dart';
 import '../../utils/utility.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -91,7 +83,7 @@ class _AccountScreenState extends State<AccountScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Text(
-          AppLocalizations.of(context)!.translate('title_myAccount')!,
+          "Tài khoản",
           style: TextStyle(
               fontSize: responsiveFont(16),
               fontWeight: FontWeight.w500,
@@ -109,21 +101,21 @@ class _AccountScreenState extends State<AccountScreen> {
                 children: [
                   point.loading
                       ? Text(
-                          "${AppLocalizations.of(context)!.translate('hello')}",
+                          "Xin chào",
                           style: TextStyle(
                               color: secondaryColor,
                               fontSize: responsiveFont(14),
                               fontWeight: FontWeight.w500),
                         )
                       : Text(
-                          "${AppLocalizations.of(context)!.translate('hello')}, ${Session.data.getString('sellerName')} !",
+                          "Xin chào, ${Session.data.getString('sellerName')} !",
                           style: TextStyle(
                               color: secondaryColor,
                               fontSize: responsiveFont(14),
                               fontWeight: FontWeight.w500),
                         ),
                   Text(
-                    AppLocalizations.of(context)!.translate('welcome_back')!,
+                    "Chào mừng quay lại",
                     style: TextStyle(fontSize: responsiveFont(9)),
                   ),
                 ],
@@ -144,16 +136,14 @@ class _AccountScreenState extends State<AccountScreen> {
               alignment: Alignment.centerLeft,
               margin: EdgeInsets.only(top: 15, left: 15, bottom: 5),
               child: Text(
-                AppLocalizations.of(context)!.translate('account')!,
+                "Tài khoản",
                 style: TextStyle(
                     fontSize: responsiveFont(10),
                     fontWeight: FontWeight.w600,
                     color: secondaryColor),
               ),
             ),
-            accountButton("akun",
-                AppLocalizations.of(context)!.translate('title_myAccount')!,
-                func: () {
+            accountButton("akun", "Thông tin tài khoản", func: () {
               Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -177,34 +167,34 @@ class _AccountScreenState extends State<AccountScreen> {
             SizedBox(
               height: 5,
             ),
-            Container(
-              alignment: Alignment.centerLeft,
-              margin: EdgeInsets.only(top: 15, left: 15, bottom: 5),
-              child: Text(
-                AppLocalizations.of(context)!.translate('transaction')!,
-                style: TextStyle(
-                    fontSize: responsiveFont(10),
-                    fontWeight: FontWeight.w600,
-                    color: secondaryColor),
-              ),
-            ),
-            accountButton(
-                "myorder", AppLocalizations.of(context)!.translate('my_order')!,
-                func: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => MyOrder()));
-            }),
-            accountButton("wishlist",
-                AppLocalizations.of(context)!.translate('wishlist')!, func: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => WishList()));
-            }),
-            accountButton(
-                "review", AppLocalizations.of(context)!.translate('review')!,
-                func: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ReviewScreen()));
-            }),
+            // Container(
+            //   alignment: Alignment.centerLeft,
+            //   margin: EdgeInsets.only(top: 15, left: 15, bottom: 5),
+            //   child: Text(
+            //     AppLocalizations.of(context)!.translate('transaction')!,
+            //     style: TextStyle(
+            //         fontSize: responsiveFont(10),
+            //         fontWeight: FontWeight.w600,
+            //         color: secondaryColor),
+            //   ),
+            // ),
+            // accountButton(
+            //     "myorder", AppLocalizations.of(context)!.translate('my_order')!,
+            //     func: () {
+            //   Navigator.push(
+            //       context, MaterialPageRoute(builder: (context) => MyOrder()));
+            // }),
+            // accountButton("wishlist",
+            //     AppLocalizations.of(context)!.translate('wishlist')!, func: () {
+            //   Navigator.push(
+            //       context, MaterialPageRoute(builder: (context) => WishList()));
+            // }),
+            // accountButton(
+            //     "review", AppLocalizations.of(context)!.translate('review')!,
+            //     func: () {
+            //   Navigator.push(context,
+            //       MaterialPageRoute(builder: (context) => ReviewScreen()));
+            // }),
             SizedBox(
               height: 5,
             ),
@@ -212,7 +202,7 @@ class _AccountScreenState extends State<AccountScreen> {
               alignment: Alignment.centerLeft,
               margin: EdgeInsets.only(top: 5, left: 15, bottom: 5),
               child: Text(
-                AppLocalizations.of(context)!.translate('general_setting')!,
+                "Cài đặt",
                 style: TextStyle(
                     fontSize: responsiveFont(10),
                     fontWeight: FontWeight.w600,
@@ -237,8 +227,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             width: 10,
                           ),
                           Text(
-                            AppLocalizations.of(context)!
-                                .translate('dark_theme')!,
+                            "Chế độ tối",
                             style: TextStyle(fontSize: responsiveFont(11)),
                           )
                         ],
@@ -270,25 +259,23 @@ class _AccountScreenState extends State<AccountScreen> {
                 )
               ],
             ),
-            accountButton("languange",
-                AppLocalizations.of(context)!.translate('title_language')!,
-                func: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LanguageScreen()));
-            }),
-            accountButton(
-                "rateapp", AppLocalizations.of(context)!.translate('rate_app')!,
-                func: () {
-              if (Platform.isIOS) {
-                LaunchReview.launch(writeReview: false, iOSAppId: appId);
-              } else {
-                LaunchReview.launch(
-                    androidAppId: generalSettings.packageInfo!.packageName);
-              }
-            }),
-            accountButton(
-                "aboutus", AppLocalizations.of(context)!.translate('about_us')!,
-                func: () {
+            // accountButton("languange",
+            //     AppLocalizations.of(context)!.translate('title_language')!,
+            //     func: () {
+            //   Navigator.push(context,
+            //       MaterialPageRoute(builder: (context) => LanguageScreen()));
+            // }),
+            // accountButton(
+            //     "rateapp", AppLocalizations.of(context)!.translate('rate_app')!,
+            //     func: () {
+            //   if (Platform.isIOS) {
+            //     LaunchReview.launch(writeReview: false, iOSAppId: appId);
+            //   } else {
+            //     LaunchReview.launch(
+            //         androidAppId: generalSettings.packageInfo!.packageName);
+            //   }
+            // }),
+            accountButton("aboutus", "Về chúng tôi", func: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -298,9 +285,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                 .translate('about_us'),
                           )));
             }),
-            accountButton(
-                "privacy", AppLocalizations.of(context)!.translate('privacy')!,
-                func: () {
+            accountButton("privacy", "Điều khoản bảo mật", func: () {
               Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -310,8 +295,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                 .translate('privacy'),
                           )));
             }),
-            accountButton("terms_conditions",
-                AppLocalizations.of(context)!.translate('terms_conditions')!,
+            accountButton("terms_conditions", "Điều khoản và điều kiện",
                 func: () {
               Navigator.push(
                   context,
@@ -322,14 +306,10 @@ class _AccountScreenState extends State<AccountScreen> {
                                 .translate('terms_conditions'),
                           )));
             }),
-            accountButton(
-                "contact", AppLocalizations.of(context)!.translate('contact')!,
-                func: () {
+            accountButton("contact", "Liên hệ", func: () {
               _launchPhoneURL(generalSettings.phone.description!);
             }),
-            accountButton(
-                "logout", AppLocalizations.of(context)!.translate('logout')!,
-                func: logoutPopDialog),
+            accountButton("logout", "Đăng xuất", func: logoutPopDialog),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
               alignment: Alignment.centerLeft,

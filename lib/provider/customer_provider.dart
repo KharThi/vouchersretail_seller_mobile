@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:nyoba/models/customer.dart';
 import 'package:nyoba/services/customer_api.dart';

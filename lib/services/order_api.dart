@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:nyoba/constant/constants.dart';
 import 'package:nyoba/constant/global_url.dart';
+import 'package:nyoba/models/cart.dart';
 import 'package:nyoba/services/session.dart';
 import 'package:nyoba/utils/utility.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,18 +36,23 @@ class OrderAPI {
     SharedPreferences data = await SharedPreferences.getInstance();
     String? jwt = data.getString("jwt");
 
-    var response = await http.get(
-        Uri.parse(
-            "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/" +
-                customerId.toString() +
-                "/cart"),
+    var response = await http.get(Uri.parse(
+            // "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/" +
+            //     customerId.toString() +
+            //     "/cart"
+            "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/2/cart"),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + jwt.toString()
         });
+    print(
+        "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/" +
+            customerId.toString() +
+            "/cart");
     Map<String, dynamic> dataResponse = await json.decode(response.body);
     print(dataResponse.toString());
-    return dataResponse;
+    Cart cart = Cart.fromJson(dataResponse);
+    return cart;
   }
 
   addCartItem(int customerId, int quantity, int priceId) async {

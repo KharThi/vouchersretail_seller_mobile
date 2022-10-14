@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// ignore: import_of_legacy_library_into_null_safe
 import 'package:flutter_sparkline/flutter_sparkline.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
@@ -488,6 +489,7 @@ class _RevenueScreenState extends State<RevenueScreen> {
         shadowColor: Color(0x802196F3),
         child: InkWell(
             // Do onTap() if it isn't null, otherwise do print()
+            // ignore: unnecessary_null_comparison
             onTap: onTap != null
                 ? () => onTap()
                 : () {

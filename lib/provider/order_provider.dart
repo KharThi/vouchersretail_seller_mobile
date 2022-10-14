@@ -400,11 +400,12 @@ class OrderProvider with ChangeNotifier {
       Customer customer,
       Future<dynamic> Function() onFinishBuyNow) async {
     if (Session.data.getBool('isLogin')!) {
-      Cart cart = await OrderAPI().getCartByCustomerId(customer.id!);
+      // ignore: unused_local_variable
+      Cart cart = await OrderAPI().getCartByCustomerId(customer.id);
       for (var i = 0; i < quantity!.length; i++) {
         if (quantity[i] != 0) {
           OrderAPI()
-              .addCartItem(customer.id!, quantity[i], product!.prices![i].id!);
+              .addCartItem(customer.id, quantity[i], product!.prices![i].id!);
         }
       }
       // CartModel cart = new CartModel();
@@ -456,7 +457,7 @@ class OrderProvider with ChangeNotifier {
 
       //Generate link WebView checkout
       await Provider.of<OrderProvider>(context, listen: false)
-          .placeOrder(customer.id!)
+          .placeOrder(customer.id)
           .then((value) async {
         printLog(value, name: 'Link Order');
         await Navigator.push(
@@ -472,6 +473,18 @@ class OrderProvider with ChangeNotifier {
       snackBar(context,
           message: "Bạn cần đăng nhập trước khi thực hiện chức năng này!");
     }
+  }
+
+  Future<Cart?> getCustomerCart(context, int? customerId) async {
+    if (Session.data.getBool('isLogin')!) {
+      Cart cart = await OrderAPI().getCartByCustomerId(customerId!);
+      return cart;
+    } else {
+      Navigator.pop(context);
+      snackBar(context,
+          message: "Bạn cần đăng nhập trước khi thực hiện chức năng này!");
+    }
+    return null;
   }
 
   Future buyNowCombo(context, Combo? product, int? quantity, String date,

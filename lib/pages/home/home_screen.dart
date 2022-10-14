@@ -12,9 +12,7 @@ import '../auth/login_screen.dart';
 import 'dart:async';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'lobby_screen.dart';
-import '../category/category_screen.dart';
 import '../order/cart_screen.dart';
-import '../blog/blog_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);

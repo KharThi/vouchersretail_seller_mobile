@@ -12,14 +12,14 @@ String customerToJson(List<Customer> data) =>
 
 class Customer {
   Customer({
-    this.id,
+    required this.id,
     this.customerName,
     this.userInfo,
     this.userInfoId,
     this.cartId,
   });
 
-  int? id;
+  int id;
   String? customerName;
   UserInfo? userInfo;
   int? userInfoId;
