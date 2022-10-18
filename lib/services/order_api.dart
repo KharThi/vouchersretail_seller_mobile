@@ -36,11 +36,11 @@ class OrderAPI {
     SharedPreferences data = await SharedPreferences.getInstance();
     String? jwt = data.getString("jwt");
 
-    var response = await http.get(Uri.parse(
-            // "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/" +
-            //     customerId.toString() +
-            //     "/cart"
-            "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/2/cart"),
+    var response = await http.get(
+        Uri.parse(
+            "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/" +
+                customerId.toString() +
+                "/cart"),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + jwt.toString()
@@ -55,13 +55,14 @@ class OrderAPI {
     return cart;
   }
 
-  addCartItem(int customerId, int quantity, int priceId) async {
+  addCartItem(int customerId, int quantity, int priceId, String date) async {
     SharedPreferences data = await SharedPreferences.getInstance();
     String? jwt = data.getString("jwt");
     Map customerData = {
       "status": "Active",
       "quantity": quantity,
       "priceId": priceId,
+      "useDate": date
     };
     var body = json.encode(customerData);
 
@@ -75,8 +76,12 @@ class OrderAPI {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + jwt.toString()
         });
+    print("addCartItem Link api " +
+        "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/" +
+        customerId.toString() +
+        "/cart/items");
     Map<String, dynamic> dataResponse = await json.decode(response.body);
-    print(dataResponse.toString());
+    print("addCartItem in orderApi" + dataResponse.toString());
     return dataResponse;
   }
 

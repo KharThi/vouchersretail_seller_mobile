@@ -198,16 +198,27 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
   // }
 
   /*Checkout*/
-  // checkOut() async {
-  //   await Provider.of<OrderProvider>(context, listen: false)
-  //       .checkOutOrder(context,
-  //           productCart: productCart,
-  //           totalSelected: totalSelected,
-  //           removeOrderedItems: removeOrderedItems)
-  //       .then((value) {
-  //     this.setState(() {});
-  //   });
-  // }
+  checkOut() async {
+    await Provider.of<OrderProvider>(context, listen: false)
+        .placeOrder(widget.customerId)
+        .then((value) {
+      this.setState(() {
+        if (value == true) {
+          snackBar(context, message: "Tạo đơn hàng thành công!");
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    CustomerCartScreen(customerId: widget.customerId)),
+            (Route<dynamic> route) => false,
+          ); // pop current page
+
+        } else {
+          snackBar(context, message: "Tạo đơn hàng thất bại!");
+        }
+      });
+    });
+  }
 
   /*Remove Ordered Items*/
   // Future removeOrderedItems() async {
@@ -223,10 +234,13 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
         .then((value) {
       this.setState(() {
         cart = value!;
-
-        for (var i = 0; i < cart!.cartItems!.length; i++) {
-          cart!.cartItems![i].isSelected = false;
-        }
+        cart!.cartItems!.forEach((element) {
+          setState(() {
+            totalSelected++;
+            element.isSelected = true;
+            totalPriceCart += element.price! * element.quantity!;
+          });
+        });
         print("CustomerID" + cart!.customerId.toString());
       });
     });
@@ -238,12 +252,14 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
     // customerProvider = Provider.of<CustomerProvider>(context, listen: false);
 
     getCart();
+    // selectedAll();
 
     // loadData();
   }
 
   @override
   Widget build(BuildContext context) {
+    // selectedAll();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -261,26 +277,26 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
           style: TextStyle(color: Colors.black),
         ),
         actions: [
-          InkWell(
-            onTap: totalSelected == 0
-                ? null
-                : () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) =>
-                          _buildPopupDelete(context),
-                    );
-                  },
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 15),
-              alignment: Alignment.center,
-              child: Text(
-                "Xóa lựa chọn",
-                style: TextStyle(
-                    color: totalSelected != 0 ? Colors.black : Colors.grey),
-              ),
-            ),
-          )
+          // InkWell(
+          //   onTap: totalSelected == 0
+          //       ? null
+          //       : () {
+          //           showDialog(
+          //             context: context,
+          //             builder: (BuildContext context) =>
+          //                 _buildPopupDelete(context),
+          //           );
+          //         },
+          //   child: Container(
+          //     margin: EdgeInsets.symmetric(horizontal: 15),
+          //     alignment: Alignment.center,
+          //     child: Text(
+          //       "Xóa lựa chọn",
+          //       style: TextStyle(
+          //           color: totalSelected != 0 ? Colors.black : Colors.grey),
+          //     ),
+          //   ),
+          // )
         ],
       ),
       body: cart != null
@@ -321,38 +337,38 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              child: Container(
-                height: double.infinity,
-                alignment: Alignment.center,
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      test = !test;
-                      cart!.cartItems![index].isSelected =
-                          !cart!.cartItems![index].isSelected!;
-                    });
-                    calculateTotal(index);
-                  },
-                  child: AnimatedContainer(
-                    duration: Duration(milliseconds: 300),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        shape: BoxShape.circle,
-                        color: cart!.cartItems![index].isSelected!
-                            ? primaryColor
-                            : Colors.white),
-                    child: Padding(
-                        padding: const EdgeInsets.all(3),
-                        child: Icon(
-                          Icons.check,
-                          color: Colors.white,
-                          size: 20,
-                        )),
-                  ),
-                ),
-              ),
-            ),
+            // Expanded(
+            //   child: Container(
+            //     height: double.infinity,
+            //     alignment: Alignment.center,
+            //     child: InkWell(
+            //       onTap: () {
+            //         setState(() {
+            //           test = !test;
+            //           cart!.cartItems![index].isSelected =
+            //               !cart!.cartItems![index].isSelected!;
+            //         });
+            //         calculateTotal(index);
+            //       },
+            //       child: AnimatedContainer(
+            //         duration: Duration(milliseconds: 300),
+            //         decoration: BoxDecoration(
+            //             border: Border.all(color: Colors.grey),
+            //             shape: BoxShape.circle,
+            //             color: cart!.cartItems![index].isSelected!
+            //                 ? primaryColor
+            //                 : Colors.white),
+            //         child: Padding(
+            //             padding: const EdgeInsets.all(3),
+            //             child: Icon(
+            //               Icons.check,
+            //               color: Colors.white,
+            //               size: 20,
+            //             )),
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
@@ -652,35 +668,35 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                 children: [
                   Row(
                     children: [
-                      Container(
-                        margin: EdgeInsets.only(left: 15, right: 10),
-                        alignment: Alignment.center,
-                        child: InkWell(
-                          onTap: () {
-                            selectedAll();
-                          },
-                          child: AnimatedContainer(
-                            duration: Duration(milliseconds: 300),
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                                shape: BoxShape.circle,
-                                color: isSelectedAll
-                                    ? primaryColor
-                                    : Colors.white),
-                            child: Padding(
-                                padding: const EdgeInsets.all(3),
-                                child: Icon(
-                                  Icons.check,
-                                  color: Colors.white,
-                                  size: 20,
-                                )),
-                          ),
-                        ),
-                      ),
-                      Text(
-                        "Chọn tất cả",
-                        style: TextStyle(fontSize: responsiveFont(10)),
-                      )
+                      // Container(
+                      //   margin: EdgeInsets.only(left: 15, right: 10),
+                      //   alignment: Alignment.center,
+                      //   child: InkWell(
+                      //     onTap: () {
+                      //       selectedAll();
+                      //     },
+                      //     child: AnimatedContainer(
+                      //       duration: Duration(milliseconds: 300),
+                      //       decoration: BoxDecoration(
+                      //           border: Border.all(color: Colors.grey),
+                      //           shape: BoxShape.circle,
+                      //           color: isSelectedAll
+                      //               ? primaryColor
+                      //               : Colors.white),
+                      //       child: Padding(
+                      //           padding: const EdgeInsets.all(3),
+                      //           child: Icon(
+                      //             Icons.check,
+                      //             color: Colors.white,
+                      //             size: 20,
+                      //           )),
+                      //     ),
+                      //   ),
+                      // ),
+                      // Text(
+                      //   "Chọn tất cả",
+                      //   style: TextStyle(fontSize: responsiveFont(10)),
+                      // )
                     ],
                   ),
                   Row(
@@ -720,7 +736,7 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                       ),
                       TextButton(
                         onPressed: () {
-                          // checkOut();
+                          checkOut();
                         },
                         style: TextButton.styleFrom(
                             padding: EdgeInsets.all(15),

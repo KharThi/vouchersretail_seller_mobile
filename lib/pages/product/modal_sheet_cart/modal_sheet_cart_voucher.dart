@@ -57,6 +57,8 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
   String _selectedDate = 'Bấm vào để chọn ngày';
   String _forCallApiDate = "";
 
+  OrderProvider? orderProvider;
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? d = await showDatePicker(
       locale: const Locale("vi", "VN"),
@@ -76,62 +78,21 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
   }
 
   /*add to cart*/
-  void addCart(ProductModel product) async {
+  void addCart(Voucher product) async {
     print('Add Cart');
-    if (variationPrice != 0) {
-      product.productPrice = variationPrice.toString();
-    }
-    if (product.variantId != null) {
-      product.selectedVariation = variation;
-      product.variationName = variationName;
-    }
-    print(product.productPrice);
-    ProductModel productCart = product;
-
-    /*check sharedprefs for cart*/
-    if (!Session.data.containsKey('cart')) {
-      List<ProductModel> listCart = [];
-      productCart.priceTotal =
-          (productCart.cartQuantity! * double.parse(productCart.productPrice));
-
-      listCart.add(productCart);
-
-      await Session.data.setString('cart', json.encode(listCart));
-      List? products = await json.decode(Session.data.getString('cart')!);
-      printLog(products.toString(), name: "Cart Product");
-    } else {
-      List products = await json.decode(Session.data.getString('cart')!);
-      printLog(products.toString(), name: "Cart Product");
-
-      List<ProductModel> listCart = products
-          .map((product) => new ProductModel.fromJson(product))
-          .toList();
-
-      int index = products.indexWhere((prod) =>
-          prod["id"] == productCart.id &&
-          prod["variant_id"] == productCart.variantId &&
-          prod["variation_name"] == productCart.variationName);
-
-      if (index != -1) {
-        productCart.cartQuantity =
-            listCart[index].cartQuantity! + productCart.cartQuantity!;
-
-        productCart.priceTotal = (productCart.cartQuantity! *
-            double.parse(productCart.productPrice));
-
-        listCart[index] = productCart;
-
-        await Session.data.setString('cart', json.encode(listCart));
-      } else {
-        productCart.priceTotal = (productCart.cartQuantity! *
-            double.parse(productCart.productPrice));
-        listCart.add(productCart);
-        await Session.data.setString('cart', json.encode(listCart));
-        printLog(products.toString(), name: "Cart Product");
-      }
-    }
-    widget.loadCount!();
-    this.setState(() {});
+    await Provider.of<OrderProvider>(context, listen: false)
+        .addCartVoucher(
+            context, widget.product, _forCallApiDate, customers.first)
+        .then((value) {
+      this.setState(() {
+        print("add to cart return value: " + value.toString());
+        if (value == true) {
+          snackBar(context, message: "Thêm vào giỏ hàng thành công!");
+        } else {
+          snackBar(context, message: "Thêm vào giỏ hàng thất bại!");
+        }
+      });
+    });
     Navigator.pop(context);
     snackBar(context,
         message:
@@ -210,9 +171,9 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
   void initState() {
     super.initState();
     getListCustomerOrder();
-    print("object " + widget.product!.prices!.length.toString());
+    // print("object " + widget.product!.prices!.length.toString());
     for (var i = 0; i < widget.product!.prices!.length; i++) {
-      listQuantity.add(0);
+      widget.product!.prices![i].quantity = 0;
     }
     // widget.quantity = 1;
     // initVariation();
@@ -373,14 +334,31 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                             child: InkWell(
                                               onTap: () {
                                                 setState(() {
-                                                  if (listQuantity[index] > 0) {
-                                                    listQuantity[index] =
-                                                        listQuantity[index] - 1;
-                                                    print(listQuantity[index]);
+                                                  if (widget
+                                                          .product!
+                                                          .prices![index]
+                                                          .quantity! >
+                                                      0) {
+                                                    widget
+                                                        .product!
+                                                        .prices![index]
+                                                        .quantity = (widget
+                                                            .product!
+                                                            .prices![index]
+                                                            .quantity! -
+                                                        1);
+                                                    print(widget
+                                                        .product!
+                                                        .prices![index]
+                                                        .quantity);
                                                   }
                                                 });
                                               },
-                                              child: listQuantity[index] > 0
+                                              child: widget
+                                                          .product!
+                                                          .prices![index]
+                                                          .quantity! >
+                                                      0
                                                   ? Image.asset(
                                                       "images/cart/minusDark.png")
                                                   : Image.asset(
@@ -390,8 +368,9 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                           SizedBox(
                                             width: 10,
                                           ),
-                                          Text(
-                                              (listQuantity[index]).toString()),
+                                          Text((widget.product!.prices![index]
+                                                  .quantity)
+                                              .toString()),
                                           SizedBox(
                                             width: 10,
                                           ),
@@ -411,9 +390,18 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                                     //         .cartQuantity! +
                                                     //     1;
                                                     // if (quantity! > 1) {
-                                                    listQuantity[index] =
-                                                        listQuantity[index] + 1;
-                                                    print(listQuantity[index]);
+                                                    widget
+                                                        .product!
+                                                        .prices![index]
+                                                        .quantity = (widget
+                                                            .product!
+                                                            .prices![index]
+                                                            .quantity! +
+                                                        1);
+                                                    print(widget
+                                                        .product!
+                                                        .prices![index]
+                                                        .quantity);
                                                     // }
                                                   });
                                                 },
@@ -441,7 +429,10 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                         widget.product!.prices!.isNotEmpty
                                             ? (widget.product!.prices![index]
                                                             .price! *
-                                                        listQuantity[index])
+                                                        widget
+                                                            .product!
+                                                            .prices![index]
+                                                            .quantity!)
                                                     .toString() +
                                                 " Vnd"
                                             : "null",
@@ -654,7 +645,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                   child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
                           side: BorderSide(
-                            color: !isAvailable || load || isOutStock
+                            color: widget.product!.inventory == 0
                                 ? Colors.grey
                                 : secondaryColor, //Color of the border
                             //Style of the border
@@ -662,24 +653,27 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                           alignment: Alignment.center,
                           shape: new RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(5))),
-                      onPressed: !isAvailable || load || isOutStock
-                          ? null
-                          : () {
-                              if (quantity != null && quantity != 0) {
-                                // addCart(widget.product!);
-                              } else {
-                                Navigator.pop(context);
-                                snackBar(context,
-                                    message: 'Product out ouf stock.');
-                              }
-                            },
+                      onPressed:
+                          // widget.product!.inventory == 0
+                          //     ? null
+                          //     :
+                          () {
+                        addCart(widget.product!);
+                        // if (widget.product!.inventory == 0) {
+                        //   addCart(widget.product!);
+                        // } else {
+                        //   Navigator.pop(context);
+                        //   snackBar(context,
+                        //       message: "Sản phẩm hết hàng!");
+                        // }
+                      },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(
                             Icons.add,
                             size: responsiveFont(9),
-                            color: !isAvailable || load || isOutStock
+                            color: widget.product!.inventory == 0
                                 ? Colors.grey
                                 : secondaryColor,
                           ),
@@ -737,32 +731,33 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                       // ignore: unnecessary_null_comparison
                       bool check2 = customers != null;
                       bool check3 = _selectedDate != "Bấm vào để chọn ngày";
-                      for (var element in listQuantity) {
-                        if (element > 0) {
+                      for (var element in widget.product!.prices!) {
+                        if (element.quantity != null) {
                           check1 = true;
                         }
                       }
-                      if (check1) {
-                        if (check2) {
-                          if (check3) {
-                            buyNow();
-                          } else {
-                            snackBar(context,
-                                message:
-                                    'Vui lòng chon ngày sử dụng sản phẩm!');
-                          }
-                        } else {
-                          snackBar(context,
-                              message:
-                                  'Vui lòng chon chủ sở hữu cho đơn hàng!');
-                        }
-                      } else {
-                        // ignore: deprecated_member_use
-                        Scaffold.of(context).showSnackBar(SnackBar(
-                            content: Text('Ticket Added Sucessfully')));
-                        snackBar(context,
-                            message: 'Bạn chưa chon số lượng cho sản phẩm!');
-                      }
+                      buyNow();
+                      // if (check1) {
+                      //   if (check2) {
+                      //     if (check3) {
+                      //       buyNow();
+                      //     } else {
+                      //       snackBar(context,
+                      //           message:
+                      //               'Vui lòng chon ngày sử dụng sản phẩm!');
+                      //     }
+                      //   } else {
+                      //     snackBar(context,
+                      //         message:
+                      //             'Vui lòng chon chủ sở hữu cho đơn hàng!');
+                      //   }
+                      // } else {
+                      //   // ignore: deprecated_member_use
+                      //   // Scaffold.of(context).showSnackBar(SnackBar(
+                      //   //     content: Text('Ticket Added Sucessfully')));
+                      //   snackBar(context,
+                      //       message: 'Bạn chưa chon số lượng cho sản phẩm!');
+                      // }
                     },
                     // !isAvailable || load
                     //     ? null

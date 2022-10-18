@@ -76,61 +76,61 @@ class _ModalSheetCartComboState extends State<ModalSheetCartCombo> {
   }
 
   /*add to cart*/
-  void addCart(ProductModel product) async {
+  void addCart(Combo product) async {
     print('Add Cart');
-    if (variationPrice != 0) {
-      product.productPrice = variationPrice.toString();
-    }
-    if (product.variantId != null) {
-      product.selectedVariation = variation;
-      product.variationName = variationName;
-    }
-    print(product.productPrice);
-    ProductModel productCart = product;
+    // if (variationPrice != 0) {
+    //   product.productPrice = variationPrice.toString();
+    // }
+    // if (product.variantId != null) {
+    //   product.selectedVariation = variation;
+    //   product.variationName = variationName;
+    // }
+    // print(product.productPrice);
+    // ProductModel productCart = product;
 
-    /*check sharedprefs for cart*/
-    if (!Session.data.containsKey('cart')) {
-      List<ProductModel> listCart = [];
-      productCart.priceTotal =
-          (productCart.cartQuantity! * double.parse(productCart.productPrice));
+    // /*check sharedprefs for cart*/
+    // if (!Session.data.containsKey('cart')) {
+    //   List<ProductModel> listCart = [];
+    //   productCart.priceTotal =
+    //       (productCart.cartQuantity! * double.parse(productCart.productPrice));
 
-      listCart.add(productCart);
+    //   listCart.add(productCart);
 
-      await Session.data.setString('cart', json.encode(listCart));
-      List? products = await json.decode(Session.data.getString('cart')!);
-      printLog(products.toString(), name: "Cart Product");
-    } else {
-      List products = await json.decode(Session.data.getString('cart')!);
-      printLog(products.toString(), name: "Cart Product");
+    //   await Session.data.setString('cart', json.encode(listCart));
+    //   List? products = await json.decode(Session.data.getString('cart')!);
+    //   printLog(products.toString(), name: "Cart Product");
+    // } else {
+    //   List products = await json.decode(Session.data.getString('cart')!);
+    //   printLog(products.toString(), name: "Cart Product");
 
-      List<ProductModel> listCart = products
-          .map((product) => new ProductModel.fromJson(product))
-          .toList();
+    //   List<ProductModel> listCart = products
+    //       .map((product) => new ProductModel.fromJson(product))
+    //       .toList();
 
-      int index = products.indexWhere((prod) =>
-          prod["id"] == productCart.id &&
-          prod["variant_id"] == productCart.variantId &&
-          prod["variation_name"] == productCart.variationName);
+    //   int index = products.indexWhere((prod) =>
+    //       prod["id"] == productCart.id &&
+    //       prod["variant_id"] == productCart.variantId &&
+    //       prod["variation_name"] == productCart.variationName);
 
-      if (index != -1) {
-        productCart.cartQuantity =
-            listCart[index].cartQuantity! + productCart.cartQuantity!;
+    //   if (index != -1) {
+    //     productCart.cartQuantity =
+    //         listCart[index].cartQuantity! + productCart.cartQuantity!;
 
-        productCart.priceTotal = (productCart.cartQuantity! *
-            double.parse(productCart.productPrice));
+    //     productCart.priceTotal = (productCart.cartQuantity! *
+    //         double.parse(productCart.productPrice));
 
-        listCart[index] = productCart;
+    //     listCart[index] = productCart;
 
-        await Session.data.setString('cart', json.encode(listCart));
-      } else {
-        productCart.priceTotal = (productCart.cartQuantity! *
-            double.parse(productCart.productPrice));
-        listCart.add(productCart);
-        await Session.data.setString('cart', json.encode(listCart));
-        printLog(products.toString(), name: "Cart Product");
-      }
-    }
-    widget.loadCount!();
+    //     await Session.data.setString('cart', json.encode(listCart));
+    //   } else {
+    //     productCart.priceTotal = (productCart.cartQuantity! *
+    //         double.parse(productCart.productPrice));
+    //     listCart.add(productCart);
+    //     await Session.data.setString('cart', json.encode(listCart));
+    //     printLog(products.toString(), name: "Cart Product");
+    //   }
+    // }
+    // widget.loadCount!();
     this.setState(() {});
     Navigator.pop(context);
     snackBar(context,
@@ -664,7 +664,7 @@ class _ModalSheetCartComboState extends State<ModalSheetCartCombo> {
                           ? null
                           : () {
                               if (quantity != null && quantity != 0) {
-                                // addCart(widget.product!);
+                                addCart(widget.product!);
                               } else {
                                 Navigator.pop(context);
                                 snackBar(context,

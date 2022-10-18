@@ -664,26 +664,38 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
                                       borderRadius:
                                           new BorderRadius.circular(5))),
                               onPressed: () {
-                                if (productModel!.inventory != 0 &&
-                                    productModel!.inventory! >= 1) {
-                                  showMaterialModalBottomSheet(
-                                    context: context,
-                                    builder: (context) => ModalSheetCartVoucher(
-                                      product: productModel,
-                                      type: 'add',
-                                      loadCount: loadCartCount,
-                                    ),
-                                  ).whenComplete(() async {
-                                    SharedPreferences prefrences =
-                                        await SharedPreferences.getInstance();
-                                    await prefrences
-                                        .remove("list_customer_order");
-                                  });
-                                } else {
-                                  snackBar(context,
-                                      message: AppLocalizations.of(context)!
-                                          .translate('product_out_stock')!);
-                                }
+                                showMaterialModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => ModalSheetCartVoucher(
+                                    product: productModel,
+                                    type: 'add',
+                                    loadCount: loadCartCount,
+                                  ),
+                                ).whenComplete(() async {
+                                  // SharedPreferences prefrences =
+                                  //     await SharedPreferences.getInstance();
+                                  // await prefrences
+                                  //     .remove("list_customer_order");
+                                });
+                                // if (productModel!.inventory != 0 &&
+                                //     productModel!.inventory! >= 1) {
+                                //   showMaterialModalBottomSheet(
+                                //     context: context,
+                                //     builder: (context) => ModalSheetCartVoucher(
+                                //       product: productModel,
+                                //       type: 'add',
+                                //       loadCount: loadCartCount,
+                                //     ),
+                                //   ).whenComplete(() async {
+                                //     // SharedPreferences prefrences =
+                                //     //     await SharedPreferences.getInstance();
+                                //     // await prefrences
+                                //     //     .remove("list_customer_order");
+                                //   });
+                                // } else {
+                                //   snackBar(context,
+                                //       message: "Sản phẩm đã hết hàng!");
+                                // }
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,

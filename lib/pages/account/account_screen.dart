@@ -492,8 +492,7 @@ class _AccountScreenState extends State<AccountScreen> {
                           height: 15,
                         ),
                         Text(
-                          AppLocalizations.of(context)!
-                              .translate('title_exit_alert')!,
+                          "Đồng ý đăng xuất?",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: responsiveFont(14),
@@ -503,8 +502,7 @@ class _AccountScreenState extends State<AccountScreen> {
                           height: 15,
                         ),
                         Text(
-                          AppLocalizations.of(context)!
-                              .translate('logout_body_alert')!,
+                          "Bạn có muốn đăng xuất khỏi tài khoản?",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: responsiveFont(12),
@@ -533,8 +531,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                           bottomLeft: Radius.circular(15)),
                                       color: primaryColor),
                                   child: Text(
-                                    AppLocalizations.of(context)!
-                                        .translate('no')!,
+                                    "Không",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w500),
@@ -554,8 +551,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                           bottomRight: Radius.circular(15)),
                                       color: Colors.white),
                                   child: Text(
-                                    AppLocalizations.of(context)!
-                                        .translate('yes')!,
+                                    "Đồng ý",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w500,
                                         color: primaryColor),

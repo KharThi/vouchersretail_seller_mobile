@@ -448,6 +448,7 @@ class Price {
   int? priceLevelId;
   int? productId;
   int? price;
+  int? quantity;
 
   factory Price.fromJson(Map<String, dynamic> json) => Price(
         id: json["id"],

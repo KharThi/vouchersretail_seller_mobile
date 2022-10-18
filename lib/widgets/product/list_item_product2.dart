@@ -130,11 +130,9 @@ class ListItemProduct2 extends StatelessWidget {
                                     children: <TextSpan>[
                                       TextSpan(
                                           text: product!.prices?.length != 0
-                                              ? stringToCurrency(
-                                                  double.parse(product!
-                                                      .prices!.first.price
-                                                      .toString()),
-                                                  context)
+                                              ? product!.prices!.first.price
+                                                      .toString() +
+                                                  " Vnd"
                                               : "Null",
                                           style: TextStyle(
                                               fontWeight: FontWeight.w600,
@@ -165,6 +163,14 @@ class ListItemProduct2 extends StatelessWidget {
                                                   // '${stringToCurrency(100, context)}' +
                                                   product!.prices?.length != 0
                                                       ? product!.prices!.first
+                                                              .price
+                                                              .toString() +
+                                                          "-" +
+                                                          product!
+                                                              .prices![product!
+                                                                      .prices!
+                                                                      .length -
+                                                                  1]
                                                               .price
                                                               .toString() +
                                                           " Vnd"

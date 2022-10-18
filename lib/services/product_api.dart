@@ -72,6 +72,7 @@ class ProductAPI {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + jwt.toString()
         });
+    print(response);
     Map<String, dynamic> dataResponse = await json.decode(response.body);
     return dataResponse["data"];
   }
