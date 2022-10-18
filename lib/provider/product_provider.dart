@@ -57,6 +57,10 @@ class ProductProvider with ChangeNotifier {
 
   ProductModel? productDetail;
 
+  Voucher? voucherDetail;
+
+  Combo? comboDetail;
+
   ProductProvider() {
     fetchFeaturedProducts();
     fetchExtendProducts('our_best_seller');
@@ -280,6 +284,46 @@ class ProductProvider with ChangeNotifier {
       }
     });
     return productDetail;
+  }
+
+  Future<Voucher?> fetchProductDetailVoucher(String? productId) async {
+    loadingDetail = true;
+    await ProductAPI().fetchDetailProductVoucher(productId).then((data) {
+      // if (data.statusCode == 200) {
+      print(data);
+      // final responseJson = json.decode(data);
+
+      voucherDetail = Voucher.fromJson(data[0]);
+
+      loadingDetail = false;
+      notifyListeners();
+      // } else {
+      //   print("Load Failed");
+      //   loadingDetail = false;
+      //   notifyListeners();
+      // }
+    });
+    return voucherDetail;
+  }
+
+  Future<Combo?> fetchProductDetailCombo(String? productId) async {
+    loadingDetail = true;
+    await ProductAPI().fetchDetailProductCombo(productId).then((data) {
+      // if (data.statusCode == 200) {
+      print("Responsedata:" + data.toString());
+      // final responseJson = json.decode(data);
+
+      comboDetail = Combo.fromJson(data[0]);
+
+      loadingDetail = false;
+      notifyListeners();
+      // } else {
+      //   print("Load Failed");
+      //   loadingDetail = false;
+      //   notifyListeners();
+      // }
+    });
+    return comboDetail;
   }
 
   Future<ProductModel?> fetchProductDetailSlug(String? slug) async {

@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:nyoba/models/user_model.dart';
+import 'package:nyoba/models/seller_model.dart';
 import 'package:nyoba/utils/utility.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -164,25 +164,50 @@ class Session {
     return bigPictureStyleInformation;
   }
 
-  Future saveUser(UserModel user) async {
+  Future saveUser(Seller seller) async {
     data.setBool('isLogin', true);
-    data.setInt("id", user.id!);
-    data.setString("username", user.userName ?? '');
-    data.setString("avatarLink", user.avatarLink ?? '');
-    data.setString("email", user.email!);
-    data.setString("phoneNumber", user.phoneNumber!);
-    data.setString("createAt", user.createAt ?? '');
-    data.setString("updateAt", user.updateAt ?? '');
-    data.setString("deleteAt", user.deleteAt ?? '');
-    data.setString("status", user.status!);
+    data.setInt("id", seller.id!);
+    data.setString("sellerName", seller.sellerName ?? '');
+    data.setString("userInfoId", seller.userInfoId.toString());
+    data.setString("email", seller.userInfo!.email!);
+    data.setString("avatarLink", seller.userInfo!.avatarLink.toString());
+    data.setString("userName", seller.userInfo!.userName!);
+    data.setString("role", seller.userInfo!.role!);
+    data.setString("phoneNumber", seller.userInfo!.phoneNumber!);
+    data.setString("createAt", seller.userInfo!.createAt ?? '');
+    data.setString("updateAt", seller.userInfo!.updateAt ?? '');
+    data.setString("deleteAt", seller.userInfo!.deleteAt ?? '');
+    data.setString("status", seller.userInfo!.status!);
+    data.setString("commissionRate", seller.commissionRate.toString());
+    data.setString("profit", seller.profit.toString());
+    data.setString("orders", seller.orders!);
+    data.setString("busyLevel", seller.busyLevel!);
 
     // data.setString("email", user.email!);
     // data.setString("cookie", cookie);
-    data.setString("role", user.role!);
+    // data.setString("role", user.role!);
   }
 
   void removeUser() async {
     data.setBool('isLogin', false);
+
+    data.remove("id");
+    data.remove("sellerName");
+    data.remove("userInfoId");
+    data.remove("email");
+    data.remove("avatarLink");
+    data.remove("userName");
+    data.remove("role");
+    data.remove("phoneNumber");
+    data.remove("createAt");
+    data.remove("updateAt");
+    data.remove("deleteAt");
+    data.remove("status");
+    data.remove("commissionRate");
+    data.remove("profit");
+    data.remove("orders");
+    data.remove("busyLevel");
+
     data.remove("id");
     data.remove("username");
     data.remove("avatarLink");

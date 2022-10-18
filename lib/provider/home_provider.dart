@@ -64,6 +64,11 @@ class HomeProvider with ChangeNotifier {
   List<ProductExtendHomeModel> specialProducts = [];
   List<ProductExtendHomeModel> bestProducts = [];
   List<ProductExtendHomeModel> recommendationProducts = [];
+
+  //PQ voucher
+
+  List<Product> products = [];
+
   List<ProductModel> tempProducts = [];
 
   /*Intro Page Status*/
@@ -127,7 +132,6 @@ class HomeProvider with ChangeNotifier {
           for (Map item in responseJson['products_flash_sale']) {
             flashSales.add(FlashSaleHomeModel.fromJson(item));
           }
-          /*End*/
 
           /*Add Data Mini Banner Home*/
           bannerSpecial.clear();
@@ -160,7 +164,8 @@ class HomeProvider with ChangeNotifier {
           for (Map item in responseJson['products_recomendation']) {
             recommendationProducts.add(ProductExtendHomeModel.fromJson(item));
           }
-          /*End*/
+
+          // fetchProducts();
 
           /*Add Data General Settings*/
           for (Map item in responseJson['general_settings']['empty_image']) {
@@ -331,5 +336,45 @@ class HomeProvider with ChangeNotifier {
   setPackageInfo(value) {
     packageInfo = value;
     notifyListeners();
+  }
+
+  //PQ Voucher
+  Future<Map<String, dynamic>?> fetchProducts() async {
+    loading = true;
+    var result;
+    await ProductAPI().fetchProducts().then((data) {
+      result = data;
+      print(result);
+      // Product product = Product.fromJson(result);
+
+      loading = false;
+      notifyListeners();
+    });
+
+    loading = false;
+    notifyListeners();
+    print(result);
+    return result;
+  }
+
+  Future<List<Product>?> fetchProductsV2() async {
+    loading = true;
+    // ignore: unused_local_variable
+    var result;
+    List<Product> list = List.empty(growable: true);
+    await ProductAPI().fetchProducts().then((data) {
+      result = data;
+      // print(result);
+      // Map<String, dynamic> data2 = jsonDecode(result);
+
+      list = data.cast<Product>();
+      // loading = false;
+      // notifyListeners();
+    });
+
+    loading = false;
+    notifyListeners();
+    // print(result);
+    return list;
   }
 }

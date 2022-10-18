@@ -1,20 +1,20 @@
 import 'package:flutter/foundation.dart';
 import 'package:nyoba/models/point_model.dart';
-import 'package:nyoba/models/user_model.dart';
+import 'package:nyoba/models/seller_model.dart';
 import 'package:nyoba/services/session.dart';
 import 'package:nyoba/services/user_api.dart';
 import 'package:nyoba/utils/utility.dart';
 
 class UserProvider with ChangeNotifier {
-  UserModel _user = new UserModel();
+  Seller _user = new Seller();
 
-  UserModel get user => _user;
+  Seller get user => _user;
 
   bool loading = false;
 
   PointModel? point;
 
-  void setUser(UserModel user) {
+  void setUser(Seller user) {
     _user = user;
     notifyListeners();
   }
@@ -27,7 +27,7 @@ class UserProvider with ChangeNotifier {
       print(result);
       // printLog(result.toString());
 
-      UserModel userModel = UserModel.fromJson(result);
+      Seller userModel = Seller.fromJson(result);
       // if (result['poin'] != null) {
       //   point = PointModel.fromJson(result['poin']);
       // }

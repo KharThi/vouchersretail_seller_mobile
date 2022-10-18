@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nyoba/pages/account/account_screen.dart';
+import 'package:nyoba/pages/order/my_order_screen.dart';
+import 'package:nyoba/pages/revenue/revenue_screen.dart';
 import 'package:nyoba/provider/order_provider.dart';
 import 'package:nyoba/services/session.dart';
 import 'package:nyoba/utils/utility.dart';
@@ -10,9 +12,7 @@ import '../auth/login_screen.dart';
 import 'dart:async';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'lobby_screen.dart';
-import '../category/category_screen.dart';
 import '../order/cart_screen.dart';
-import '../blog/blog_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -32,10 +32,8 @@ class _HomeScreenState extends State<HomeScreen>
 
   static List<Widget> _widgetOptions = <Widget>[
     LobbyScreen(),
-    BlogScreen(),
-    CategoryScreen(
-      isFromHome: true,
-    ),
+    RevenueScreen(),
+    MyOrder(),
     CartScreen(
       isFromHome: true,
     ),
@@ -223,13 +221,8 @@ class _HomeScreenState extends State<HomeScreen>
                     await _onItemTapped(0);
                   },
                   child: Container(
-                      child: navbarItem(
-                          0,
-                          "images/lobby/home.png",
-                          "images/lobby/homeClicked.png",
-                          AppLocalizations.of(context)!.translate('home')!,
-                          28,
-                          14)),
+                      child: navbarItem(0, "images/lobby/home.png",
+                          "images/lobby/homeClicked.png", "Trang chủ", 28, 14)),
                 ),
               ),
               Expanded(
@@ -248,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen>
                             1,
                             "images/lobby/writing.png",
                             "images/lobby/writingClicked.png",
-                            AppLocalizations.of(context)!.translate('blog')!,
+                            "Thu nhập",
                             28,
                             14)),
                   )),
@@ -268,8 +261,7 @@ class _HomeScreenState extends State<HomeScreen>
                             2,
                             "images/lobby/category.png",
                             "images/lobby/categoryClicked.png",
-                            AppLocalizations.of(context)!
-                                .translate('category')!,
+                            "Order của tôi",
                             28,
                             14)),
                   )),
@@ -289,7 +281,7 @@ class _HomeScreenState extends State<HomeScreen>
                             3,
                             "images/lobby/cart.png",
                             "images/lobby/cartClicked.png",
-                            AppLocalizations.of(context)!.translate('cart')!,
+                            "Giỏ hàng",
                             28,
                             14)),
                   )),
@@ -326,7 +318,7 @@ class _HomeScreenState extends State<HomeScreen>
                             4,
                             "images/lobby/account.png",
                             "images/lobby/accountClicked.png",
-                            AppLocalizations.of(context)!.translate('account')!,
+                            "Tài khoản",
                             28,
                             14)),
                   ))

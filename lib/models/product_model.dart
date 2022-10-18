@@ -1,5 +1,7 @@
 import 'package:nyoba/services/session.dart';
 import 'package:nyoba/utils/utility.dart';
+//PQ voucher
+import 'dart:convert';
 
 class ProductModel {
   int? id, productStock, ratingCount, cartQuantity, variantId;
@@ -370,4 +372,310 @@ class ProductVideo {
         name = json['name'],
         host = json['host'],
         content = json['content'];
+}
+
+//PQ vouvher
+
+// To parse this JSON data, do
+//
+//     final product = productFromJson(jsonString);
+
+// To parse this JSON data, do
+//
+//     final product = productFromJson(jsonString);
+
+List<Product> productFromJson(String str) =>
+    List<Product>.from(json.decode(str).map((x) => Product.fromJson(x)));
+
+String productToJson(List<Product> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class Product {
+  Product({
+    this.id,
+    this.description,
+    this.summary,
+    this.bannerImg,
+    this.content,
+    this.isForKid,
+    this.type,
+    this.prices,
+  });
+
+  int? id;
+  String? description;
+  String? summary;
+  String? bannerImg;
+  String? content;
+  bool? isForKid;
+  String? type;
+  List<Price>? prices;
+
+  factory Product.fromJson(Map<String, dynamic> json) => Product(
+        id: json["id"],
+        description: json["description"],
+        summary: json["summary"],
+        bannerImg: json["bannerImg"],
+        content: json["content"],
+        isForKid: json["isForKid"],
+        type: json["type"],
+        prices: List<Price>.from(json["prices"].map((x) => Price.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "description": description,
+        "summary": summary,
+        "bannerImg": bannerImg,
+        "content": content,
+        "isForKid": isForKid,
+        "type": type,
+        "prices": List<dynamic>.from(prices!.map((x) => x.toJson())),
+      };
+}
+
+class Price {
+  Price({
+    this.id,
+    this.priceLevelName,
+    this.priceLevelId,
+    this.productId,
+    this.price,
+  });
+
+  int? id;
+  String? priceLevelName;
+  int? priceLevelId;
+  int? productId;
+  int? price;
+  int? quantity;
+
+  factory Price.fromJson(Map<String, dynamic> json) => Price(
+        id: json["id"],
+        priceLevelName: json["priceLevelName"],
+        priceLevelId: json["priceLevelId"],
+        productId: json["productId"],
+        price: json["price"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "priceLevelName": priceLevelName,
+        "priceLevelId": priceLevelId,
+        "productId": productId,
+        "price": price,
+      };
+}
+
+List<Voucher> voucherFromJson(String str) =>
+    List<Voucher>.from(json.decode(str).map((x) => Voucher.fromJson(x)));
+
+String voucherToJson(List<Voucher> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class Voucher {
+  Voucher({
+    this.id,
+    this.voucherName,
+    this.inventory,
+    this.limitPerDay,
+    this.isRequireProfileInfo,
+    this.startDate,
+    this.endDate,
+    this.productId,
+    this.serviceId,
+    this.description,
+    this.summary,
+    this.bannerImg,
+    this.content,
+    this.isForKid,
+    this.type,
+    this.prices,
+  });
+
+  int? id;
+  String? voucherName;
+  int? inventory;
+  int? limitPerDay;
+  bool? isRequireProfileInfo;
+  String? startDate;
+  String? endDate;
+  int? productId;
+  int? serviceId;
+  String? description;
+  String? summary;
+  String? bannerImg;
+  String? content;
+  bool? isForKid;
+  String? type;
+  List<Price>? prices;
+
+  factory Voucher.fromJson(Map<String, dynamic> json) => Voucher(
+        id: json["id"],
+        voucherName: json["voucherName"],
+        inventory: json["inventory"],
+        limitPerDay: json["limitPerDay"],
+        isRequireProfileInfo: json["isRequireProfileInfo"],
+        startDate: json["startDate"],
+        endDate: json["endDate"],
+        productId: json["productId"],
+        serviceId: json["serviceId"],
+        description: json["description"] == null ? null : json["description"],
+        summary: json["summary"],
+        bannerImg: json["bannerImg"],
+        content: json["content"],
+        isForKid: json["isForKid"],
+        type: json["type"],
+        prices: List<Price>.from(json["prices"].map((x) => Price.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "voucherName": voucherName,
+        "inventory": inventory,
+        "limitPerDay": limitPerDay,
+        "isRequireProfileInfo": isRequireProfileInfo,
+        "startDate": startDate,
+        "endDate": endDate,
+        "productId": productId,
+        "serviceId": serviceId,
+        "description": description == null ? null : description,
+        "summary": summary,
+        "bannerImg": bannerImg,
+        "content": content,
+        "isForKid": isForKid,
+        "type": type,
+        "prices": List<dynamic>.from(prices!.map((x) => x.toJson())),
+      };
+}
+
+List<Combo> comboFromJson(String str) =>
+    List<Combo>.from(json.decode(str).map((x) => Combo.fromJson(x)));
+
+String comboToJson(List<Combo> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class Combo {
+  Combo({
+    this.id,
+    this.name,
+    this.startDate,
+    this.endDate,
+    this.description,
+    this.summary,
+    this.bannerImg,
+    this.content,
+    this.isForKid,
+    this.type,
+    this.prices,
+    this.productId,
+    this.vouchers,
+  });
+
+  int? id;
+  String? name;
+  String? startDate;
+  String? endDate;
+  String? description;
+  String? summary;
+  String? bannerImg;
+  String? content;
+  bool? isForKid;
+  String? type;
+  List<Price>? prices;
+  int? productId;
+  List<ComboVoucher>? vouchers;
+
+  factory Combo.fromJson(Map<String, dynamic> json) => Combo(
+        id: json["id"],
+        name: json["name"],
+        startDate: json["startDate"],
+        endDate: json["endDate"],
+        description: json["description"],
+        summary: json["summary"],
+        bannerImg: json["bannerImg"],
+        content: json["content"],
+        isForKid: json["isForKid"],
+        type: json["type"],
+        prices: json["prices"] != null
+            ? List<Price>.from(json["prices"].map((x) => x))
+            : List.empty(),
+        productId: json["productId"],
+        vouchers: List<ComboVoucher>.from(
+            json["vouchers"].map((x) => ComboVoucher.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "startDate": startDate,
+        "endDate": endDate,
+        "description": description,
+        "summary": summary,
+        "bannerImg": bannerImg,
+        "content": content,
+        "isForKid": isForKid,
+        "type": type,
+        "prices": List<dynamic>.from(prices!.map((x) => x)),
+        "productId": productId,
+        "vouchers": List<dynamic>.from(vouchers!.map((x) => x.toJson())),
+      };
+}
+
+List<ComboVoucher> comboVoucherFromJson(String str) => List<ComboVoucher>.from(
+    json.decode(str).map((x) => ComboVoucher.fromJson(x)));
+
+String comboVoucherToJson(List<ComboVoucher> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class ComboVoucher {
+  ComboVoucher({
+    this.id,
+    this.voucherName,
+    this.price,
+    this.inventory,
+    this.limitPerDay,
+    this.isRequireProfileInfo,
+    this.startDate,
+    this.endDate,
+    this.productId,
+    this.serviceId,
+  });
+
+  int? id;
+  String? voucherName;
+  int? price;
+  int? inventory;
+  int? limitPerDay;
+  bool? isRequireProfileInfo;
+  String? startDate;
+  String? endDate;
+  int? productId;
+  int? serviceId;
+
+  factory ComboVoucher.fromJson(Map<String, dynamic> json) => ComboVoucher(
+        id: json["id"],
+        voucherName: json["voucherName"],
+        price: json["price"],
+        inventory: json["inventory"],
+        limitPerDay: json["limitPerDay"],
+        isRequireProfileInfo: json["isRequireProfileInfo"],
+        startDate: json["startDate"],
+        endDate: json["endDate"],
+        productId: json["productId"],
+        serviceId: json["serviceId"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "voucherName": voucherName,
+        "price": price,
+        "inventory": inventory,
+        "limitPerDay": limitPerDay,
+        "isRequireProfileInfo": isRequireProfileInfo,
+        "startDate": startDate,
+        "endDate": endDate,
+        "productId": productId,
+        "serviceId": serviceId,
+      };
 }

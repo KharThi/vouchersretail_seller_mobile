@@ -18,7 +18,7 @@ class LoginAPI {
     // );
     var body = json.encode(data);
     var response2 = await http.post(
-        Uri.parse("https://webapp-220831200534.azurewebsites.net/api/v1/login"),
+        Uri.parse("https://webapp-221010174451.azurewebsites.net/api/v1/login"),
         headers: {
           "Content-Type": "application/json",
         },
@@ -31,7 +31,7 @@ class LoginAPI {
     // print("Response 1" + dataResponse.toString());
     var response = await http.get(
         Uri.parse(
-            "https://webapp-220831200534.azurewebsites.net/api/v1/users/current"),
+            "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/current"),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + response2.body
