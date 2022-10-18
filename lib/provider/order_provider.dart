@@ -59,16 +59,41 @@ class OrderProvider with ChangeNotifier {
   }
 
   Future<bool> placeOrder(customerId) async {
-    var result;
+    bool check = false;
     await OrderAPI().placeOrder(customerId).then((data) {
       // printLog(data, name: 'Link Order From API');
+      check = data["id"].toString() != "";
       print("Return data" + data.toString());
-      result = data;
-      if (data["id"] != null) {
-        return true;
-      }
     });
-    return false;
+    return check;
+    // return result;
+  }
+
+  Future<bool> updateCart(int customerId, Cart cart) async {
+    bool check = false;
+    for (var element in cart.cartItems!) {
+      print(element.id.toString() + " " + element.isChange.toString());
+    }
+    await OrderAPI().updateCart(customerId, cart).then((data) {
+      // printLog(data, name: 'Link Order From API');
+      check = data["id"].toString() != "";
+      print("Return data" + check.toString());
+      // if (data["id"] != null) {
+      //   check = true;
+      // }
+    });
+    return check;
+    // return result;
+  }
+
+  Future<bool> removeCart(int customerId, int cartItemId) async {
+    bool check = false;
+    await OrderAPI().removeCartItem(customerId, cartItemId).then((data) {
+      // printLog(data, name: 'Link Order From API');
+      check = data["id"].toString() != "";
+      print("Return data" + data.toString());
+    });
+    return check;
     // return result;
   }
 

@@ -672,10 +672,10 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
                                     loadCount: loadCartCount,
                                   ),
                                 ).whenComplete(() async {
-                                  // SharedPreferences prefrences =
-                                  //     await SharedPreferences.getInstance();
-                                  // await prefrences
-                                  //     .remove("list_customer_order");
+                                  SharedPreferences prefrences =
+                                      await SharedPreferences.getInstance();
+                                  await prefrences
+                                      .remove("list_customer_order");
                                 });
                                 // if (productModel!.inventory != 0 &&
                                 //     productModel!.inventory! >= 1) {

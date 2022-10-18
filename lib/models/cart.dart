@@ -52,6 +52,8 @@ class CartItem {
   int? price;
   int? priceId;
   bool? isSelected;
+  bool? isChange;
+  int? oldQuantity;
 
   factory CartItem.fromJson(Map<String, dynamic> json) => CartItem(
         id: json["id"],

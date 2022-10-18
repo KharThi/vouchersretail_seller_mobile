@@ -29,6 +29,7 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
   bool isCouponUsed = false;
   bool isSelectedAll = false;
   bool test = false;
+  bool updateCart = false;
 
   // CustomerProvider? customerProvider;
 
@@ -220,6 +221,51 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
     });
   }
 
+  update() async {
+    bool check = await Provider.of<OrderProvider>(context, listen: false)
+        .updateCart(widget.customerId, cart!);
+    this.setState(() {
+      if (check) {
+        updateCart = false;
+        snackBar(context, message: "Cập nhật giỏ hàng thành công!");
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  CustomerCartScreen(customerId: widget.customerId)),
+          (Route<dynamic> route) => false,
+        ); // pop current page
+
+      } else {
+        updateCart = false;
+        snackBar(context, message: "Cập nhật giỏ hàng thất bại!");
+      }
+    });
+  }
+
+  remove(int cartItemId) async {
+    await Provider.of<OrderProvider>(context, listen: false)
+        .removeCart(widget.customerId, cartItemId)
+        .then((value) {
+      this.setState(() {
+        if (value == true) {
+          snackBar(context, message: "Xóa sản phẩm thành công!");
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    CustomerCartScreen(customerId: widget.customerId)),
+            (Route<dynamic> route) => false,
+          ); // pop current page
+
+        } else {
+          Navigator.pop(context);
+          snackBar(context, message: "Xóa sản phẩm thất bại!");
+        }
+      });
+    });
+  }
+
   /*Remove Ordered Items*/
   // Future removeOrderedItems() async {
   //   productCart.removeWhere((element) => element.isSelected!);
@@ -238,6 +284,8 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
           setState(() {
             totalSelected++;
             element.isSelected = true;
+            element.isChange = false;
+            element.oldQuantity = element.quantity;
             totalPriceCart += element.price! * element.quantity!;
           });
         });
@@ -477,7 +525,8 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  // removeItem(index);
+                                  confirmDeletePopDialog(
+                                      cart!.cartItems![index].id!);
                                 },
                                 child: Container(
                                     width: 16.w,
@@ -498,6 +547,17 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                                         cart!.cartItems![index].quantity =
                                             cart!.cartItems![index].quantity! -
                                                 1;
+                                        if (cart!.cartItems![index].quantity ==
+                                            cart!.cartItems![index]
+                                                .oldQuantity) {
+                                          cart!.cartItems![index].isChange =
+                                              false;
+                                        } else {
+                                          cart!.cartItems![index].isChange =
+                                              true;
+                                        }
+                                        updateCart = cart!.cartItems!.any(
+                                            (value) => value.isChange == true);
                                       });
                                       decreaseQuantity(index);
                                     }
@@ -532,6 +592,19 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                                                   cart!.cartItems![index]
                                                           .quantity! +
                                                       1;
+                                              if (cart!.cartItems![index]
+                                                      .quantity ==
+                                                  cart!.cartItems![index]
+                                                      .oldQuantity) {
+                                                cart!.cartItems![index]
+                                                    .isChange = false;
+                                              } else {
+                                                cart!.cartItems![index]
+                                                    .isChange = true;
+                                              }
+                                              updateCart = cart!.cartItems!.any(
+                                                  (value) =>
+                                                      value.isChange == true);
                                             });
                                             increaseQuantity(index);
                                           },
@@ -668,35 +741,20 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                 children: [
                   Row(
                     children: [
-                      // Container(
-                      //   margin: EdgeInsets.only(left: 15, right: 10),
-                      //   alignment: Alignment.center,
-                      //   child: InkWell(
-                      //     onTap: () {
-                      //       selectedAll();
-                      //     },
-                      //     child: AnimatedContainer(
-                      //       duration: Duration(milliseconds: 300),
-                      //       decoration: BoxDecoration(
-                      //           border: Border.all(color: Colors.grey),
-                      //           shape: BoxShape.circle,
-                      //           color: isSelectedAll
-                      //               ? primaryColor
-                      //               : Colors.white),
-                      //       child: Padding(
-                      //           padding: const EdgeInsets.all(3),
-                      //           child: Icon(
-                      //             Icons.check,
-                      //             color: Colors.white,
-                      //             size: 20,
-                      //           )),
-                      //     ),
-                      //   ),
-                      // ),
-                      // Text(
-                      //   "Chọn tất cả",
-                      //   style: TextStyle(fontSize: responsiveFont(10)),
-                      // )
+                      Visibility(
+                        visible: updateCart,
+                        child: Container(
+                          margin: EdgeInsets.only(left: 15, right: 10),
+                          alignment: Alignment.center,
+                          child: ElevatedButton.icon(
+                            onPressed: () {
+                              update();
+                            },
+                            icon: Icon(Icons.update),
+                            label: Text("Cập nhật"),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   Row(
@@ -835,5 +893,109 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
             );
           },
         ));
+  }
+
+  confirmDeletePopDialog(int cartItemId) {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+          contentPadding: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(15.0))),
+          insetPadding: EdgeInsets.all(0),
+          content: Builder(
+            builder: (context) {
+              return Container(
+                height: 150.h,
+                width: 330.w,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text(
+                          "Đồng ý xóa sản phẩm?",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: responsiveFont(14),
+                              fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        // Text(
+                        //   "Bạn có muốn đăng xuất khỏi tài khoản?",
+                        //   textAlign: TextAlign.center,
+                        //   style: TextStyle(
+                        //       fontSize: responsiveFont(12),
+                        //       fontWeight: FontWeight.w400),
+                        // ),
+                      ],
+                    ),
+                    Container(
+                        child: Column(
+                      children: [
+                        Container(
+                          color: Colors.black12,
+                          height: 2,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: GestureDetector(
+                                onTap: () => Navigator.of(context).pop(false),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.symmetric(vertical: 12),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                          bottomLeft: Radius.circular(15)),
+                                      color: primaryColor),
+                                  child: Text(
+                                    "Không",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: GestureDetector(
+                                onTap: () => {
+                                  remove(cartItemId),
+                                  Navigator.pop(context)
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.symmetric(vertical: 12),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                          bottomRight: Radius.circular(15)),
+                                      color: Colors.white),
+                                  child: Text(
+                                    "Đồng ý",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        color: primaryColor),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ))
+                  ],
+                ),
+              );
+            },
+          )),
+    );
   }
 }

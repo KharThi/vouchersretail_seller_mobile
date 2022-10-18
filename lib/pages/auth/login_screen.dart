@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter/gestures.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:nyoba/pages/auth/sign_in_otp_screen.dart';
 import 'package:nyoba/pages/home/home_screen.dart';
 import 'package:nyoba/provider/login_provider.dart';
 import 'package:nyoba/services/session.dart';
 import 'package:provider/provider.dart';
-import '../../app_localizations.dart';
 import 'forgot_password_screen.dart';
-import 'sign_up_screen.dart';
 import '../../utils/utility.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 

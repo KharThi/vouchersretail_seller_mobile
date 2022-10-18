@@ -85,6 +85,53 @@ class OrderAPI {
     return dataResponse;
   }
 
+  updateCart(int customerId, Cart cart) async {
+    SharedPreferences data = await SharedPreferences.getInstance();
+    String? jwt = data.getString("jwt");
+    List<Map<dynamic, dynamic>> customerData = List.empty(growable: true);
+
+    for (var element in cart.cartItems!) {
+      if (element.isChange!) {
+        customerData
+            .add({"quantity": element.quantity, "cartItemId": element.id});
+      }
+    }
+    var body = json.encode(customerData);
+
+    var response = await http.put(
+        Uri.parse(
+            "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/" +
+                customerId.toString() +
+                "/cart/items"),
+        body: body,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + jwt.toString()
+        });
+    Map<String, dynamic> dataResponse = await json.decode(response.body);
+    print("updateCart in orderApi" + dataResponse.toString());
+    return dataResponse;
+  }
+
+  removeCartItem(int customerId, int cartItemId) async {
+    SharedPreferences data = await SharedPreferences.getInstance();
+    String? jwt = data.getString("jwt");
+
+    var response = await http.delete(
+        Uri.parse(
+            "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/" +
+                customerId.toString() +
+                "/cart/items/" +
+                cartItemId.toString()),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + jwt.toString()
+        });
+    Map<String, dynamic> dataResponse = await json.decode(response.body);
+    print("removeCartItem in orderApi" + dataResponse.toString());
+    return dataResponse;
+  }
+
   placeOrder(int customerId) async {
     SharedPreferences data = await SharedPreferences.getInstance();
     String? jwt = data.getString("jwt");
