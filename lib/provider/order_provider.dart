@@ -30,6 +30,9 @@ class OrderProvider with ChangeNotifier {
 
   List<OrderModel> listOrder = [];
   List<OrderModel> tempOrder = [];
+
+  List<OrderModel> listOrder2 = [];
+  List<OrderModel> tempOrder2 = [];
   int orderPage = 1;
 
   List<ProductModel?> listProductOrder = [];
@@ -124,6 +127,27 @@ class OrderProvider with ChangeNotifier {
       printLog(result.toString());
     });
     return result;
+  }
+
+  Future<List<Order>> fetchOrdersV2(context, String orderStatus) async {
+    isLoading = true;
+    List<Order> orders = List.empty(growable: true);
+    await OrderAPI().getListOrder(orderStatus).then((data) {
+      if (data.length != 0 || data != "") {
+        // Iterable l = data;
+        // customers =
+        //     List<Customer>.from(l.map((model) => Customer.fromJson(model)));
+        orders = data;
+
+        // for (var element in customers) {
+        //   print(element.customerName);
+        // }
+        isLoading = false;
+        notifyListeners();
+        return orders;
+      }
+    });
+    return orders;
   }
 
   Future<List?> fetchDetailOrder(orderId) async {

@@ -18,7 +18,7 @@
             <data android:mimeType="*/*" />
         </intent>
     </queries>
-    <application android:label="RevoShop" android:icon="@mipmap/launcher_icon">
+    <application android:label="Phú Quốc Voucher" android:icon="@mipmap/launcher_icon">
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id" />
 
         <activity android:name="com.facebook.FacebookActivity" android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" android:label="@string/app_name" />
@@ -65,19 +65,19 @@ android:resource="@drawable/transparent" />
             </intent-filter>
 
             <!-- App Links -->
-            <intent-filter android:label="RevoShop">
+            <intent-filter android:label="Phú Quốc Voucher">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="https" android:host="demoonlineshop.revoapps.id" />
             </intent-filter>
-            <intent-filter android:label="RevoShop">
+            <intent-filter android:label="Phú Quốc Voucher">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="http" android:host="demoonlineshop.revoapps.id" />
             </intent-filter>
-            <intent-filter android:label="RevoShop">
+            <intent-filter android:label="Phú Quốc Voucher">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />

@@ -64,8 +64,8 @@ class _SearchScreenState extends State<SearchScreen> {
             return buildSearchEmpty(
               context,
               searchController.text.isEmpty
-                  ? AppLocalizations.of(context)!.translate('search_here')
-                  : AppLocalizations.of(context)!.translate('cant_find_prod'),
+                  ? "Tiềm kiếm ở đây"
+                  : "Không tiềm thấy sản phẩm",
             );
           }
           return Container(
@@ -96,26 +96,26 @@ class _SearchScreenState extends State<SearchScreen> {
           },
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50), color: primaryColor),
+            // decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(50), color: primaryColor),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: Colors.white),
-                    child: Container(
-                        height: 30,
-                        padding: EdgeInsets.all(5),
-                        child: Image.asset("images/search/barcode_icon.png"))),
-                SizedBox(
-                  width: 5,
-                ),
-                Text(
-                  "SCAN BARCODE",
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                )
+                // Container(
+                //     decoration: BoxDecoration(
+                //         shape: BoxShape.circle, color: Colors.white),
+                //     child: Container(
+                //         height: 30,
+                //         padding: EdgeInsets.all(5),
+                //         child: Image.asset("images/search/barcode_icon.png"))),
+                // SizedBox(
+                //   width: 5,
+                // ),
+                // Text(
+                //   "SCAN BARCODE",
+                //   style: TextStyle(
+                //       color: Colors.white, fontWeight: FontWeight.bold),
+                // )
               ],
             ),
           ),
@@ -162,8 +162,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             ),
                           ),
                           prefixIcon: Icon(Icons.search),
-                          hintText:
-                              AppLocalizations.of(context)!.translate('search'),
+                          hintText: "Tiềm kiếm",
                           hintStyle: TextStyle(fontSize: responsiveFont(10)),
                         ),
                       ),

@@ -1,8 +1,9 @@
 //PQ voucher
-import 'package:nyoba/models/voucher_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import '../models/product_model.dart';
 
 class VoucherAPI {
   fetchVoucher() async {
@@ -11,7 +12,7 @@ class VoucherAPI {
 
     var response = await http.get(
         Uri.parse(
-            "https://webapp-220831200534.azurewebsites.net/api/v1/vouchers"),
+            "https://webapp-221010174451.azurewebsites.net/api/v1/vouchers"),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + jwt.toString()

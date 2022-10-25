@@ -116,6 +116,7 @@ flutter:
   assets:
     - images/
     - images/lobby/
+    - images/icon/
     - images/account/
     - images/blog/
     - images/cart/

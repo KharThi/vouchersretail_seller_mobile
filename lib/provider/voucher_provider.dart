@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:nyoba/models/voucher_model.dart';
 import 'package:nyoba/services/voucher_api.dart';
+
+import '../models/product_model.dart';
 
 class VoucherProvider with ChangeNotifier {
   bool loading = false;

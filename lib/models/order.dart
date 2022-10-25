@@ -4,54 +4,56 @@
 
 import 'dart:convert';
 
-Order orderFromJson(String str) => Order.fromJson(json.decode(str));
+List<Order> orderFromJson(String str) =>
+    List<Order>.from(json.decode(str).map((x) => Order.fromJson(x)));
 
-String orderToJson(Order data) => json.encode(data.toJson());
+String orderToJson(List<Order> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Order {
   Order({
-    this.status,
     this.id,
-    this.createDate,
+    this.totalPrice,
     this.orderStatus,
     this.customerId,
     this.sellerId,
+    this.paymentDetail,
     this.orderItems,
   });
 
-  String? status;
   int? id;
-  String? createDate;
+  int? totalPrice;
   String? orderStatus;
   int? customerId;
   int? sellerId;
+  dynamic paymentDetail;
   List<OrderItem>? orderItems;
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
-        status: json["status"],
         id: json["id"],
-        createDate: json["createDate"],
+        totalPrice: json["totalPrice"],
         orderStatus: json["orderStatus"],
         customerId: json["customerId"],
         sellerId: json["sellerId"],
+        paymentDetail: json["paymentDetail"],
         orderItems: List<OrderItem>.from(
             json["orderItems"].map((x) => OrderItem.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "status": status,
         "id": id,
-        "createDate": createDate,
+        "totalPrice": totalPrice,
         "orderStatus": orderStatus,
         "customerId": customerId,
         "sellerId": sellerId,
+        "paymentDetail": paymentDetail,
         "orderItems": List<dynamic>.from(orderItems!.map((x) => x.toJson())),
       };
 }
 
 class OrderItem {
   OrderItem({
-    this.status,
+    this.id,
     this.orderId,
     this.orderProductId,
     this.priceId,
@@ -59,28 +61,29 @@ class OrderItem {
     this.useDate,
   });
 
-  String? status;
+  int? id;
   int? orderId;
   int? orderProductId;
   int? priceId;
-  int? profileId;
-  String? useDate;
+  dynamic profileId;
+  DateTime? useDate;
 
   factory OrderItem.fromJson(Map<String, dynamic> json) => OrderItem(
-        status: json["status"],
+        id: json["id"],
         orderId: json["orderId"],
         orderProductId: json["orderProductId"],
         priceId: json["priceId"],
         profileId: json["profileId"],
-        useDate: json["useDate"],
+        useDate:
+            json["useDate"] == null ? null : DateTime.parse(json["useDate"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "status": status,
+        "id": id,
         "orderId": orderId,
         "orderProductId": orderProductId,
         "priceId": priceId,
         "profileId": profileId,
-        "useDate": useDate,
+        "useDate": useDate == null ? null : useDate!.toIso8601String(),
       };
 }

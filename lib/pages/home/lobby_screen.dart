@@ -7,8 +7,7 @@ import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:colorful_safe_area/colorful_safe_area.dart';
-import 'package:nyoba/models/combo_model.dart';
-import 'package:nyoba/models/voucher_model.dart';
+
 import 'package:nyoba/pages/category/brand_product_screen.dart';
 import 'package:nyoba/pages/home/socmed_screen.dart';
 import 'package:nyoba/pages/order/coupon_screen.dart';
@@ -98,8 +97,8 @@ class _LobbyScreenState extends State<LobbyScreen>
           setState(() {
             page++;
           });
-          loadRecommendationProduct(products.productRecommendation.products);
-          loadProduct();
+          // loadRecommendationProduct(products.productRecommendation.products);
+          // loadProduct();
           loadCombo();
           loadVoucher();
         }
@@ -132,11 +131,11 @@ class _LobbyScreenState extends State<LobbyScreen>
       });
     }
 
-    if (Session.data.getBool('isLogin')!) {
-      loadRecentProduct();
-      loadWallet();
-      loadCoupon();
-    }
+    // if (Session.data.getBool('isLogin')!) {
+    //   loadRecentProduct();
+    //   loadWallet();
+    //   loadCoupon();
+    // }
   }
 
   @override
@@ -266,37 +265,37 @@ class _LobbyScreenState extends State<LobbyScreen>
 
     final combos = Provider.of<ComboProvider>(context, listen: false);
 
-    Widget buildNewProducts = Container(
-      child: ListenableProvider.value(
-        value: products,
-        child: Consumer<ProductProvider>(builder: (context, value, child) {
-          if (value.loadingNew) {
-            return Container(
-                height: MediaQuery.of(context).size.height / 3.0,
-                child: shimmerProductItemSmall());
-          }
-          return AspectRatio(
-            aspectRatio: 3 / 2,
-            child: ListView.separated(
-              itemCount: value.listNewProduct.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, i) {
-                return CardItem(
-                  product: value.listNewProduct[i],
-                  i: i,
-                  itemCount: value.listNewProduct.length,
-                );
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return SizedBox(
-                  width: 5,
-                );
-              },
-            ),
-          );
-        }),
-      ),
-    );
+    // Widget buildNewProducts = Container(
+    //   child: ListenableProvider.value(
+    //     value: products,
+    //     child: Consumer<ProductProvider>(builder: (context, value, child) {
+    //       if (value.loadingNew) {
+    //         return Container(
+    //             height: MediaQuery.of(context).size.height / 3.0,
+    //             child: shimmerProductItemSmall());
+    //       }
+    //       return AspectRatio(
+    //         aspectRatio: 3 / 2,
+    //         child: ListView.separated(
+    //           itemCount: value.listNewProduct.length,
+    //           scrollDirection: Axis.horizontal,
+    //           itemBuilder: (context, i) {
+    //             return CardItem(
+    //               product: value.listNewProduct[i],
+    //               i: i,
+    //               itemCount: value.listNewProduct.length,
+    //             );
+    //           },
+    //           separatorBuilder: (BuildContext context, int index) {
+    //             return SizedBox(
+    //               width: 5,
+    //             );
+    //           },
+    //         ),
+    //       );
+    //     }),
+    //   ),
+    // );
 
     //PQ voucher build Combo
     Widget buildCombos = Container(
@@ -339,168 +338,208 @@ class _LobbyScreenState extends State<LobbyScreen>
         }),
       ),
     );
-
-    Widget buildRecentProducts = Container(
+    Widget buildVoucher = Container(
       child: ListenableProvider.value(
         value: products,
-        child: Consumer<ProductProvider>(builder: (context, value, child) {
-          return Visibility(
-              visible: value.listRecentProduct.isNotEmpty,
-              child: Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          AppLocalizations.of(context)!
-                              .translate('recent_view')!,
-                          style: TextStyle(
-                              fontSize: responsiveFont(14),
-                              fontWeight: FontWeight.w600),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ProductMoreScreen(
-                                          name: AppLocalizations.of(context)!
-                                              .translate('recent_view')!,
-                                          include: value.productRecent,
-                                        )));
-                          },
-                          child: Text(
-                            AppLocalizations.of(context)!.translate('more')!,
-                            style: TextStyle(
-                                fontSize: responsiveFont(12),
-                                fontWeight: FontWeight.w600,
-                                color: secondaryColor),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  AspectRatio(
-                    aspectRatio: 3 / 2,
-                    child: ListView.separated(
-                      itemCount: value.listRecentProduct.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, i) {
-                        return CardItem(
-                          product: value.listRecentProduct[i],
-                          i: i,
-                          itemCount: value.listRecentProduct.length,
-                        );
-                      },
-                      separatorBuilder: (BuildContext context, int index) {
-                        return SizedBox(
-                          width: 5,
-                        );
-                      },
-                    ),
-                  )
-                ],
-              ));
+        child: Consumer<VoucherProvider>(builder: (context, value, child) {
+          // if (value.loadingNew) {
+          //   return Container(
+          //       height: MediaQuery.of(context).size.height / 3.0,
+          //       child: shimmerProductItemSmall());
+          // }
+          return AspectRatio(
+            aspectRatio: 3 / 2,
+            child: ListView.separated(
+              // itemCount: value.listCombo.length,
+              // scrollDirection: Axis.horizontal,
+              // itemBuilder: (context, i) {
+              //   return CardItemPq(
+              //     comboPq: value.listCombo[i],
+              //     i: i,
+              //     itemCount: value.listCombo.length,
+              //   );
+              // },
+              itemCount: listVoucher.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, i) {
+                return CardItemPqVoucher(
+                  voucher: listVoucher[i],
+                  i: i,
+                  itemCount: listCombo.length,
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return SizedBox(
+                  width: 5,
+                );
+              },
+            ),
+          );
         }),
       ),
     );
 
-    Widget buildRecommendation = Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: EdgeInsets.only(left: 15, top: 15),
-            child: Text(
-              AppLocalizations.of(context)!.translate('title_hap_3')!,
-              style: TextStyle(
-                  fontSize: responsiveFont(14), fontWeight: FontWeight.w600),
-            ),
-          ),
-          Container(
-              margin: EdgeInsets.only(left: 15, bottom: 10, right: 15),
-              child: Text(
-                AppLocalizations.of(context)!.translate('description_hap_3')!,
-                style: TextStyle(
-                  fontSize: responsiveFont(12),
-                  color: Colors.black,
-                ),
-                textAlign: TextAlign.justify,
-              )),
-          //recommendation item
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            child: GridView.builder(
-              primary: false,
-              shrinkWrap: true,
-              itemCount: home.recommendationProducts[0].products!.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  crossAxisCount: 2,
-                  childAspectRatio: 78 / 125),
-              itemBuilder: (context, i) {
-                return GridItem(
-                  i: i,
-                  itemCount: home.recommendationProducts[0].products!.length,
-                  product: home.recommendationProducts[0].products![i],
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
+    // Widget buildRecentProducts = Container(
+    //   child: ListenableProvider.value(
+    //     value: products,
+    //     child: Consumer<ProductProvider>(builder: (context, value, child) {
+    //       return Visibility(
+    //           visible: value.listRecentProduct.isNotEmpty,
+    //           child: Column(
+    //             children: [
+    //               Container(
+    //                 margin: EdgeInsets.only(left: 15, right: 15, bottom: 10),
+    //                 child: Row(
+    //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //                   children: [
+    //                     Text(
+    //                       AppLocalizations.of(context)!
+    //                           .translate('recent_view')!,
+    //                       style: TextStyle(
+    //                           fontSize: responsiveFont(14),
+    //                           fontWeight: FontWeight.w600),
+    //                     ),
+    //                     GestureDetector(
+    //                       onTap: () {
+    //                         Navigator.push(
+    //                             context,
+    //                             MaterialPageRoute(
+    //                                 builder: (context) => ProductMoreScreen(
+    //                                       name: AppLocalizations.of(context)!
+    //                                           .translate('recent_view')!,
+    //                                       include: value.productRecent,
+    //                                     )));
+    //                       },
+    //                       child: Text(
+    //                         AppLocalizations.of(context)!.translate('more')!,
+    //                         style: TextStyle(
+    //                             fontSize: responsiveFont(12),
+    //                             fontWeight: FontWeight.w600,
+    //                             color: secondaryColor),
+    //                       ),
+    //                     ),
+    //                   ],
+    //                 ),
+    //               ),
+    //               AspectRatio(
+    //                 aspectRatio: 3 / 2,
+    //                 child: ListView.separated(
+    //                   itemCount: value.listRecentProduct.length,
+    //                   scrollDirection: Axis.horizontal,
+    //                   itemBuilder: (context, i) {
+    //                     return CardItem(
+    //                       product: value.listRecentProduct[i],
+    //                       i: i,
+    //                       itemCount: value.listRecentProduct.length,
+    //                     );
+    //                   },
+    //                   separatorBuilder: (BuildContext context, int index) {
+    //                     return SizedBox(
+    //                       width: 5,
+    //                     );
+    //                   },
+    //                 ),
+    //               )
+    //             ],
+    //           ));
+    //     }),
+    //   ),
+    // );
+
+    // Widget buildRecommendation = Container(
+    //   child: Column(
+    //     crossAxisAlignment: CrossAxisAlignment.start,
+    //     children: [
+    //       Container(
+    //         margin: EdgeInsets.only(left: 15, top: 15),
+    //         child: Text(
+    //           AppLocalizations.of(context)!.translate('title_hap_3')!,
+    //           style: TextStyle(
+    //               fontSize: responsiveFont(14), fontWeight: FontWeight.w600),
+    //         ),
+    //       ),
+    //       Container(
+    //           margin: EdgeInsets.only(left: 15, bottom: 10, right: 15),
+    //           child: Text(
+    //             AppLocalizations.of(context)!.translate('description_hap_3')!,
+    //             style: TextStyle(
+    //               fontSize: responsiveFont(12),
+    //               color: Colors.black,
+    //             ),
+    //             textAlign: TextAlign.justify,
+    //           )),
+    //       //recommendation item
+    //       Container(
+    //         margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+    //         child: GridView.builder(
+    //           primary: false,
+    //           shrinkWrap: true,
+    //           itemCount: home.recommendationProducts[0].products!.length,
+    //           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+    //               crossAxisSpacing: 10,
+    //               mainAxisSpacing: 10,
+    //               crossAxisCount: 2,
+    //               childAspectRatio: 78 / 125),
+    //           itemBuilder: (context, i) {
+    //             return GridItem(
+    //               i: i,
+    //               itemCount: home.recommendationProducts[0].products!.length,
+    //               product: home.recommendationProducts[0].products![i],
+    //             );
+    //           },
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
 
     // start copy above
-    Widget buildProduct = Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: EdgeInsets.only(left: 15, top: 15),
-            child: Text(
-              "Sản phẩm",
-              style: TextStyle(
-                  fontSize: responsiveFont(14), fontWeight: FontWeight.w600),
-            ),
-          ),
-          Container(
-              margin: EdgeInsets.only(left: 15, bottom: 10, right: 15),
-              child: Text(
-                "Đễ xuất sản phẩm",
-                style: TextStyle(
-                  fontSize: responsiveFont(12),
-                  color: Colors.black,
-                ),
-                textAlign: TextAlign.justify,
-              )),
-          //recommendation item
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-            child: GridView.builder(
-              primary: false,
-              shrinkWrap: true,
-              itemCount: listProduct.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
-                  crossAxisCount: 2,
-                  childAspectRatio: 78 / 125),
-              itemBuilder: (context, i) {
-                return GridItemPQ(
-                  i: i,
-                  itemCount: listProduct.length,
-                  product: listProduct[i],
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
+    // Widget buildProduct = Container(
+    //   child: Column(
+    //     crossAxisAlignment: CrossAxisAlignment.start,
+    //     children: [
+    //       Container(
+    //         margin: EdgeInsets.only(left: 15, top: 15),
+    //         child: Text(
+    //           "Sản phẩm",
+    //           style: TextStyle(
+    //               fontSize: responsiveFont(14), fontWeight: FontWeight.w600),
+    //         ),
+    //       ),
+    //       Container(
+    //           margin: EdgeInsets.only(left: 15, bottom: 10, right: 15),
+    //           child: Text(
+    //             "Đễ xuất sản phẩm",
+    //             style: TextStyle(
+    //               fontSize: responsiveFont(12),
+    //               color: Colors.black,
+    //             ),
+    //             textAlign: TextAlign.justify,
+    //           )),
+    //       //recommendation item
+    //       Container(
+    //         margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+    //         child: GridView.builder(
+    //           primary: false,
+    //           shrinkWrap: true,
+    //           itemCount: listProduct.length,
+    //           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+    //               crossAxisSpacing: 10,
+    //               mainAxisSpacing: 10,
+    //               crossAxisCount: 2,
+    //               childAspectRatio: 78 / 125),
+    //           itemBuilder: (context, i) {
+    //             return GridItemPQ(
+    //               i: i,
+    //               itemCount: listProduct.length,
+    //               product: listProduct[i],
+    //             );
+    //           },
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
     //end copy
 
     String fullName =
@@ -548,14 +587,22 @@ class _LobbyScreenState extends State<LobbyScreen>
                               margin: EdgeInsets.all(15),
                               child: Row(
                                 children: [
-                                  CachedNetworkImage(
-                                    imageUrl: home.logo.image!,
-                                    placeholder: (context, url) => Container(),
-                                    errorWidget: (context, url, error) => Icon(
-                                      Icons.image_not_supported_rounded,
-                                      size: 15,
-                                    ),
-                                  ),
+                                  Container(
+                                      height: double.infinity,
+                                      alignment:
+                                          Alignment.center, // This is needed
+                                      child: Image.asset(
+                                        "images/icon/icon.png",
+                                        fit: BoxFit.contain,
+                                      )),
+                                  // CachedNetworkImage(
+                                  //   imageUrl: home.logo.image!,
+                                  //   placeholder: (context, url) => Container(),
+                                  //   errorWidget: (context, url, error) => Icon(
+                                  //     Icons.image_not_supported_rounded,
+                                  //     size: 15,
+                                  //   ),
+                                  // ),
                                   Container(
                                     width: 12,
                                   ),
@@ -572,7 +619,7 @@ class _LobbyScreenState extends State<LobbyScreen>
                                         children: [
                                           Flexible(
                                             child: Text(
-                                              home.logo.title!,
+                                              "Phú Quốc Voucher",
                                               style: TextStyle(
                                                   fontSize: responsiveFont(14),
                                                   fontWeight: FontWeight.bold,
@@ -583,7 +630,7 @@ class _LobbyScreenState extends State<LobbyScreen>
                                             child: Row(
                                               children: [
                                                 Text(
-                                                  "${AppLocalizations.of(context)!.translate('please_login')} ",
+                                                  "Vui lòng đăng nhập ",
                                                   style: TextStyle(
                                                       fontSize:
                                                           responsiveFont(10),
@@ -602,9 +649,7 @@ class _LobbyScreenState extends State<LobbyScreen>
                                                                     )));
                                                   },
                                                   child: Text(
-                                                    AppLocalizations.of(
-                                                            context)!
-                                                        .translate('here')!,
+                                                    "Tại đây",
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
@@ -706,99 +751,99 @@ class _LobbyScreenState extends State<LobbyScreen>
                         loading: home.loading,
                       );
                     }),
-                    Container(
-                      width: double.infinity,
-                      margin: EdgeInsets.only(
-                          left: 15, bottom: 10, right: 15, top: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            AppLocalizations.of(context)!
-                                .translate('new_product')!,
-                            style: TextStyle(
-                                fontSize: responsiveFont(14),
-                                fontWeight: FontWeight.w600),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => BrandProducts(
-                                            categoryId: clickIndex == 0
-                                                ? ''
-                                                : clickIndex.toString(),
-                                            brandName: selectedCategory ??
-                                                AppLocalizations.of(context)!
-                                                    .translate('new_product'),
-                                            sortIndex: 1,
-                                          )));
-                            },
-                            child: Text(
-                              AppLocalizations.of(context)!.translate('more')!,
-                              style: TextStyle(
-                                  fontSize: responsiveFont(12),
-                                  fontWeight: FontWeight.w600,
-                                  color: secondaryColor),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Consumer<CategoryProvider>(
-                        builder: (context, value, child) {
-                      if (value.loading) {
-                        return Container();
-                      } else {
-                        return Container(
-                          height: MediaQuery.of(context).size.height / 21,
-                          child: ListView.separated(
-                              itemCount: value.productCategories.length,
-                              scrollDirection: Axis.horizontal,
-                              itemBuilder: (context, i) {
-                                return GestureDetector(
-                                    onTap: () {
-                                      if (value.productCategories[i].id ==
-                                          clickIndex) {
-                                        setState(() {
-                                          clickIndex = 0;
-                                          selectedCategory =
-                                              AppLocalizations.of(context)!
-                                                  .translate('new_product');
-                                        });
-                                      } else {
-                                        setState(() {
-                                          clickIndex =
-                                              value.productCategories[i].id;
-                                          selectedCategory =
-                                              value.productCategories[i].name;
-                                        });
-                                      }
-                                      loadNewProduct(true);
-                                      setState(() {});
-                                    },
-                                    child: tabCategory(
-                                        value.productCategories[i],
-                                        i,
-                                        value.productCategories.length));
-                              },
-                              separatorBuilder:
-                                  (BuildContext context, int index) {
-                                return SizedBox(
-                                  width: 8,
-                                );
-                              }),
-                        );
-                      }
-                    }),
-                    Container(
-                      height: 10,
-                    ),
-                    buildNewProducts,
-                    Container(
-                      height: 15,
-                    ),
+                    // Container(
+                    //   width: double.infinity,
+                    //   margin: EdgeInsets.only(
+                    //       left: 15, bottom: 10, right: 15, top: 15),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //     children: [
+                    //       Text(
+                    //         AppLocalizations.of(context)!
+                    //             .translate('new_product')!,
+                    //         style: TextStyle(
+                    //             fontSize: responsiveFont(14),
+                    //             fontWeight: FontWeight.w600),
+                    //       ),
+                    //       GestureDetector(
+                    //         onTap: () {
+                    //           Navigator.push(
+                    //               context,
+                    //               MaterialPageRoute(
+                    //                   builder: (context) => BrandProducts(
+                    //                         categoryId: clickIndex == 0
+                    //                             ? ''
+                    //                             : clickIndex.toString(),
+                    //                         brandName: selectedCategory ??
+                    //                             AppLocalizations.of(context)!
+                    //                                 .translate('new_product'),
+                    //                         sortIndex: 1,
+                    //                       )));
+                    //         },
+                    //         child: Text(
+                    //           AppLocalizations.of(context)!.translate('more')!,
+                    //           style: TextStyle(
+                    //               fontSize: responsiveFont(12),
+                    //               fontWeight: FontWeight.w600,
+                    //               color: secondaryColor),
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+                    // Consumer<CategoryProvider>(
+                    //     builder: (context, value, child) {
+                    //   if (value.loading) {
+                    //     return Container();
+                    //   } else {
+                    //     return Container(
+                    //       height: MediaQuery.of(context).size.height / 21,
+                    //       child: ListView.separated(
+                    //           itemCount: value.productCategories.length,
+                    //           scrollDirection: Axis.horizontal,
+                    //           itemBuilder: (context, i) {
+                    //             return GestureDetector(
+                    //                 onTap: () {
+                    //                   if (value.productCategories[i].id ==
+                    //                       clickIndex) {
+                    //                     setState(() {
+                    //                       clickIndex = 0;
+                    //                       selectedCategory =
+                    //                           AppLocalizations.of(context)!
+                    //                               .translate('new_product');
+                    //                     });
+                    //                   } else {
+                    //                     setState(() {
+                    //                       clickIndex =
+                    //                           value.productCategories[i].id;
+                    //                       selectedCategory =
+                    //                           value.productCategories[i].name;
+                    //                     });
+                    //                   }
+                    //                   loadNewProduct(true);
+                    //                   setState(() {});
+                    //                 },
+                    //                 child: tabCategory(
+                    //                     value.productCategories[i],
+                    //                     i,
+                    //                     value.productCategories.length));
+                    //           },
+                    //           separatorBuilder:
+                    //               (BuildContext context, int index) {
+                    //             return SizedBox(
+                    //               width: 8,
+                    //             );
+                    //           }),
+                    //     );
+                    //   }
+                    // }),
+                    // Container(
+                    //   height: 10,
+                    // ),
+                    // buildNewProducts,
+                    // Container(
+                    //   height: 15,
+                    // ),
                     //Start build Combo
                     Container(
                       width: double.infinity,
@@ -830,7 +875,7 @@ class _LobbyScreenState extends State<LobbyScreen>
                                           )));
                             },
                             child: Text(
-                              AppLocalizations.of(context)!.translate('more')!,
+                              "Xem thêm",
                               style: TextStyle(
                                   fontSize: responsiveFont(12),
                                   fontWeight: FontWeight.w600,
@@ -844,6 +889,50 @@ class _LobbyScreenState extends State<LobbyScreen>
                       height: 10,
                     ),
                     buildCombos,
+                    Container(
+                      width: double.infinity,
+                      margin: EdgeInsets.only(
+                          left: 15, bottom: 10, right: 15, top: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Voucher",
+                            style: TextStyle(
+                              fontSize: responsiveFont(14),
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => BrandProducts(
+                                            categoryId: clickIndex == 0
+                                                ? ''
+                                                : clickIndex.toString(),
+                                            brandName: selectedCategory ??
+                                                AppLocalizations.of(context)!
+                                                    .translate('new_product'),
+                                            sortIndex: 1,
+                                          )));
+                            },
+                            child: Text(
+                              "Xem thêm",
+                              style: TextStyle(
+                                  fontSize: responsiveFont(12),
+                                  fontWeight: FontWeight.w600,
+                                  color: secondaryColor),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      height: 10,
+                    ),
+                    buildVoucher,
                     //End build combo
                     Container(
                       height: 15,
@@ -851,7 +940,7 @@ class _LobbyScreenState extends State<LobbyScreen>
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: 15),
                       child: Text(
-                        "Image Phú Quốc",
+                        "Một số hình ảnh Phú Quốc",
                         style: TextStyle(
                             fontSize: responsiveFont(14),
                             fontWeight: FontWeight.w600),
@@ -980,579 +1069,579 @@ class _LobbyScreenState extends State<LobbyScreen>
 
                     //End banner
                     //special for you item
-                    Consumer<HomeProvider>(builder: (context, value, child) {
-                      return Column(
-                        children: [
-                          Container(
-                              width: double.infinity,
-                              margin: EdgeInsets.only(
-                                  left: 15, bottom: 10, right: 15),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        value.specialProducts[0].title! ==
-                                                'Special Promo : App Only'
-                                            ? AppLocalizations.of(context)!
-                                                .translate('title_hap_1')!
-                                            : value.specialProducts[0].title!,
-                                        style: TextStyle(
-                                            fontSize: responsiveFont(14),
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      // Text(
-                                      //   value.specialProducts[0].title! ==
-                                      //           'Special Promo : App Only'
-                                      //       ? AppLocalizations.of(context)!
-                                      //           .translate('title_hap_1')!
-                                      //       : value.specialProducts[0].title!,
-                                      //   style: TextStyle(
-                                      //       fontSize: responsiveFont(14),
-                                      //       fontWeight: FontWeight.w600),
-                                      // ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder:
-                                                      (context) =>
-                                                          ProductMoreScreen(
-                                                            include: products
-                                                                .productSpecial
-                                                                .products,
-                                                            name: value
-                                                                        .specialProducts[
-                                                                            0]
-                                                                        .title! ==
-                                                                    'Special Promo : App Only'
-                                                                ? AppLocalizations.of(
-                                                                        context)!
-                                                                    .translate(
-                                                                        'title_hap_1')!
-                                                                : value
-                                                                    .specialProducts[
-                                                                        0]
-                                                                    .title!,
-                                                          )));
-                                        },
-                                        child: Text(
-                                          AppLocalizations.of(context)!
-                                              .translate('more')!,
-                                          style: TextStyle(
-                                              fontSize: responsiveFont(12),
-                                              fontWeight: FontWeight.w600,
-                                              color: secondaryColor),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    value.specialProducts[0].description! ==
-                                            'For You'
-                                        ? AppLocalizations.of(context)!
-                                            .translate('description_hap_1')!
-                                        : value.specialProducts[0].description!,
-                                    style: TextStyle(
-                                      fontSize: responsiveFont(12),
-                                      color: Colors.black,
-                                    ),
-                                    textAlign: TextAlign.justify,
-                                  )
-                                ],
-                              )),
-                          AspectRatio(
-                            aspectRatio: 3 / 2,
-                            child: value.loading
-                                ? shimmerProductItemSmall()
-                                : ListView.separated(
-                                    itemCount: value
-                                        .specialProducts[0].products!.length,
-                                    scrollDirection: Axis.horizontal,
-                                    itemBuilder: (context, i) {
-                                      return CardItem(
-                                        product: value
-                                            .specialProducts[0].products![i],
-                                        i: i,
-                                        itemCount: value.specialProducts[0]
-                                            .products!.length,
-                                      );
-                                    },
-                                    separatorBuilder:
-                                        (BuildContext context, int index) {
-                                      return SizedBox(
-                                        width: 5,
-                                      );
-                                    },
-                                  ),
-                          ),
-                        ],
-                      );
-                    }),
-                    Container(
-                      height: 10,
-                    ),
-                    Stack(
-                      children: [
-                        Container(
-                          color: primaryColor,
-                          width: double.infinity,
-                          height: MediaQuery.of(context).size.height / 3.5,
-                        ),
-                        Consumer<HomeProvider>(
-                            builder: (context, value, child) {
-                          if (value.loading) {
-                            return Column(
-                              children: [
-                                Shimmer.fromColors(
-                                    child: Container(
-                                      width: double.infinity,
-                                      margin: EdgeInsets.only(
-                                          left: 15, right: 15, top: 10),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Container(
-                                                width: 150,
-                                                height: 10,
-                                                color: Colors.white,
-                                              )
-                                            ],
-                                          ),
-                                          Container(
-                                            height: 2,
-                                          ),
-                                          Container(
-                                            width: 100,
-                                            height: 8,
-                                            color: Colors.white,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    baseColor: Colors.grey[300]!,
-                                    highlightColor: Colors.grey[100]!),
-                                Container(
-                                  height: 10,
-                                ),
-                                Container(
-                                  height:
-                                      MediaQuery.of(context).size.height / 3.0,
-                                  child: shimmerProductItemSmall(),
-                                )
-                              ],
-                            );
-                          }
-                          return Column(
-                            children: [
-                              Container(
-                                width: double.infinity,
-                                margin: EdgeInsets.only(
-                                    left: 15, right: 15, top: 10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          value.bestProducts[0].title! ==
-                                                  'Best Seller'
-                                              ? AppLocalizations.of(context)!
-                                                  .translate('title_hap_2')!
-                                              : value.bestProducts[0].title!,
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: responsiveFont(14),
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder:
-                                                        (context) =>
-                                                            ProductMoreScreen(
-                                                              name: value
-                                                                          .bestProducts[
-                                                                              0]
-                                                                          .title! ==
-                                                                      'Best Seller'
-                                                                  ? AppLocalizations.of(
-                                                                          context)!
-                                                                      .translate(
-                                                                          'title_hap_2')!
-                                                                  : value
-                                                                      .bestProducts[
-                                                                          0]
-                                                                      .title!,
-                                                              include: products
-                                                                  .productBest
-                                                                  .products,
-                                                            )));
-                                          },
-                                          child: Text(
-                                            AppLocalizations.of(context)!
-                                                .translate('more')!,
-                                            style: TextStyle(
-                                                fontSize: responsiveFont(12),
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.white),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Text(
-                                      value.bestProducts[0].description! ==
-                                              'Get The Best Products'
-                                          ? AppLocalizations.of(context)!
-                                              .translate('description_hap_2')!
-                                          : value.bestProducts[0].description!,
-                                      style: TextStyle(
-                                        fontSize: responsiveFont(12),
-                                        color: Colors.white,
-                                      ),
-                                      textAlign: TextAlign.justify,
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                height: 10,
-                              ),
-                              AspectRatio(
-                                aspectRatio: 3 / 2,
-                                child: ListView.separated(
-                                  itemCount:
-                                      value.bestProducts[0].products!.length,
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (context, i) {
-                                    return CardItem(
-                                      product:
-                                          value.bestProducts[0].products![i],
-                                      i: i,
-                                      itemCount: value
-                                          .bestProducts[0].products!.length,
-                                    );
-                                  },
-                                  separatorBuilder:
-                                      (BuildContext context, int index) {
-                                    return SizedBox(
-                                      width: 5,
-                                    );
-                                  },
-                                ),
-                              )
-                            ],
-                          );
-                        }),
-                      ],
-                    ),
-                    //Start Voucher
-                    Stack(
-                      children: [
-                        Container(
-                          color: primaryColor,
-                          width: double.infinity,
-                          height: MediaQuery.of(context).size.height / 3.5,
-                        ),
-                        Consumer<HomeProvider>(
-                            builder: (context, value, child) {
-                          if (value.loading) {
-                            return Column(
-                              children: [
-                                Shimmer.fromColors(
-                                    child: Container(
-                                      width: double.infinity,
-                                      margin: EdgeInsets.only(
-                                          left: 15, right: 15, top: 10),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Container(
-                                                width: 150,
-                                                height: 10,
-                                                color: Colors.white,
-                                              )
-                                            ],
-                                          ),
-                                          Container(
-                                            height: 2,
-                                          ),
-                                          Container(
-                                            width: 100,
-                                            height: 8,
-                                            color: Colors.white,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    baseColor: Colors.grey[300]!,
-                                    highlightColor: Colors.grey[100]!),
-                                Container(
-                                  height: 10,
-                                ),
-                                Container(
-                                  height:
-                                      MediaQuery.of(context).size.height / 3.0,
-                                  child: shimmerProductItemSmall(),
-                                )
-                              ],
-                            );
-                          }
-                          return Column(
-                            children: [
-                              Container(
-                                width: double.infinity,
-                                margin: EdgeInsets.only(
-                                    left: 15, right: 15, top: 10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          "Voucher",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: responsiveFont(14),
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder:
-                                                        (context) =>
-                                                            ProductMoreScreen(
-                                                              name: value
-                                                                          .bestProducts[
-                                                                              0]
-                                                                          .title! ==
-                                                                      'Best Seller'
-                                                                  ? AppLocalizations.of(
-                                                                          context)!
-                                                                      .translate(
-                                                                          'title_hap_2')!
-                                                                  : value
-                                                                      .bestProducts[
-                                                                          0]
-                                                                      .title!,
-                                                              include: products
-                                                                  .productBest
-                                                                  .products,
-                                                            )));
-                                          },
-                                          child: Text(
-                                            AppLocalizations.of(context)!
-                                                .translate('more')!,
-                                            style: TextStyle(
-                                                fontSize: responsiveFont(12),
-                                                fontWeight: FontWeight.w600,
-                                                color: Colors.white),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Text(
-                                      "Get The Best Voucher",
-                                      style: TextStyle(
-                                        fontSize: responsiveFont(12),
-                                        color: Colors.white,
-                                      ),
-                                      textAlign: TextAlign.justify,
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                height: 10,
-                              ),
-                              AspectRatio(
-                                aspectRatio: 3 / 2,
-                                child: ListView.separated(
-                                  itemCount: listVoucher.length,
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (context, i) {
-                                    return CardItemPqVoucher(
-                                      voucher: listVoucher[i],
-                                      i: i,
-                                      itemCount: listVoucher.length,
-                                    );
-                                  },
-                                  separatorBuilder:
-                                      (BuildContext context, int index) {
-                                    return SizedBox(
-                                      width: 5,
-                                    );
-                                  },
-                                ),
-                              )
-                            ],
-                          );
-                        }),
-                      ],
-                    ),
-                    //End voucher
-                    Container(
-                      margin: EdgeInsets.only(
-                          left: 15, right: 15, top: 15, bottom: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            AppLocalizations.of(context)!
-                                .translate('banner_2')!,
-                            style: TextStyle(
-                                fontSize: responsiveFont(14),
-                                fontWeight: FontWeight.w600),
-                          ),
-                          /*GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => AllProducts()));
-                            },
-                            child: Text(
-                              "More",
-                              style: TextStyle(
-                                  fontSize: responsiveFont(12),
-                                  fontWeight: FontWeight.w600,
-                                  color: secondaryColor),
-                            ),
-                          ),*/
-                        ],
-                      ),
-                    ),
-                    //Mini Banner Item start Here
-                    Consumer<HomeProvider>(builder: (context, value, child) {
-                      return Container(
-                        margin: EdgeInsets.only(
-                            left: 15, right: 15, top: 10, bottom: 15),
-                        child: GridView.builder(
-                          primary: false,
-                          shrinkWrap: true,
-                          itemCount: value.bannerLove.length,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisSpacing: 10,
-                                  mainAxisSpacing: 10,
-                                  crossAxisCount: 2,
-                                  childAspectRatio: 2 / 1),
-                          itemBuilder: (context, i) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                  color: primaryColor,
-                                  borderRadius: BorderRadius.circular(5)),
-                              child: InkWell(
-                                  onTap: () {
-                                    if (value.bannerLove[i].product != null) {
-                                      if (value.bannerLove[i].linkTo ==
-                                          'product') {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ProductDetail(
-                                                      productId: value
-                                                          .bannerLove[i].product
-                                                          .toString(),
-                                                    )));
-                                      } else {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    BrandProducts(
-                                                      categoryId: value
-                                                          .bannerLove[i].product
-                                                          .toString(),
-                                                      brandName: value
-                                                          .bannerLove[i].name,
-                                                    )));
-                                      }
-                                    }
-                                  },
-                                  child: Image.network(
-                                      value.bannerLove[i].image!)),
-                            );
-                          },
-                        ),
-                      );
-                    }),
-                    //recently viewed item
-                    buildRecentProducts,
-                    Container(
-                      height: 15,
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 7,
-                      color: HexColor("EEEEEE"),
-                    ),
-                    buildRecommendation,
-                    Container(
-                      height: 15,
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 7,
-                      color: HexColor("EEEEEE"),
-                    ),
-                    buildProduct,
-                    if (home.loadingMore) customLoading()
+                    // Consumer<HomeProvider>(builder: (context, value, child) {
+                    //   return Column(
+                    //     children: [
+                    //       Container(
+                    //           width: double.infinity,
+                    //           margin: EdgeInsets.only(
+                    //               left: 15, bottom: 10, right: 15),
+                    //           child: Column(
+                    //             crossAxisAlignment: CrossAxisAlignment.start,
+                    //             children: [
+                    //               Row(
+                    //                 mainAxisAlignment:
+                    //                     MainAxisAlignment.spaceBetween,
+                    //                 children: [
+                    //                   Text(
+                    //                     value.specialProducts[0].title! ==
+                    //                             'Special Promo : App Only'
+                    //                         ? AppLocalizations.of(context)!
+                    //                             .translate('title_hap_1')!
+                    //                         : value.specialProducts[0].title!,
+                    //                     style: TextStyle(
+                    //                         fontSize: responsiveFont(14),
+                    //                         fontWeight: FontWeight.w600),
+                    //                   ),
+                    //                   // Text(
+                    //                   //   value.specialProducts[0].title! ==
+                    //                   //           'Special Promo : App Only'
+                    //                   //       ? AppLocalizations.of(context)!
+                    //                   //           .translate('title_hap_1')!
+                    //                   //       : value.specialProducts[0].title!,
+                    //                   //   style: TextStyle(
+                    //                   //       fontSize: responsiveFont(14),
+                    //                   //       fontWeight: FontWeight.w600),
+                    //                   // ),
+                    //                   GestureDetector(
+                    //                     onTap: () {
+                    //                       Navigator.push(
+                    //                           context,
+                    //                           MaterialPageRoute(
+                    //                               builder:
+                    //                                   (context) =>
+                    //                                       ProductMoreScreen(
+                    //                                         include: products
+                    //                                             .productSpecial
+                    //                                             .products,
+                    //                                         name: value
+                    //                                                     .specialProducts[
+                    //                                                         0]
+                    //                                                     .title! ==
+                    //                                                 'Special Promo : App Only'
+                    //                                             ? AppLocalizations.of(
+                    //                                                     context)!
+                    //                                                 .translate(
+                    //                                                     'title_hap_1')!
+                    //                                             : value
+                    //                                                 .specialProducts[
+                    //                                                     0]
+                    //                                                 .title!,
+                    //                                       )));
+                    //                     },
+                    //                     child: Text(
+                    //                       AppLocalizations.of(context)!
+                    //                           .translate('more')!,
+                    //                       style: TextStyle(
+                    //                           fontSize: responsiveFont(12),
+                    //                           fontWeight: FontWeight.w600,
+                    //                           color: secondaryColor),
+                    //                     ),
+                    //                   ),
+                    //                 ],
+                    //               ),
+                    //               Text(
+                    //                 value.specialProducts[0].description! ==
+                    //                         'For You'
+                    //                     ? AppLocalizations.of(context)!
+                    //                         .translate('description_hap_1')!
+                    //                     : value.specialProducts[0].description!,
+                    //                 style: TextStyle(
+                    //                   fontSize: responsiveFont(12),
+                    //                   color: Colors.black,
+                    //                 ),
+                    //                 textAlign: TextAlign.justify,
+                    //               )
+                    //             ],
+                    //           )),
+                    //       AspectRatio(
+                    //         aspectRatio: 3 / 2,
+                    //         child: value.loading
+                    //             ? shimmerProductItemSmall()
+                    //             : ListView.separated(
+                    //                 itemCount: value
+                    //                     .specialProducts[0].products!.length,
+                    //                 scrollDirection: Axis.horizontal,
+                    //                 itemBuilder: (context, i) {
+                    //                   return CardItem(
+                    //                     product: value
+                    //                         .specialProducts[0].products![i],
+                    //                     i: i,
+                    //                     itemCount: value.specialProducts[0]
+                    //                         .products!.length,
+                    //                   );
+                    //                 },
+                    //                 separatorBuilder:
+                    //                     (BuildContext context, int index) {
+                    //                   return SizedBox(
+                    //                     width: 5,
+                    //                   );
+                    //                 },
+                    //               ),
+                    //       ),
+                    //     ],
+                    //   );
+                    // }),
+                    // Container(
+                    //   height: 10,
+                    // ),
+                    // Stack(
+                    //   children: [
+                    //     Container(
+                    //       color: primaryColor,
+                    //       width: double.infinity,
+                    //       height: MediaQuery.of(context).size.height / 3.5,
+                    //     ),
+                    //     Consumer<HomeProvider>(
+                    //         builder: (context, value, child) {
+                    //       if (value.loading) {
+                    //         return Column(
+                    //           children: [
+                    //             Shimmer.fromColors(
+                    //                 child: Container(
+                    //                   width: double.infinity,
+                    //                   margin: EdgeInsets.only(
+                    //                       left: 15, right: 15, top: 10),
+                    //                   child: Column(
+                    //                     crossAxisAlignment:
+                    //                         CrossAxisAlignment.start,
+                    //                     children: [
+                    //                       Row(
+                    //                         mainAxisAlignment:
+                    //                             MainAxisAlignment.spaceBetween,
+                    //                         children: [
+                    //                           Container(
+                    //                             width: 150,
+                    //                             height: 10,
+                    //                             color: Colors.white,
+                    //                           )
+                    //                         ],
+                    //                       ),
+                    //                       Container(
+                    //                         height: 2,
+                    //                       ),
+                    //                       Container(
+                    //                         width: 100,
+                    //                         height: 8,
+                    //                         color: Colors.white,
+                    //                       )
+                    //                     ],
+                    //                   ),
+                    //                 ),
+                    //                 baseColor: Colors.grey[300]!,
+                    //                 highlightColor: Colors.grey[100]!),
+                    //             Container(
+                    //               height: 10,
+                    //             ),
+                    //             Container(
+                    //               height:
+                    //                   MediaQuery.of(context).size.height / 3.0,
+                    //               child: shimmerProductItemSmall(),
+                    //             )
+                    //           ],
+                    //         );
+                    //       }
+                    //       return Column(
+                    //         children: [
+                    //           Container(
+                    //             width: double.infinity,
+                    //             margin: EdgeInsets.only(
+                    //                 left: 15, right: 15, top: 10),
+                    //             child: Column(
+                    //               crossAxisAlignment: CrossAxisAlignment.start,
+                    //               children: [
+                    //                 Row(
+                    //                   mainAxisAlignment:
+                    //                       MainAxisAlignment.spaceBetween,
+                    //                   children: [
+                    //                     Text(
+                    //                       value.bestProducts[0].title! ==
+                    //                               'Best Seller'
+                    //                           ? AppLocalizations.of(context)!
+                    //                               .translate('title_hap_2')!
+                    //                           : value.bestProducts[0].title!,
+                    //                       style: TextStyle(
+                    //                           color: Colors.white,
+                    //                           fontSize: responsiveFont(14),
+                    //                           fontWeight: FontWeight.w600),
+                    //                     ),
+                    //                     GestureDetector(
+                    //                       onTap: () {
+                    //                         Navigator.push(
+                    //                             context,
+                    //                             MaterialPageRoute(
+                    //                                 builder:
+                    //                                     (context) =>
+                    //                                         ProductMoreScreen(
+                    //                                           name: value
+                    //                                                       .bestProducts[
+                    //                                                           0]
+                    //                                                       .title! ==
+                    //                                                   'Best Seller'
+                    //                                               ? AppLocalizations.of(
+                    //                                                       context)!
+                    //                                                   .translate(
+                    //                                                       'title_hap_2')!
+                    //                                               : value
+                    //                                                   .bestProducts[
+                    //                                                       0]
+                    //                                                   .title!,
+                    //                                           include: products
+                    //                                               .productBest
+                    //                                               .products,
+                    //                                         )));
+                    //                       },
+                    //                       child: Text(
+                    //                         AppLocalizations.of(context)!
+                    //                             .translate('more')!,
+                    //                         style: TextStyle(
+                    //                             fontSize: responsiveFont(12),
+                    //                             fontWeight: FontWeight.w600,
+                    //                             color: Colors.white),
+                    //                       ),
+                    //                     ),
+                    //                   ],
+                    //                 ),
+                    //                 Text(
+                    //                   value.bestProducts[0].description! ==
+                    //                           'Get The Best Products'
+                    //                       ? AppLocalizations.of(context)!
+                    //                           .translate('description_hap_2')!
+                    //                       : value.bestProducts[0].description!,
+                    //                   style: TextStyle(
+                    //                     fontSize: responsiveFont(12),
+                    //                     color: Colors.white,
+                    //                   ),
+                    //                   textAlign: TextAlign.justify,
+                    //                 )
+                    //               ],
+                    //             ),
+                    //           ),
+                    //           Container(
+                    //             height: 10,
+                    //           ),
+                    //           AspectRatio(
+                    //             aspectRatio: 3 / 2,
+                    //             child: ListView.separated(
+                    //               itemCount:
+                    //                   value.bestProducts[0].products!.length,
+                    //               scrollDirection: Axis.horizontal,
+                    //               itemBuilder: (context, i) {
+                    //                 return CardItem(
+                    //                   product:
+                    //                       value.bestProducts[0].products![i],
+                    //                   i: i,
+                    //                   itemCount: value
+                    //                       .bestProducts[0].products!.length,
+                    //                 );
+                    //               },
+                    //               separatorBuilder:
+                    //                   (BuildContext context, int index) {
+                    //                 return SizedBox(
+                    //                   width: 5,
+                    //                 );
+                    //               },
+                    //             ),
+                    //           )
+                    //         ],
+                    //       );
+                    //     }),
+                    //   ],
+                    // ),
+                    // //Start Voucher
+                    // Stack(
+                    //   children: [
+                    //     Container(
+                    //       color: primaryColor,
+                    //       width: double.infinity,
+                    //       height: MediaQuery.of(context).size.height / 3.5,
+                    //     ),
+                    //     Consumer<HomeProvider>(
+                    //         builder: (context, value, child) {
+                    //       if (value.loading) {
+                    //         return Column(
+                    //           children: [
+                    //             Shimmer.fromColors(
+                    //                 child: Container(
+                    //                   width: double.infinity,
+                    //                   margin: EdgeInsets.only(
+                    //                       left: 15, right: 15, top: 10),
+                    //                   child: Column(
+                    //                     crossAxisAlignment:
+                    //                         CrossAxisAlignment.start,
+                    //                     children: [
+                    //                       Row(
+                    //                         mainAxisAlignment:
+                    //                             MainAxisAlignment.spaceBetween,
+                    //                         children: [
+                    //                           Container(
+                    //                             width: 150,
+                    //                             height: 10,
+                    //                             color: Colors.white,
+                    //                           )
+                    //                         ],
+                    //                       ),
+                    //                       Container(
+                    //                         height: 2,
+                    //                       ),
+                    //                       Container(
+                    //                         width: 100,
+                    //                         height: 8,
+                    //                         color: Colors.white,
+                    //                       )
+                    //                     ],
+                    //                   ),
+                    //                 ),
+                    //                 baseColor: Colors.grey[300]!,
+                    //                 highlightColor: Colors.grey[100]!),
+                    //             Container(
+                    //               height: 10,
+                    //             ),
+                    //             Container(
+                    //               height:
+                    //                   MediaQuery.of(context).size.height / 3.0,
+                    //               child: shimmerProductItemSmall(),
+                    //             )
+                    //           ],
+                    //         );
+                    //       }
+                    //       return Column(
+                    //         children: [
+                    //           Container(
+                    //             width: double.infinity,
+                    //             margin: EdgeInsets.only(
+                    //                 left: 15, right: 15, top: 10),
+                    //             child: Column(
+                    //               crossAxisAlignment: CrossAxisAlignment.start,
+                    //               children: [
+                    //                 Row(
+                    //                   mainAxisAlignment:
+                    //                       MainAxisAlignment.spaceBetween,
+                    //                   children: [
+                    //                     Text(
+                    //                       "Voucher",
+                    //                       style: TextStyle(
+                    //                           color: Colors.white,
+                    //                           fontSize: responsiveFont(14),
+                    //                           fontWeight: FontWeight.w600),
+                    //                     ),
+                    //                     GestureDetector(
+                    //                       onTap: () {
+                    //                         Navigator.push(
+                    //                             context,
+                    //                             MaterialPageRoute(
+                    //                                 builder:
+                    //                                     (context) =>
+                    //                                         ProductMoreScreen(
+                    //                                           name: value
+                    //                                                       .bestProducts[
+                    //                                                           0]
+                    //                                                       .title! ==
+                    //                                                   'Best Seller'
+                    //                                               ? AppLocalizations.of(
+                    //                                                       context)!
+                    //                                                   .translate(
+                    //                                                       'title_hap_2')!
+                    //                                               : value
+                    //                                                   .bestProducts[
+                    //                                                       0]
+                    //                                                   .title!,
+                    //                                           include: products
+                    //                                               .productBest
+                    //                                               .products,
+                    //                                         )));
+                    //                       },
+                    //                       child: Text(
+                    //                         AppLocalizations.of(context)!
+                    //                             .translate('more')!,
+                    //                         style: TextStyle(
+                    //                             fontSize: responsiveFont(12),
+                    //                             fontWeight: FontWeight.w600,
+                    //                             color: Colors.white),
+                    //                       ),
+                    //                     ),
+                    //                   ],
+                    //                 ),
+                    //                 Text(
+                    //                   "Get The Best Voucher",
+                    //                   style: TextStyle(
+                    //                     fontSize: responsiveFont(12),
+                    //                     color: Colors.white,
+                    //                   ),
+                    //                   textAlign: TextAlign.justify,
+                    //                 )
+                    //               ],
+                    //             ),
+                    //           ),
+                    //           Container(
+                    //             height: 10,
+                    //           ),
+                    //           AspectRatio(
+                    //             aspectRatio: 3 / 2,
+                    //             child: ListView.separated(
+                    //               itemCount: listVoucher.length,
+                    //               scrollDirection: Axis.horizontal,
+                    //               itemBuilder: (context, i) {
+                    //                 return CardItemPqVoucher(
+                    //                   voucher: listVoucher[i],
+                    //                   i: i,
+                    //                   itemCount: listVoucher.length,
+                    //                 );
+                    //               },
+                    //               separatorBuilder:
+                    //                   (BuildContext context, int index) {
+                    //                 return SizedBox(
+                    //                   width: 5,
+                    //                 );
+                    //               },
+                    //             ),
+                    //           )
+                    //         ],
+                    //       );
+                    //     }),
+                    //   ],
+                    // ),
+                    // //End voucher
+                    // Container(
+                    //   margin: EdgeInsets.only(
+                    //       left: 15, right: 15, top: 15, bottom: 10),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //     children: [
+                    //       Text(
+                    //         AppLocalizations.of(context)!
+                    //             .translate('banner_2')!,
+                    //         style: TextStyle(
+                    //             fontSize: responsiveFont(14),
+                    //             fontWeight: FontWeight.w600),
+                    //       ),
+                    //       /*GestureDetector(
+                    //         onTap: () {
+                    //           Navigator.push(
+                    //               context,
+                    //               MaterialPageRoute(
+                    //                   builder: (context) => AllProducts()));
+                    //         },
+                    //         child: Text(
+                    //           "More",
+                    //           style: TextStyle(
+                    //               fontSize: responsiveFont(12),
+                    //               fontWeight: FontWeight.w600,
+                    //               color: secondaryColor),
+                    //         ),
+                    //       ),*/
+                    //     ],
+                    //   ),
+                    // ),
+                    // //Mini Banner Item start Here
+                    // Consumer<HomeProvider>(builder: (context, value, child) {
+                    //   return Container(
+                    //     margin: EdgeInsets.only(
+                    //         left: 15, right: 15, top: 10, bottom: 15),
+                    //     child: GridView.builder(
+                    //       primary: false,
+                    //       shrinkWrap: true,
+                    //       itemCount: value.bannerLove.length,
+                    //       gridDelegate:
+                    //           SliverGridDelegateWithFixedCrossAxisCount(
+                    //               crossAxisSpacing: 10,
+                    //               mainAxisSpacing: 10,
+                    //               crossAxisCount: 2,
+                    //               childAspectRatio: 2 / 1),
+                    //       itemBuilder: (context, i) {
+                    //         return Container(
+                    //           decoration: BoxDecoration(
+                    //               color: primaryColor,
+                    //               borderRadius: BorderRadius.circular(5)),
+                    //           child: InkWell(
+                    //               onTap: () {
+                    //                 if (value.bannerLove[i].product != null) {
+                    //                   if (value.bannerLove[i].linkTo ==
+                    //                       'product') {
+                    //                     Navigator.push(
+                    //                         context,
+                    //                         MaterialPageRoute(
+                    //                             builder: (context) =>
+                    //                                 ProductDetail(
+                    //                                   productId: value
+                    //                                       .bannerLove[i].product
+                    //                                       .toString(),
+                    //                                 )));
+                    //                   } else {
+                    //                     Navigator.push(
+                    //                         context,
+                    //                         MaterialPageRoute(
+                    //                             builder: (context) =>
+                    //                                 BrandProducts(
+                    //                                   categoryId: value
+                    //                                       .bannerLove[i].product
+                    //                                       .toString(),
+                    //                                   brandName: value
+                    //                                       .bannerLove[i].name,
+                    //                                 )));
+                    //                   }
+                    //                 }
+                    //               },
+                    //               child: Image.network(
+                    //                   value.bannerLove[i].image!)),
+                    //         );
+                    //       },
+                    //     ),
+                    //   );
+                    // }),
+                    // //recently viewed item
+                    // buildRecentProducts,
+                    // Container(
+                    //   height: 15,
+                    // ),
+                    // Container(
+                    //   width: double.infinity,
+                    //   height: 7,
+                    //   color: HexColor("EEEEEE"),
+                    // ),
+                    // buildRecommendation,
+                    // Container(
+                    //   height: 15,
+                    // ),
+                    // Container(
+                    //   width: double.infinity,
+                    //   height: 7,
+                    //   color: HexColor("EEEEEE"),
+                    // ),
+                    // buildProduct,
+                    // if (home.loadingMore) customLoading()
                   ],
                 ),
               ),
             ),
-            Visibility(
-                visible: coupons.coupons.isNotEmpty,
-                child: DraggableWidget(
-                  bottomMargin: 120,
-                  topMargin: 60,
-                  intialVisibility: true,
-                  horizontalSpace: 3,
-                  verticalSpace: 30,
-                  normalShadow: BoxShadow(
-                    color: Colors.transparent,
-                    offset: Offset(0, 10),
-                    blurRadius: 0,
-                  ),
-                  shadowBorderRadius: 50,
-                  child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CouponScreen()));
-                      },
-                      child: Container(
-                          height: 100,
-                          width: 100,
-                          child: Image.asset("images/lobby/gift-coupon.gif"))),
-                  initialPosition: AnchoringPosition.bottomRight,
-                  dragController: dragController,
-                ))
+            // Visibility(
+            //     visible: coupons.coupons.isNotEmpty,
+            //     child: DraggableWidget(
+            //       bottomMargin: 120,
+            //       topMargin: 60,
+            //       intialVisibility: true,
+            //       horizontalSpace: 3,
+            //       verticalSpace: 30,
+            //       normalShadow: BoxShadow(
+            //         color: Colors.transparent,
+            //         offset: Offset(0, 10),
+            //         blurRadius: 0,
+            //       ),
+            //       shadowBorderRadius: 50,
+            //       child: GestureDetector(
+            //           onTap: () {
+            //             Navigator.push(
+            //                 context,
+            //                 MaterialPageRoute(
+            //                     builder: (context) => CouponScreen()));
+            //           },
+            //           child: Container(
+            //               height: 100,
+            //               width: 100,
+            //               child: Image.asset("images/lobby/gift-coupon.gif"))),
+            //       initialPosition: AnchoringPosition.bottomRight,
+            //       dragController: dragController,
+            //     ))
           ],
         ),
       ),
@@ -1629,76 +1718,50 @@ class _LobbyScreenState extends State<LobbyScreen>
                             SizedBox(
                               width: 5,
                             ),
-                            animatedText.description != null
-                                ? DefaultTextStyle(
-                                    style: TextStyle(
-                                        fontSize: responsiveFont(12),
-                                        color: Colors.black45),
-                                    child: AnimatedTextKit(
-                                      isRepeatingAnimation: true,
-                                      repeatForever: true,
-                                      animatedTexts: [
-                                        TyperAnimatedText(
-                                            AppLocalizations.of(context)!
-                                                .translate('search')!,
-                                            speed: Duration(milliseconds: 80)),
-                                        if (animatedText.description['text_1']
-                                                .isNotEmpty &&
-                                            animatedText.description != null)
-                                          TyperAnimatedText(animatedText
-                                              .description['text_1']),
-                                        if (animatedText.description['text_2']
-                                                .isNotEmpty &&
-                                            animatedText.description != null)
-                                          TyperAnimatedText(animatedText
-                                              .description['text_2']),
-                                        if (animatedText.description['text_3']
-                                                .isNotEmpty &&
-                                            animatedText.description != null)
-                                          TyperAnimatedText(animatedText
-                                              .description['text_3']),
-                                        if (animatedText.description['text_4']
-                                                .isNotEmpty &&
-                                            animatedText.description != null)
-                                          TyperAnimatedText(animatedText
-                                              .description['text_4']),
-                                        if (animatedText.description['text_5']
-                                                .isNotEmpty &&
-                                            animatedText.description != null)
-                                          TyperAnimatedText(animatedText
-                                              .description['text_5']),
-                                      ],
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    SearchScreen()));
-                                      },
-                                    ),
-                                  )
-                                : DefaultTextStyle(
-                                    style: TextStyle(
-                                        fontSize: responsiveFont(12),
-                                        color: Colors.black45),
-                                    child: AnimatedTextKit(
-                                      isRepeatingAnimation: true,
-                                      repeatForever: true,
-                                      animatedTexts: [
-                                        TyperAnimatedText(
-                                            AppLocalizations.of(context)!
-                                                .translate('search')!,
-                                            speed: Duration(milliseconds: 80)),
-                                      ],
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    SearchScreen()));
-                                      },
-                                    ),
-                                  ),
+                            DefaultTextStyle(
+                              style: TextStyle(
+                                  fontSize: responsiveFont(12),
+                                  color: Colors.black45),
+                              child: AnimatedTextKit(
+                                isRepeatingAnimation: true,
+                                repeatForever: true,
+                                animatedTexts: [
+                                  TyperAnimatedText("Tiềm kiếm",
+                                      speed: Duration(milliseconds: 80)),
+                                  if (true) TyperAnimatedText("Ăn uống"),
+                                  if (true) TyperAnimatedText("Vui chơi"),
+                                ],
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              SearchScreen()));
+                                },
+                              ),
+                            )
+                            // : DefaultTextStyle(
+                            //     style: TextStyle(
+                            //         fontSize: responsiveFont(12),
+                            //         color: Colors.black45),
+                            //     child: AnimatedTextKit(
+                            //       isRepeatingAnimation: true,
+                            //       repeatForever: true,
+                            //       animatedTexts: [
+                            //         TyperAnimatedText(
+                            //             AppLocalizations.of(context)!
+                            //                 .translate('search')!,
+                            //             speed: Duration(milliseconds: 80)),
+                            //       ],
+                            //       onTap: () {
+                            //         Navigator.push(
+                            //             context,
+                            //             MaterialPageRoute(
+                            //                 builder: (context) =>
+                            //                     SearchScreen()));
+                            //       },
+                            //     ),
+                            //   ),
                           ],
                         )),
                   )),
@@ -1708,40 +1771,40 @@ class _LobbyScreenState extends State<LobbyScreen>
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SocmedScreen()));
-                    },
-                    child: Container(
-                        width: 23.w,
-                        child: Image.asset("images/lobby/icon-cs-app-bar.png")),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => WishList()));
-                    },
-                    child: Container(
-                        margin: EdgeInsets.only(left: 10),
-                        width: 27.w,
-                        child: Image.asset("images/lobby/heart.png")),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => MyOrder()));
-                    },
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10),
-                      width: 27.w,
-                      child: Image.asset(
-                        "images/lobby/document.png",
-                      ),
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //             builder: (context) => SocmedScreen()));
+                  //   },
+                  //   child: Container(
+                  //       width: 23.w,
+                  //       child: Image.asset("images/lobby/icon-cs-app-bar.png")),
+                  // ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     Navigator.push(context,
+                  //         MaterialPageRoute(builder: (context) => WishList()));
+                  //   },
+                  //   child: Container(
+                  //       margin: EdgeInsets.only(left: 10),
+                  //       width: 27.w,
+                  //       child: Image.asset("images/lobby/heart.png")),
+                  // ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     Navigator.push(context,
+                  //         MaterialPageRoute(builder: (context) => MyOrder()));
+                  //   },
+                  //   child: Container(
+                  //     margin: EdgeInsets.symmetric(horizontal: 10),
+                  //     width: 27.w,
+                  //     child: Image.asset(
+                  //       "images/lobby/document.png",
+                  //     ),
+                  //   ),
+                  // ),
                   GestureDetector(
                     onTap: () {
                       Navigator.push(

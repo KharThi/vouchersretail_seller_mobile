@@ -141,7 +141,7 @@ void main() async {
         create: (context) => WalletProvider(),
       ),
       ChangeNotifierProvider<CustomerProvider>(
-        create: (context) => CustomerProvider(),
+          create: (context) => CustomerProvider()),
       ChangeNotifierProvider<ComboProvider>(
         create: (context) => ComboProvider(),
       ),

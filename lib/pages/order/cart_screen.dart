@@ -288,43 +288,47 @@ class _CartScreenState extends State<CartScreen> {
           )
         ],
       ),
-      body: customer.length != 0
-          ? Column(
-              children: [
-                // Expanded(
-                //     child: ListView.separated(
-                //         itemBuilder: (context, i) {
-                //           return Dismissible(
-                //               key: UniqueKey(),
-                //               onDismissed: (direction) {
-                //                 removeItem(i);
-                //               },
-                //               child: itemList(i));
-                //         },
-                //         separatorBuilder: (BuildContext context, int index) {
-                //           return SizedBox(
-                //             height: 15,
-                //           );
-                //         },
-                //         itemCount: productCart.length)),
-                // buildBottomBarCart()
-                Container(
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      controller: _scrollController,
-                      physics: ScrollPhysics(),
-                      itemCount: customer.length,
-                      itemBuilder: (context, i) {
-                        return ListItemCustomerCart(
-                          itemCount: customer.length,
-                          customer: customer[i],
-                          i: i,
-                        );
-                      }),
-                )
-              ],
+      body: !Session.data.getBool('isLogin')!
+          ? Center(
+              child: buildNoAuth(context),
             )
-          : customLoading(),
+          : customer.length != 0
+              ? Column(
+                  children: [
+                    // Expanded(
+                    //     child: ListView.separated(
+                    //         itemBuilder: (context, i) {
+                    //           return Dismissible(
+                    //               key: UniqueKey(),
+                    //               onDismissed: (direction) {
+                    //                 removeItem(i);
+                    //               },
+                    //               child: itemList(i));
+                    //         },
+                    //         separatorBuilder: (BuildContext context, int index) {
+                    //           return SizedBox(
+                    //             height: 15,
+                    //           );
+                    //         },
+                    //         itemCount: productCart.length)),
+                    // buildBottomBarCart()
+                    Container(
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          controller: _scrollController,
+                          physics: ScrollPhysics(),
+                          itemCount: customer.length,
+                          itemBuilder: (context, i) {
+                            return ListItemCustomerCart(
+                              itemCount: customer.length,
+                              customer: customer[i],
+                              i: i,
+                            );
+                          }),
+                    )
+                  ],
+                )
+              : customLoading(),
     );
   }
 

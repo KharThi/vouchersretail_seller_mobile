@@ -172,10 +172,11 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     return UpgradeAlert(
       upgrader: Upgrader(
-          canDismissDialog: false,
-          showIgnore: false,
-          showReleaseNotes: false,
-          messages: CustomMessages()),
+        canDismissDialog: false,
+        showIgnore: false,
+        showReleaseNotes: false,
+      ),
+      // messages: CustomMessages()),
       child: WillPopScope(
           child: Scaffold(
             resizeToAvoidBottomInset: false,
@@ -259,8 +260,8 @@ class _HomeScreenState extends State<HomeScreen>
                     child: Container(
                         child: navbarItem(
                             2,
-                            "images/lobby/category.png",
-                            "images/lobby/categoryClicked.png",
+                            "images/order/processing_dark.png",
+                            "images/order/processing_dark.png",
                             "Order của tôi",
                             28,
                             14)),
@@ -422,27 +423,27 @@ class _HomeScreenState extends State<HomeScreen>
   }
 }
 
-class CustomMessages extends UpgraderMessages {
-  /// Override the message function to provide custom language localization.
-  @override
-  String? message(UpgraderMessage messageKey) {
-    switch (messageKey) {
-      case UpgraderMessage.body:
-        return 'App Name : {{appName}}\nYour Version : {{currentInstalledVersion}}\nAvailable : {{currentAppStoreVersion}}';
-      case UpgraderMessage.buttonTitleIgnore:
-        return 'Ignore';
-      case UpgraderMessage.buttonTitleLater:
-        return 'Later';
-      case UpgraderMessage.buttonTitleUpdate:
-        return 'Update Now';
-      case UpgraderMessage.prompt:
-        return 'Would you like to update it now?';
-      case UpgraderMessage.title:
-        return 'New Version Available';
-      case UpgraderMessage.releaseNotes:
-        break;
-    }
-    return null;
-    // Messages that are not provided above can still use the default values.
-  }
-}
+// class CustomMessages extends UpgraderMessages {
+//   /// Override the message function to provide custom language localization.
+//   @override
+//   String? message(UpgraderMessage messageKey) {
+//     switch (messageKey) {
+//       case UpgraderMessage.body:
+//         return 'App Name : {{appName}}\nYour Version : {{currentInstalledVersion}}\nAvailable : {{currentAppStoreVersion}}';
+//       case UpgraderMessage.buttonTitleIgnore:
+//         return 'Ignore';
+//       case UpgraderMessage.buttonTitleLater:
+//         return 'Later';
+//       case UpgraderMessage.buttonTitleUpdate:
+//         return 'Update Now';
+//       case UpgraderMessage.prompt:
+//         return 'Would you like to update it now?';
+//       case UpgraderMessage.title:
+//         return 'New Version Available';
+//       case UpgraderMessage.releaseNotes:
+//         break;
+//     }
+//     return null;
+//     // Messages that are not provided above can still use the default values.
+//   }
+// }

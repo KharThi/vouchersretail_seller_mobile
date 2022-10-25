@@ -117,7 +117,7 @@ buildNoAuth(context) {
         height: 10,
       ),
       Text(
-        "Oops, please login first to use this feature",
+        "Bạn cần đăng nhập để sử dụng tính năng này!",
         style: TextStyle(
             color: Colors.black, fontWeight: FontWeight.w500, fontSize: 14),
         textAlign: TextAlign.center,
@@ -140,7 +140,7 @@ buildNoAuth(context) {
                 context, MaterialPageRoute(builder: (context) => Login()));
           },
           child: Text(
-            "Login",
+            "Đăng nhập",
             style: TextStyle(
                 color: Colors.white,
                 fontSize: responsiveFont(10),
