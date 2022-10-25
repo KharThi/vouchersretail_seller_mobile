@@ -19,6 +19,7 @@ import 'package:nyoba/pages/home/home_screen.dart';
 import 'package:nyoba/pages/notification/notification_screen.dart';
 import 'package:nyoba/provider/app_provider.dart';
 import 'package:nyoba/provider/blog_provider.dart';
+import 'package:nyoba/provider/combo_provider.dart';
 import 'package:nyoba/provider/coupon_provider.dart';
 import 'package:nyoba/provider/customer_provider.dart';
 import 'package:nyoba/provider/flash_sale_provider.dart';
@@ -32,6 +33,7 @@ import 'package:nyoba/provider/register_provider.dart';
 import 'package:nyoba/provider/review_provider.dart';
 import 'package:nyoba/provider/search_provider.dart';
 import 'package:nyoba/provider/user_provider.dart';
+import 'package:nyoba/provider/voucher_provider.dart';
 import 'package:nyoba/provider/wallet_provider.dart';
 import 'package:nyoba/provider/wishlist_provider.dart';
 import 'package:nyoba/services/session.dart';
@@ -140,6 +142,11 @@ void main() async {
       ),
       ChangeNotifierProvider<CustomerProvider>(
         create: (context) => CustomerProvider(),
+      ChangeNotifierProvider<ComboProvider>(
+        create: (context) => ComboProvider(),
+      ),
+      ChangeNotifierProvider<VoucherProvider>(
+        create: (context) => VoucherProvider(),
       ),
     ],
     child: MyApp(
@@ -282,7 +289,7 @@ class _MyAppState extends State<MyApp> {
       designSize: const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: (child) {
+      builder: (context, child) {
         return ChangeNotifierProvider<AppNotifier?>(
             create: (_) => widget.appLanguage, child: child);
       },

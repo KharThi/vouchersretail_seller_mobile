@@ -82,7 +82,14 @@ class GridItemPQ extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(product!.prices!.first.price.toString() +
-                                    " Vnd")
+                                    " Vnd"),
+                                Text(
+                                  product!.summary!,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style:
+                                      TextStyle(fontSize: responsiveFont(10)),
+                                )
                               ],
                             ),
                           ),

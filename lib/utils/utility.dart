@@ -23,7 +23,7 @@ Color primaryColor = HexColor("ED1D1D");
 Color secondaryColor = HexColor("960000");
 
 double responsiveFont(double designFont) {
-  return ScreenUtil().setSp(designFont+2);
+  return ScreenUtil().setSp(designFont + 2);
 }
 
 Widget customLoading({Color? color}) {
@@ -226,8 +226,36 @@ buildButtonCart(context, product) {
           ),
         );
       } else {
-        snackBar(context, message: AppLocalizations.of(context)!.translate('product_out_stock')!);
+        snackBar(context,
+            message:
+                AppLocalizations.of(context)!.translate('product_out_stock')!);
       }
+    },
+    child: Icon(
+      Icons.add_shopping_cart,
+      color: secondaryColor,
+      size: 20.h,
+    ),
+  );
+}
+
+buildButtonCartPq(context) {
+  final loadCount =
+      Provider.of<OrderProvider>(context, listen: false).loadCartCount;
+  return GestureDetector(
+    onTap: () {
+      // if (product.stockStatus != 'outofstock' && product.productStock >= 1) {
+      //   showMaterialModalBottomSheet(
+      //     context: context,
+      //     builder: (context) => ModalSheetCart(
+      //       product: product,
+      //       type: 'add',
+      //       loadCount: loadCount,
+      //     ),
+      //   );
+      // } else {
+      //   snackBar(context, message: AppLocalizations.of(context)!.translate('product_out_stock')!);
+      // }
     },
     child: Icon(
       Icons.add_shopping_cart,
