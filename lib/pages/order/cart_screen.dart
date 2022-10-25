@@ -3,14 +3,17 @@ import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:nyoba/models/customer.dart';
 import 'package:nyoba/models/product_model.dart';
 import 'package:nyoba/pages/order/order_success_screen.dart';
 import 'package:nyoba/provider/coupon_provider.dart';
 import 'package:nyoba/provider/order_provider.dart';
 import 'package:nyoba/services/session.dart';
 import 'package:nyoba/utils/currency_format.dart';
+import 'package:nyoba/widgets/customer/list_item_customer_cart.dart';
 import 'package:provider/provider.dart';
 import '../../app_localizations.dart';
+import '../../provider/customer_provider.dart';
 import 'coupon_screen.dart';
 import '../../utils/utility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -26,10 +29,15 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   List<ProductModel> productCart = [];
   double totalPriceCart = 0;
+  List<Customer> customer = List.empty(growable: true);
+
+  ScrollController _scrollController = new ScrollController();
 
   int totalSelected = 0;
   bool isCouponUsed = false;
   bool isSelectedAll = false;
+
+  CustomerProvider? customerProvider;
 
   loadData() async {
     if (Session.data.containsKey('cart')) {
@@ -164,7 +172,8 @@ class _CartScreenState extends State<CartScreen> {
     reCalculateTotalOrder();
     saveData();
     snackBar(context,
-        message: AppLocalizations.of(context)!.translate('delete_cart_message')!);
+        message:
+            AppLocalizations.of(context)!.translate('delete_cart_message')!);
   }
 
   /*Remove Selected Item*/
@@ -176,7 +185,8 @@ class _CartScreenState extends State<CartScreen> {
     saveData();
     Navigator.pop(context);
     snackBar(context,
-        message: AppLocalizations.of(context)!.translate('delete_cart_message')!);
+        message:
+            AppLocalizations.of(context)!.translate('delete_cart_message')!);
   }
 
   /*Calculate Discount*/
@@ -214,10 +224,25 @@ class _CartScreenState extends State<CartScreen> {
         context, MaterialPageRoute(builder: (context) => OrderSuccess()));
   }
 
+  getListCustomer() async {
+    await Provider.of<CustomerProvider>(context, listen: false)
+        .getListCustomer(context)
+        .then((value) {
+      this.setState(() {
+        customer = value;
+        for (var element in customer) {
+          print(element.userInfoId);
+        }
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    loadData();
+    customerProvider = Provider.of<CustomerProvider>(context, listen: false);
+    getListCustomer();
+    // loadData();
   }
 
   @override
@@ -237,7 +262,7 @@ class _CartScreenState extends State<CartScreen> {
               )
             : null,
         title: Text(
-          AppLocalizations.of(context)!.translate('cart')!,
+          "Danh sách khách hàng",
           style: TextStyle(color: Colors.black),
         ),
         actions: [
@@ -254,36 +279,52 @@ class _CartScreenState extends State<CartScreen> {
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 15),
               alignment: Alignment.center,
-              child: Text(
-                AppLocalizations.of(context)!.translate('delete_selected')!,
-                style: TextStyle(
-                    color: totalSelected != 0 ? Colors.black : Colors.grey),
-              ),
+              // child: Text(
+              //   AppLocalizations.of(context)!.translate('delete_selected')!,
+              //   style: TextStyle(
+              //       color: totalSelected != 0 ? Colors.black : Colors.grey),
+              // ),
             ),
           )
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-              child: ListView.separated(
-                  itemBuilder: (context, i) {
-                    return Dismissible(
-                        key: UniqueKey(),
-                        onDismissed: (direction) {
-                          removeItem(i);
-                        },
-                        child: itemList(i));
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return SizedBox(
-                      height: 15,
-                    );
-                  },
-                  itemCount: productCart.length)),
-          buildBottomBarCart()
-        ],
-      ),
+      body: customer.length != 0
+          ? Column(
+              children: [
+                // Expanded(
+                //     child: ListView.separated(
+                //         itemBuilder: (context, i) {
+                //           return Dismissible(
+                //               key: UniqueKey(),
+                //               onDismissed: (direction) {
+                //                 removeItem(i);
+                //               },
+                //               child: itemList(i));
+                //         },
+                //         separatorBuilder: (BuildContext context, int index) {
+                //           return SizedBox(
+                //             height: 15,
+                //           );
+                //         },
+                //         itemCount: productCart.length)),
+                // buildBottomBarCart()
+                Container(
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      controller: _scrollController,
+                      physics: ScrollPhysics(),
+                      itemCount: customer.length,
+                      itemBuilder: (context, i) {
+                        return ListItemCustomerCart(
+                          itemCount: customer.length,
+                          customer: customer[i],
+                          i: i,
+                        );
+                      }),
+                )
+              ],
+            )
+          : customLoading(),
     );
   }
 
@@ -455,7 +496,8 @@ class _CartScreenState extends State<CartScreen> {
                                     if (productCart[index].cartQuantity! > 1) {
                                       setState(() {
                                         productCart[index].cartQuantity =
-                                            productCart[index].cartQuantity! - 1;
+                                            productCart[index].cartQuantity! -
+                                                1;
                                       });
                                       decreaseQuantity(index);
                                     }

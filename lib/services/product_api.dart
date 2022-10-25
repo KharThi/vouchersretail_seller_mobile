@@ -58,15 +58,89 @@ class ProductAPI {
     return response;
   }
 
+  fetchDetailProductVoucher(String? productId) async {
+    // var response = await baseAPI.getAsync('$product/$productId');
+    // return response;
+    SharedPreferences data = await SharedPreferences.getInstance();
+    String? jwt = data.getString("jwt");
+
+    var response = await http.get(
+        Uri.parse(
+            "https://webapp-221010174451.azurewebsites.net/api/v1/vouchers?ProductId=" +
+                productId.toString()),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + jwt.toString()
+        });
+    print(response);
+    Map<String, dynamic> dataResponse = await json.decode(response.body);
+    return dataResponse["data"];
+  }
+
+  fetchDetailProductCombo(String? productId) async {
+    // var response = await baseAPI.getAsync('$product/$productId');
+    // return response;
+    SharedPreferences data = await SharedPreferences.getInstance();
+    String? jwt = data.getString("jwt");
+
+    var response = await http.get(
+        Uri.parse(
+            "https://webapp-221010174451.azurewebsites.net/api/v1/combos?ProductId=" +
+                productId.toString()),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + jwt.toString()
+        });
+    Map<String, dynamic> dataResponse = await json.decode(response.body);
+    print("object" + productId.toString());
+    return dataResponse["data"];
+  }
+
   fetchDetailProductSlug(String? slug) async {
     var response = await baseAPI.getAsync('$product/?slug=$slug');
     return response;
   }
 
   searchProduct({String search = '', String category = '', int? page}) async {
-    var response = await baseAPI.getAsync(
-        '$product?search=$search&category=$category&page=$page&status=publish');
-    return response;
+    // var response = await baseAPI.getAsync(
+    //     '$product?search=$search&category=$category&page=$page&status=publish');
+    // return response;
+
+    SharedPreferences data = await SharedPreferences.getInstance();
+    String? jwt = data.getString("jwt");
+
+    var response = await http.get(
+        Uri.parse(
+            "https://webapp-221010174451.azurewebsites.net/api/v1/products?Summary=" +
+                search),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + jwt.toString()
+        });
+    print(response.body);
+    Map<String, dynamic> dataResponse = await json.decode(response.body);
+    return dataResponse["data"];
+  }
+
+  searchCustomer({String search = '', String category = '', int? page}) async {
+    // var response = await baseAPI.getAsync(
+    //     '$product?search=$search&category=$category&page=$page&status=publish');
+    // return response;
+
+    SharedPreferences data = await SharedPreferences.getInstance();
+    String? jwt = data.getString("jwt");
+
+    var response = await http.get(
+        Uri.parse(
+            "https://webapp-221010174451.azurewebsites.net/api/v1/customers?UserName=" +
+                search),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + jwt.toString()
+        });
+    print(response.body);
+    Map<String, dynamic> dataResponse = await json.decode(response.body);
+    return dataResponse["data"];
   }
 
   checkVariationProduct(int? productId, List<ProductVariation>? list) async {
@@ -148,10 +222,10 @@ class ProductAPI {
 
     var response = await http.get(
         Uri.parse(
-            "https://webapp-220831200534.azurewebsites.net/api/v1/products"),
+            "https://webapp-221010174451.azurewebsites.net/api/v1/products"),
         headers: {
           "Content-Type": "application/json",
-          // "Authorization": "Bearer " + jwt!
+          "Authorization": "Bearer " + jwt.toString()
         });
     var dataResponse = await json.decode(response.body);
     // List returnData = new List.empty(growable: true);
@@ -159,8 +233,8 @@ class ProductAPI {
 
     Iterable list = dataResponse['data'];
 
-    final Data = list.cast<Map<String, dynamic>>();
-    final listData = await Data.map<Product>((json) {
+    final data2 = list.cast<Map<String, dynamic>>();
+    final listData = data2.map<Product>((json) {
       return Product.fromJson(json);
     }).toList();
 

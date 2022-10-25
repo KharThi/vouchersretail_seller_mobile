@@ -30,7 +30,6 @@ import 'package:nyoba/services/session.dart';
 import 'package:nyoba/widgets/home/card_item_small_pq.dart';
 import 'package:nyoba/widgets/home/card_item_small_pq_voucher.dart';
 import 'package:nyoba/widgets/home/grid_item_pq.dart';
-import 'package:nyoba/widgets/home/wallet_card.dart';
 import 'package:nyoba/widgets/home/flashsale/flash_sale_countdown.dart';
 import 'package:provider/provider.dart';
 
@@ -680,7 +679,7 @@ class _LobbyScreenState extends State<LobbyScreen>
                       ],
                     ),
                     // wallet
-                    WalletCard(showBtnMore: true),
+                    // WalletCard(showBtnMore: true),
                     Container(
                       height: 15,
                     ),

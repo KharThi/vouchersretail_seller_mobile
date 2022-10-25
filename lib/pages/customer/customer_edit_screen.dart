@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:nyoba/models/seller_model.dart';
+import 'package:nyoba/models/customer.dart';
 import 'package:nyoba/provider/user_provider.dart';
-import 'package:nyoba/services/session.dart';
 import 'package:provider/provider.dart';
 import '../../app_localizations.dart';
 import '../../utils/utility.dart';
 
-class AccountEditScreen extends StatefulWidget {
-  final Seller? userModel;
-  AccountEditScreen({Key? key, this.userModel}) : super(key: key);
+class CustomerEditScreen extends StatefulWidget {
+  final Customer? userModel;
+  CustomerEditScreen({Key? key, this.userModel}) : super(key: key);
 
   @override
-  _AccountEditScreenState createState() => _AccountEditScreenState();
+  _CustomerEditScreenState createState() => _CustomerEditScreenState();
 }
 
-class _AccountEditScreenState extends State<AccountEditScreen> {
+class _CustomerEditScreenState extends State<CustomerEditScreen> {
   bool isVisible = false;
   bool checkedValue = false;
 
@@ -27,11 +26,16 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
   TextEditingController controllerPasswordConfirm = new TextEditingController();
   TextEditingController controllerOldPassword = new TextEditingController();
 
+  TextEditingController controllerPhone = new TextEditingController();
+  TextEditingController controllerCustomerName = new TextEditingController();
+
   @override
   void initState() {
     super.initState();
     controllerEmail.text = widget.userModel!.userInfo!.email!;
-    controllerUsername.text = widget.userModel!.sellerName!;
+    controllerUsername.text = widget.userModel!.userInfo!.userName!;
+    controllerPhone.text = widget.userModel!.userInfo!.phoneNumber!;
+    controllerCustomerName.text = widget.userModel!.customerName!;
     // controllerFirstname.text = widget.userModel!.firstname!;
     // controllerLastname.text = widget.userModel!.lastname!;
   }
@@ -87,7 +91,7 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
           ),
           backgroundColor: Colors.white,
           title: Text(
-            AppLocalizations.of(context)!.translate('edit_account')!,
+            "Cập nhật khách hàng",
             style:
                 TextStyle(fontSize: responsiveFont(16), color: secondaryColor),
           ),
@@ -98,66 +102,57 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                form(
-                    AppLocalizations.of(context)!.translate('enter_firstname'),
-                    AppLocalizations.of(context)!.translate('first_name'),
-                    false,
-                    controllerFirstname),
+                form("Nhập tên của khách hàng", "Tên khách hàng", true,
+                    controllerCustomerName,
+                    icon: "akun"),
                 Container(
                   height: 15,
                 ),
-                form(
-                    AppLocalizations.of(context)!.translate('enter_lastname'),
-                    AppLocalizations.of(context)!.translate('last_name'),
-                    false,
-                    controllerLastname),
+                form("Nhập số điện thoại", "Số điện thoại", true,
+                    controllerPhone,
+                    icon: "call"),
                 Container(
                   height: 15,
                 ),
-                form(
-                    AppLocalizations.of(context)!.translate('enter_username'),
-                    AppLocalizations.of(context)!.translate('username'),
-                    true,
+                form("Nhập username khách hàng", "Username khách hàng", true,
                     controllerUsername,
-                    icon: "akun",
-                    enable: false),
+                    icon: "akun", enable: false),
                 Container(
                   height: 15,
                 ),
-                form(AppLocalizations.of(context)!.translate('enter_email'),
-                    "Email", true, controllerEmail,
+                form("Nhập email khách hàng", "Email", true, controllerEmail,
                     icon: "email", enable: false),
                 Container(
                   height: 15,
                 ),
-                Visibility(
-                    visible: Session.data.getString('login_type') == 'default',
-                    child: Column(
-                      children: [
-                        passwordForm("Current Password", "Current Password",
-                            controllerOldPassword),
-                        Container(
-                          height: 15,
-                        ),
-                        passwordForm(
-                            AppLocalizations.of(context)!
-                                .translate('new_password'),
-                            "Password",
-                            controllerPassword),
-                        Container(
-                          height: 15,
-                        ),
-                        passwordForm(
-                            AppLocalizations.of(context)!
-                                .translate('repeat_new_password'),
-                            AppLocalizations.of(context)!
-                                .translate('repeat_password'),
-                            controllerPasswordConfirm),
-                        Container(
-                          height: 15,
-                        ),
-                      ],
-                    )),
+                // Visibility(
+                //     visible: Session.data.getString('login_type') == 'default',
+                //     child: Column(
+                //       children: [
+                //         passwordForm("Current Password", "Current Password",
+                //             controllerOldPassword),
+                //         Container(
+                //           height: 15,
+                //         ),
+                //         passwordForm(
+                //             AppLocalizations.of(context)!
+                //                 .translate('new_password'),
+                //             "Password",
+                //             controllerPassword),
+                //         Container(
+                //           height: 15,
+                //         ),
+                //         passwordForm(
+                //             AppLocalizations.of(context)!
+                //                 .translate('repeat_new_password'),
+                //             AppLocalizations.of(context)!
+                //                 .translate('repeat_password'),
+                //             controllerPasswordConfirm),
+                //         Container(
+                //           height: 15,
+                //         ),
+                //       ],
+                //     )),
                 Container(
                   height: 10,
                 ),
@@ -172,7 +167,7 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
                     child: user.loading
                         ? customLoading()
                         : Text(
-                            AppLocalizations.of(context)!.translate('save')!,
+                            "Lưu",
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: responsiveFont(10),

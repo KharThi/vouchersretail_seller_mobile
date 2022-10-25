@@ -1,9 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:nyoba/models/product_model.dart';
-import 'package:nyoba/utils/currency_format.dart';
 import 'package:nyoba/utils/utility.dart';
-import 'package:hexcolor/hexcolor.dart';
 
 import '../../pages/product/product_detail_screen.dart';
 
@@ -29,7 +27,7 @@ class GridItemPQ extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => ProductDetail(
-                            productId: product!.id.toString(),
+                            productId: product!.summary.toString(),
                           )));
             },
             child: Column(
@@ -46,7 +44,7 @@ class GridItemPQ extends StatelessWidget {
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: CachedNetworkImage(
-                            imageUrl: product!.bannerImg!,
+                            imageUrl: product!.bannerImg.toString(),
                             placeholder: (context, url) => customLoading(),
                             errorWidget: (context, url, error) => Icon(
                               Icons.image_not_supported_rounded,
@@ -59,7 +57,7 @@ class GridItemPQ extends StatelessWidget {
                         margin:
                             EdgeInsets.symmetric(vertical: 3, horizontal: 5),
                         child: Text(
-                          product!.content!.toString(),
+                          product!.summary!.toString(),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(fontSize: responsiveFont(10)),
@@ -83,6 +81,8 @@ class GridItemPQ extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                Text(product!.prices!.first.price.toString() +
+                                    " Vnd"),
                                 Text(
                                   product!.summary!,
                                   maxLines: 2,

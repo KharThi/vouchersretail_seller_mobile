@@ -87,15 +87,15 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
         productCart.cartQuantity =
             listCart[index].cartQuantity! + productCart.cartQuantity!;
 
-        productCart.priceTotal =
-            (productCart.cartQuantity! * double.parse(productCart.productPrice));
+        productCart.priceTotal = (productCart.cartQuantity! *
+            double.parse(productCart.productPrice));
 
         listCart[index] = productCart;
 
         await Session.data.setString('cart', json.encode(listCart));
       } else {
-        productCart.priceTotal =
-            (productCart.cartQuantity! * double.parse(productCart.productPrice));
+        productCart.priceTotal = (productCart.cartQuantity! *
+            double.parse(productCart.productPrice));
         listCart.add(productCart);
         await Session.data.setString('cart', json.encode(listCart));
         printLog(products.toString(), name: "Cart Product");
@@ -105,7 +105,8 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
     this.setState(() {});
     Navigator.pop(context);
     snackBar(context,
-        message: AppLocalizations.of(context)!.translate('product_success_atc')!);
+        message:
+            AppLocalizations.of(context)!.translate('product_success_atc')!);
   }
 
   /*get variant id, if product have variant*/
@@ -296,7 +297,8 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
                                         child: InkWell(
                                           onTap: () {
                                             setState(() {
-                                              if (widget.product!.cartQuantity! >
+                                              if (widget
+                                                      .product!.cartQuantity! >
                                                   1) {
                                                 widget.product!.cartQuantity =
                                                     widget.product!
@@ -305,7 +307,8 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
                                               }
                                             });
                                           },
-                                          child: widget.product!.cartQuantity! > 1
+                                          child: widget.product!.cartQuantity! >
+                                                  1
                                               ? Image.asset(
                                                   "images/cart/minusDark.png")
                                               : Image.asset(
@@ -339,7 +342,8 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
                                                               1;
                                                         });
                                                       },
-                                            child: widget.product!.productStock! >
+                                            child: widget.product!
+                                                            .productStock! >
                                                         widget.product!
                                                             .cartQuantity! &&
                                                     !isOutStock
@@ -466,7 +470,8 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
                               : secondaryColor,
                         ),
                         Text(
-                          AppLocalizations.of(context)!.translate('add_to_cart')!,
+                          AppLocalizations.of(context)!
+                              .translate('add_to_cart')!,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: responsiveFont(9),
@@ -590,7 +595,8 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
                           checkProductVariant(widget.product!);
                         },
                         child: attributes[index].id == 0
-                            ? sizeButton(attributes[index].options![i], index, i)
+                            ? sizeButton(
+                                attributes[index].options![i], index, i)
                             : sizeButtonPA(
                                 attributes[index].options![i], index, i)),
                     Container(

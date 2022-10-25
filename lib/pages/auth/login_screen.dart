@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter/gestures.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:nyoba/pages/auth/sign_in_otp_screen.dart';
 import 'package:nyoba/pages/home/home_screen.dart';
 import 'package:nyoba/provider/login_provider.dart';
 import 'package:nyoba/services/session.dart';
 import 'package:provider/provider.dart';
-import '../../app_localizations.dart';
 import 'forgot_password_screen.dart';
-import 'sign_up_screen.dart';
 import '../../utils/utility.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
@@ -112,7 +109,8 @@ class _LoginState extends State<Login> {
             .login(context, password: password.text, username: username.text)
             .then((value) => this.setState(() {}));
       } else {
-        snackBar(context, message: 'Username & password should not empty');
+        snackBar(context,
+            message: 'Tài khoản và mật khẩu không được để trống!');
       }
     };
 
@@ -128,7 +126,7 @@ class _LoginState extends State<Login> {
                   ))
               : null,
           title: AutoSizeText(
-            AppLocalizations.of(context)!.translate('login')!,
+            "Đăng nhập",
             style:
                 TextStyle(fontSize: responsiveFont(16), color: secondaryColor),
           ),
@@ -140,14 +138,14 @@ class _LoginState extends State<Login> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "${AppLocalizations.of(context)!.translate('welcome')}!",
+                "Xin chào!",
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: responsiveFont(14),
                 ),
               ),
               Text(
-                AppLocalizations.of(context)!.translate('subtitle_login')!,
+                "Vùi lòng nhập mật khẩu và tài khoản để đăng nhập!",
                 style: TextStyle(
                   fontSize: responsiveFont(9),
                 ),
@@ -174,10 +172,8 @@ class _LoginState extends State<Login> {
                         fontSize: responsiveFont(12),
                       ),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
-                      labelText:
-                          AppLocalizations.of(context)!.translate('username'),
-                      hintText: AppLocalizations.of(context)!
-                          .translate('hint_username')),
+                      labelText: "Tên tài khoản",
+                      hintText: "Nhập tên tài khoản của bạn"),
                 ),
               ),
               Container(
@@ -215,10 +211,8 @@ class _LoginState extends State<Login> {
                         fontSize: responsiveFont(12),
                       ),
                       floatingLabelBehavior: FloatingLabelBehavior.always,
-                      labelText:
-                          AppLocalizations.of(context)!.translate('password'),
-                      hintText: AppLocalizations.of(context)!
-                          .translate('hint_password')),
+                      labelText: "Mật khẩu",
+                      hintText: "Nhập mật khẩu của bạn"),
                 ),
               ),
               Container(
@@ -234,7 +228,7 @@ class _LoginState extends State<Login> {
                   alignment: Alignment.centerRight,
                   width: double.infinity,
                   child: Text(
-                    AppLocalizations.of(context)!.translate('forgot_password')!,
+                    "Quên mật khẩu?",
                     style: TextStyle(
                       color: HexColor("FD490C"),
                       fontSize: responsiveFont(10),
@@ -256,7 +250,7 @@ class _LoginState extends State<Login> {
                   child: auth.loading
                       ? customLoading()
                       : Text(
-                          AppLocalizations.of(context)!.translate('login')!,
+                          "Đăng nhập",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: responsiveFont(10),
@@ -271,42 +265,42 @@ class _LoginState extends State<Login> {
               Container(
                 height: 15,
               ),
-              Center(
-                child: RichText(
-                  text: TextSpan(
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: responsiveFont(10),
-                    ),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text:
-                            "${AppLocalizations.of(context)!.translate("don't_have_account")} ",
-                      ),
-                      TextSpan(
-                          recognizer: new TapGestureRecognizer()
-                            ..onTap = () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SignUp())),
-                          text:
-                              AppLocalizations.of(context)!.translate('sign_up'),
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: secondaryColor)),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                height: 15,
-              ),
-              signInButton(
-                  "${AppLocalizations.of(context)!.translate('sign_in_otp')}",
-                  "message"),
-              Container(
-                height: 10,
-              ),
+              // Center(
+              //   child: RichText(
+              //     text: TextSpan(
+              //       style: TextStyle(
+              //         color: Colors.black,
+              //         fontSize: responsiveFont(10),
+              //       ),
+              //       children: <TextSpan>[
+              //         TextSpan(
+              //           text:
+              //               "${AppLocalizations.of(context)!.translate("don't_have_account")} ",
+              //         ),
+              //         TextSpan(
+              //             recognizer: new TapGestureRecognizer()
+              //               ..onTap = () => Navigator.push(
+              //                   context,
+              //                   MaterialPageRoute(
+              //                       builder: (context) => SignUp())),
+              //             text: AppLocalizations.of(context)!
+              //                 .translate('sign_up'),
+              //             style: TextStyle(
+              //                 fontWeight: FontWeight.bold,
+              //                 color: secondaryColor)),
+              //       ],
+              //     ),
+              //   ),
+              // ),
+              // Container(
+              //   height: 15,
+              // ),
+              // signInButton(
+              //     "${AppLocalizations.of(context)!.translate('sign_in_otp')}",
+              //     "message"),
+              // Container(
+              //   height: 10,
+              // ),
               // signInButton(
               //     "${AppLocalizations.of(context).translate('sign_in')} Google",
               //     "google"),

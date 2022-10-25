@@ -1,11 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:nyoba/models/product_model.dart';
 import 'package:nyoba/pages/order/cart_screen.dart';
 import 'package:nyoba/pages/product/product_detail_screen.dart';
-import 'package:nyoba/pages/product/modal_sheet_cart/modal_sheet_cart.dart';
 import 'package:nyoba/provider/order_provider.dart';
 import 'package:nyoba/provider/product_provider.dart';
 import 'package:nyoba/utils/currency_format.dart';
@@ -253,8 +251,10 @@ class _ProductMoreScreenState extends State<ProductMoreScreen> {
                         2,
                         AppLocalizations.of(context)!
                             .translate('highest_price')!),
-                    tabStyle(3,
-                        AppLocalizations.of(context)!.translate('lowest_price')!),
+                    tabStyle(
+                        3,
+                        AppLocalizations.of(context)!
+                            .translate('lowest_price')!),
                   ],
                 ),
               ),
@@ -463,14 +463,14 @@ class _ProductMoreScreenState extends State<ProductMoreScreen> {
                             borderRadius: new BorderRadius.circular(5))),
                     onPressed: () {
                       if (!isOutOfStock && productDetail.productStock! >= 1) {
-                        showMaterialModalBottomSheet(
-                          context: context,
-                          builder: (context) => ModalSheetCart(
-                            product: productDetail,
-                            type: 'add',
-                            loadCount: loadCartCount,
-                          ),
-                        );
+                        // showMaterialModalBottomSheet(
+                        //   context: context,
+                        //   builder: (context) => ModalSheetCart(
+                        //     product: productDetail,
+                        //     type: 'add',
+                        //     loadCount: loadCartCount,
+                        //   ),
+                        // );
                       } else {
                         snackBar(context,
                             message: AppLocalizations.of(context)!
@@ -492,7 +492,7 @@ class _ProductMoreScreenState extends State<ProductMoreScreen> {
                           style: TextStyle(
                               fontSize: responsiveFont(9),
                               color:
-                              isOutOfStock ? Colors.grey : secondaryColor),
+                                  isOutOfStock ? Colors.grey : secondaryColor),
                         )
                       ],
                     )),
@@ -504,9 +504,10 @@ class _ProductMoreScreenState extends State<ProductMoreScreen> {
     );
   }
 
-  buildStock(ProductModel productDetail, stock){
-    if (productDetail.stockStatus == 'outofstock'){
-      return Text("${AppLocalizations.of(context)!.translate('out_stock')}",
+  buildStock(ProductModel productDetail, stock) {
+    if (productDetail.stockStatus == 'outofstock') {
+      return Text(
+        "${AppLocalizations.of(context)!.translate('out_stock')}",
         style: TextStyle(fontSize: responsiveFont(8)),
       );
     }
