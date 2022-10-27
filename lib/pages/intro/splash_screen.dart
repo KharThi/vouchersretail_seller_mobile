@@ -64,7 +64,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     return Timer(duration, () {
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
-        if (home.introStatus == 'show') {
+        if (false) {
           return IntroScreen(
             intro: home.intro,
           );
@@ -73,7 +73,7 @@ class _SplashScreenState extends State<SplashScreen> {
             Session.data.setBool('isLogin', false);
             Session.data.setBool('isIntro', false);
           }
-          return Session.data.getBool('isIntro') != false
+          return true
               ? HomeScreen()
               : IntroScreen(
                   intro: home.intro,

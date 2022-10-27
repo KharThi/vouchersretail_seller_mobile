@@ -235,6 +235,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _configureSelectNotificationSubject() {
+    Uri uri1 = Uri.parse("https://www.phuquocvoucher.vn/home");
+    DeeplinkConfig().pathUrl(uri1, context, false);
     selectNotificationSubject.stream.listen((String? payload) async {
       debugPrint("Payload : $payload");
       var _payload = json.decode(payload!);
