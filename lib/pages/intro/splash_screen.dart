@@ -151,9 +151,7 @@ class _SplashScreenState extends State<SplashScreen> {
         body: home.loading
             ? Container()
             : loadHomeSuccess
-                ? isVideo
-                    ? videoSplashScreen()
-                    : imageSplashScreen()
+                ? imageSplashScreen()
                 : buildError(context));
   }
 
@@ -164,7 +162,9 @@ class _SplashScreenState extends State<SplashScreen> {
         decoration: BoxDecoration(
             image: DecorationImage(
                 fit: BoxFit.cover,
-                image: CachedNetworkImageProvider(home.splashscreen.image!))),
+                image: new AssetImage("images/splashscreen.png")
+                // CachedNetworkImageProvider(home.splashscreen.image!)
+                )),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: Column(
