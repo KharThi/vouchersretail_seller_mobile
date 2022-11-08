@@ -88,7 +88,7 @@ class _OrderDetailState extends State<OrderDetail> {
                                   fontWeight: FontWeight.w500),
                             ),
                             Text(
-                              "${order.detailOrder!.id}",
+                              "OrderId",
                               style: TextStyle(
                                   fontSize: responsiveFont(12),
                                   fontWeight: FontWeight.w500,
@@ -175,15 +175,15 @@ class _OrderDetailState extends State<OrderDetail> {
                                     fontWeight: FontWeight.w500),
                               ),
                               Text(
-                                "${order.detailOrder!.billingInfo!.firstName} ${order.detailOrder!.billingInfo!.lastName}",
+                                "Billing name",
                                 style: TextStyle(fontSize: responsiveFont(11)),
                               ),
                               Text(
-                                order.detailOrder!.billingInfo!.phone!,
+                                "Phone",
                                 style: TextStyle(fontSize: responsiveFont(11)),
                               ),
                               Text(
-                                order.detailOrder!.billingInfo!.firstAddress!,
+                                "Address",
                                 style: TextStyle(fontSize: responsiveFont(11)),
                               )
                             ],
@@ -239,7 +239,7 @@ class _OrderDetailState extends State<OrderDetail> {
                                     fontWeight: FontWeight.w600),
                               ),
                               Text(
-                                "${order.detailOrder!.paymentMethodTitle}",
+                                "Payment method",
                                 style: TextStyle(
                                     fontSize: responsiveFont(12),
                                     fontWeight: FontWeight.w400),
@@ -255,7 +255,7 @@ class _OrderDetailState extends State<OrderDetail> {
                                     fontWeight: FontWeight.w600),
                               ),
                               Text(
-                                "${order.detailOrder!.paymentDescription}",
+                                "Description",
                                 style: TextStyle(
                                     fontSize: responsiveFont(12),
                                     fontWeight: FontWeight.w400),
@@ -303,7 +303,7 @@ class _OrderDetailState extends State<OrderDetail> {
                                       height: 10,
                                     ),
                                     Text(
-                                      "${order.detailOrder!.customerNote}",
+                                      "Order Note",
                                       style: TextStyle(
                                           fontSize: responsiveFont(12),
                                           fontWeight: FontWeight.w400),

@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -744,14 +746,22 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                       Visibility(
                         visible: updateCart,
                         child: Container(
-                          margin: EdgeInsets.only(left: 15, right: 10),
+                          height: 50,
+                          // margin: EdgeInsets.only(left: 15, right: 10),
                           alignment: Alignment.center,
                           child: ElevatedButton.icon(
                             onPressed: () {
                               update();
                             },
+                            style: ElevatedButton.styleFrom(
+                              primary: primaryColor,
+                              padding: EdgeInsets.all(15),
+                            ),
                             icon: Icon(Icons.update),
-                            label: Text("Cập nhật"),
+                            label: Text(
+                              "Cập nhật",
+                              style: new TextStyle(fontSize: 12),
+                            ),
                           ),
                         ),
                       ),
@@ -803,7 +813,7 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                                 : Colors.grey),
                         child: Text(
                           "${"Thanh toán"}($totalSelected)",
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.white, fontSize: 12),
                         ),
                       )
                     ],

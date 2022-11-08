@@ -435,34 +435,25 @@ class Product {
 }
 
 class Price {
-  Price({
-    this.id,
-    this.priceLevelName,
-    this.priceLevelId,
-    this.productId,
-    this.price,
-  });
+  Price({this.id, this.priceLevelName, this.price, this.isDefault});
 
   int? id;
   String? priceLevelName;
-  int? priceLevelId;
-  int? productId;
   int? price;
   int? quantity;
+  bool? isDefault;
 
   factory Price.fromJson(Map<String, dynamic> json) => Price(
         id: json["id"],
         priceLevelName: json["priceLevelName"],
-        priceLevelId: json["priceLevelId"],
-        productId: json["productId"],
+        isDefault: json["isDefault"],
         price: json["price"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "priceLevelName": priceLevelName,
-        "priceLevelId": priceLevelId,
-        "productId": productId,
+        "isDefault": isDefault,
         "price": price,
       };
 }
@@ -574,8 +565,8 @@ class Combo {
 
   int? id;
   String? name;
-  String? startDate;
-  String? endDate;
+  DateTime? startDate;
+  DateTime? endDate;
   String? description;
   String? summary;
   String? bannerImg;
@@ -584,25 +575,22 @@ class Combo {
   String? type;
   List<Price>? prices;
   int? productId;
-  List<ComboVoucher>? vouchers;
+  List<Voucher>? vouchers;
 
   factory Combo.fromJson(Map<String, dynamic> json) => Combo(
         id: json["id"],
         name: json["name"],
-        startDate: json["startDate"],
-        endDate: json["endDate"],
+        startDate: DateTime.parse(json["startDate"]),
+        endDate: DateTime.parse(json["endDate"]),
         description: json["description"],
         summary: json["summary"],
         bannerImg: json["bannerImg"],
         content: json["content"],
         isForKid: json["isForKid"],
         type: json["type"],
-        prices: json["prices"] != null
-            ? List<Price>.from(json["prices"].map((x) => x))
-            : List.empty(),
+        prices: List<Price>.from(json["prices"].map((x) => Price.fromJson(x))),
         productId: json["productId"],
-        vouchers: List<ComboVoucher>.from(
-            json["vouchers"].map((x) => ComboVoucher.fromJson(x))),
+        vouchers: List<Voucher>.from(json["vouchers"].map((x) => x)),
       );
 
   Map<String, dynamic> toJson() => {
@@ -616,9 +604,9 @@ class Combo {
         "content": content,
         "isForKid": isForKid,
         "type": type,
-        "prices": List<dynamic>.from(prices!.map((x) => x)),
+        "prices": List<dynamic>.from(prices!.map((x) => x.toJson())),
         "productId": productId,
-        "vouchers": List<dynamic>.from(vouchers!.map((x) => x.toJson())),
+        "vouchers": List<dynamic>.from(vouchers!.map((x) => x)),
       };
 }
 

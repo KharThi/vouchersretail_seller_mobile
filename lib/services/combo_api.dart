@@ -1,4 +1,6 @@
 //PQ voucher
+// ignore_for_file: await_only_futures
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';

@@ -1,9 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:nyoba/pages/product/product_detail_screen.dart';
 import 'package:nyoba/models/product_model.dart';
-import 'package:nyoba/utils/currency_format.dart';
+import 'package:nyoba/pages/product/product_detail_screen_combo.dart';
 import 'package:nyoba/utils/utility.dart';
 import 'package:hexcolor/hexcolor.dart';
 
@@ -18,12 +17,12 @@ class CardItemPq extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) => ProductDetail(
-        //               productId: product!.id.toString(),
-        //             )));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProductDetailCombo(
+                      productId: comboPq!.id.toString(),
+                    )));
       },
       child: Container(
         margin: EdgeInsets.only(

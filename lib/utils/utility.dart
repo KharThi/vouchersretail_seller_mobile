@@ -240,8 +240,6 @@ buildButtonCart(context, product) {
 }
 
 buildButtonCartPq(context) {
-  final loadCount =
-      Provider.of<OrderProvider>(context, listen: false).loadCartCount;
   return GestureDetector(
     onTap: () {
       // if (product.stockStatus != 'outofstock' && product.productStock >= 1) {

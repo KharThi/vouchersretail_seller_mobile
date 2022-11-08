@@ -5,7 +5,6 @@ import 'package:nyoba/provider/search_provider.dart';
 import 'package:nyoba/utils/utility.dart';
 import 'package:provider/provider.dart';
 
-import '../../app_localizations.dart';
 import '../../widgets/product/list_item_product2.dart';
 
 class SearchScreen extends StatefulWidget {

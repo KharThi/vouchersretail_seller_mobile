@@ -52,6 +52,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
     with TickerProviderStateMixin {
   late AnimationController _colorAnimationController;
   late AnimationController _textAnimationController;
+  int? price;
 
   int itemCount = 10;
 
@@ -109,23 +110,20 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
     final productProvider =
         Provider.of<ProductProvider>(context, listen: false);
 
-    loadCartCount();
+    // loadCartCount();
     if (widget.slug == null) {
       await Provider.of<ProductProvider>(context, listen: false)
           .fetchProductDetailCombo(widget.productId)
           .then((value) async {
         setState(() {
           productModel = value;
-          printLog(productModel.toString(), name: 'Product Model');
+
+          price = productModel!.prices!
+              .firstWhere((currency) => currency.isDefault == false)
+              .price;
+          // printLog(productModel.toString(), name: 'Product Model');
           // productModel!.isSelected = false;
         });
-        // loadVariationData().then((value) {
-        //   printLog('Load Stop', name: 'Load Stop');
-        //   productProvider.loadingDetail = false;
-        // });
-        if (Session.data.getBool('isLogin')!)
-          await productProvider.hitViewProducts(widget.productId).then(
-              (value) async => await productProvider.fetchRecentProducts());
       });
     }
     // else {
@@ -144,7 +142,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
     //     });
     //   });
     // }
-    if (mounted) secondLoad();
+    // if (mounted) secondLoad();
   }
 
   secondLoad() {
@@ -1309,7 +1307,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                                       productId: item.productId.toString(),
                                     ))),
                         title: Text(item.voucherName.toString()),
-                        subtitle: Text(item.price.toString() + " Vnd"),
+                        // subtitle: Text(item.price.toString() + " Vnd"),
                         // leading: {};
                       ),
                   ],
@@ -1338,13 +1336,8 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                               // text: stringToCurrency(
                               //     double.parse(productModel!.price.toString()),
                               //     context),
-                              text: productModel!.prices!.isNotEmpty
-                                  ? productModel!.prices!.first.price
-                                          .toString() +
-                                      "to" +
-                                      productModel!.prices!.last.price
-                                          .toString() +
-                                      " Vnd"
+                              text: price != 0
+                                  ? price.toString() + " Vnd"
                                   : "null",
                               style: TextStyle(
                                   fontWeight: FontWeight.w600,

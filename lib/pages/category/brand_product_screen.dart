@@ -4,8 +4,10 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:nyoba/models/product_model.dart';
 import 'package:nyoba/pages/order/cart_screen.dart';
+import 'package:nyoba/pages/product/modal_sheet_cart/modal_sheet_cart_combo.dart';
 import 'package:nyoba/pages/product/product_detail_screen.dart';
 import 'package:nyoba/pages/product/modal_sheet_cart/modal_sheet_cart.dart';
+import 'package:nyoba/provider/combo_provider.dart';
 import 'package:nyoba/provider/order_provider.dart';
 import 'package:nyoba/provider/product_provider.dart';
 import 'package:nyoba/utils/currency_format.dart';
@@ -31,22 +33,25 @@ class _BrandProductsState extends State<BrandProducts>
   int? currentIndex = 0;
   TabController? _tabController;
 
+  List<Combo> listCombo = List.empty(growable: true);
+
   int page = 1;
   String order = 'desc';
   String orderBy = 'popularity';
   int cartCount = 0;
+  int? price;
 
   ScrollController _scrollController = new ScrollController();
 
   @override
   void initState() {
-    final product = Provider.of<ProductProvider>(context, listen: false);
+    // final product = Provider.of<ProductProvider>(context, listen: false);
     super.initState();
     _tabController = new TabController(length: 4, vsync: this);
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        if (product.listBrandProduct.length % 8 == 0) {
+        if (listCombo.length % 8 == 0) {
           setState(() {
             page++;
           });
@@ -65,22 +70,17 @@ class _BrandProductsState extends State<BrandProducts>
   }
 
   loadProductByBrand() async {
-    await Provider.of<ProductProvider>(context, listen: false)
-        .fetchBrandProduct(
-            page: page,
-            order: order,
-            category: widget.categoryId.toString(),
-            orderBy: orderBy);
-    loadCartCount();
+    await Provider.of<ComboProvider>(context, listen: false).fetchCombos();
+    // loadCartCount();
   }
 
-  Future loadCartCount() async {
-    await Provider.of<OrderProvider>(context, listen: false)
-        .loadCartCount()
-        .then((value) => setState(() {
-              cartCount = value;
-            }));
-  }
+  // Future loadCartCount() async {
+  //   await Provider.of<OrderProvider>(context, listen: false)
+  //       .loadCartCount()
+  //       .then((value) => setState(() {
+  //             cartCount = value;
+  //           }));
+  // }
 
   _onSortChange(i) {
     if (i == 0) {
@@ -111,8 +111,8 @@ class _BrandProductsState extends State<BrandProducts>
     final product = Provider.of<ProductProvider>(context, listen: false);
     Widget buildItems = ListenableProvider.value(
       value: product,
-      child: Consumer<ProductProvider>(builder: (context, value, child) {
-        if (value.loadingBrand && page == 1) {
+      child: Consumer<ComboProvider>(builder: (context, value, child) {
+        if (value.loading && page == 1) {
           return Expanded(
             child: GridView.builder(
                 shrinkWrap: true,
@@ -127,14 +127,14 @@ class _BrandProductsState extends State<BrandProducts>
                 }),
           );
         }
-        if (value.listBrandProduct.isEmpty) {
-          return buildSearchEmpty(context, "Can't find the products");
+        if (listCombo.isEmpty) {
+          return buildSearchEmpty(context, "Không tìm thấy sản phẩm nào");
         }
         return Expanded(
           child: GridView.builder(
               controller: _scrollController,
               shrinkWrap: true,
-              itemCount: value.listBrandProduct.length,
+              itemCount: listCombo.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   childAspectRatio: 1 / 2,
                   crossAxisCount: 2,
@@ -142,16 +142,12 @@ class _BrandProductsState extends State<BrandProducts>
                   crossAxisSpacing: 15),
               itemBuilder: (context, i) {
                 return itemGridList(
-                    value.listBrandProduct[i].productName!,
-                    value.listBrandProduct[i].discProduct!.round().toString(),
-                    value.listBrandProduct[i].productPrice,
-                    value.listBrandProduct[i].productRegPrice,
+                    listCombo[i].name!,
                     i,
-                    value.listBrandProduct[i].productStock,
-                    value.listBrandProduct[i].images!.isEmpty
+                    listCombo[i].bannerImg != null
                         ? ''
-                        : value.listBrandProduct[i].images![0].src,
-                    value.listBrandProduct[i]);
+                        : listCombo[i].bannerImg,
+                    listCombo[i]);
               }),
         );
       }),
@@ -184,48 +180,48 @@ class _BrandProductsState extends State<BrandProducts>
             ),
           ),
           actions: [
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CartScreen(
-                              isFromHome: false,
-                            )));
-              },
-              child: Container(
-                width: 65,
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Icon(
-                      Icons.shopping_cart,
-                      color: Colors.black,
-                    ),
-                    Positioned(
-                      right: 0,
-                      top: 7,
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle, color: primaryColor),
-                        alignment: Alignment.center,
-                        child: Text(
-                          cartCount.toString(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: responsiveFont(9),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
+            // InkWell(
+            //   onTap: () {
+            //     Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //             builder: (context) => CartScreen(
+            //                   isFromHome: false,
+            //                 )));
+            //   },
+            //   child: Container(
+            //     width: 65,
+            //     padding: EdgeInsets.symmetric(horizontal: 8),
+            //     child: Stack(
+            //       alignment: Alignment.center,
+            //       children: [
+            //         Icon(
+            //           Icons.shopping_cart,
+            //           color: Colors.black,
+            //         ),
+            //         Positioned(
+            //           right: 0,
+            //           top: 7,
+            //           child: Container(
+            //             padding:
+            //                 EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+            //             decoration: BoxDecoration(
+            //                 shape: BoxShape.circle, color: primaryColor),
+            //             alignment: Alignment.center,
+            //             child: Text(
+            //               cartCount.toString(),
+            //               textAlign: TextAlign.center,
+            //               style: TextStyle(
+            //                 color: Colors.white,
+            //                 fontSize: responsiveFont(9),
+            //               ),
+            //             ),
+            //           ),
+            //         )
+            //       ],
+            //     ),
+            //   ),
+            // ),
           ],
         ),
         body: Container(
@@ -236,45 +232,45 @@ class _BrandProductsState extends State<BrandProducts>
               SizedBox(
                 height: 15,
               ),
-              Text(AppLocalizations.of(context)!.translate('sort')!,
-                  style: TextStyle(
-                      fontSize: responsiveFont(12),
-                      fontWeight: FontWeight.w500)),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 15),
-                child: TabBar(
-                  controller: _tabController,
-                  labelPadding: EdgeInsets.symmetric(horizontal: 5),
-                  onTap: (i) {
-                    setState(() {
-                      currentIndex = i;
-                      page = 1;
-                    });
-                    _onSortChange(i);
-                    loadProductByBrand();
-                  },
-                  isScrollable: true,
-                  indicatorSize: TabBarIndicatorSize.label,
-                  indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: primaryColor,
-                  ),
-                  tabs: [
-                    tabStyle(0,
-                        AppLocalizations.of(context)!.translate('popularity')!),
-                    tabStyle(
-                        1, AppLocalizations.of(context)!.translate('latest')!),
-                    tabStyle(
-                        2,
-                        AppLocalizations.of(context)!
-                            .translate('highest_price')!),
-                    tabStyle(
-                        3,
-                        AppLocalizations.of(context)!
-                            .translate('lowest_price')!),
-                  ],
-                ),
-              ),
+              // Text(AppLocalizations.of(context)!.translate('sort')!,
+              //     style: TextStyle(
+              //         fontSize: responsiveFont(12),
+              //         fontWeight: FontWeight.w500)),
+              // Container(
+              //   margin: EdgeInsets.symmetric(vertical: 15),
+              //   child: TabBar(
+              //     controller: _tabController,
+              //     labelPadding: EdgeInsets.symmetric(horizontal: 5),
+              //     onTap: (i) {
+              //       setState(() {
+              //         currentIndex = i;
+              //         page = 1;
+              //       });
+              //       _onSortChange(i);
+              //       loadProductByBrand();
+              //     },
+              //     isScrollable: true,
+              //     indicatorSize: TabBarIndicatorSize.label,
+              //     indicator: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(5),
+              //       color: primaryColor,
+              //     ),
+              //     tabs: [
+              //       tabStyle(0,
+              //           AppLocalizations.of(context)!.translate('popularity')!),
+              //       tabStyle(
+              //           1, AppLocalizations.of(context)!.translate('latest')!),
+              //       tabStyle(
+              //           2,
+              //           AppLocalizations.of(context)!
+              //               .translate('highest_price')!),
+              //       tabStyle(
+              //           3,
+              //           AppLocalizations.of(context)!
+              //               .translate('lowest_price')!),
+              //     ],
+              //   ),
+              // ),
               buildItems,
               if (product.loadingBrand && page != 1) customLoading()
             ],
@@ -310,14 +306,16 @@ class _BrandProductsState extends State<BrandProducts>
 
   Widget itemGridList(
       String title,
-      String discount,
-      String? price,
-      String? crossedPrice,
+      // String discount,
+      // String? crossedPrice,
       int i,
-      int? stock,
+      // int? stock,
       String? image,
-      ProductModel productDetail) {
-    bool isOutOfStock = productDetail.stockStatus == 'outofstock';
+      Combo productDetail) {
+    bool isOutOfStock = productDetail.vouchers!.length == 0;
+    int? price = productDetail!.prices!
+        .firstWhere((currency) => currency.isDefault == false)
+        .price;
     return Container(
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(5)),
@@ -377,96 +375,68 @@ class _BrandProductsState extends State<BrandProducts>
                         Container(
                           height: 5,
                         ),
-                        Visibility(
-                          visible: discount != "0",
-                          child: Flexible(
-                            flex: 1,
-                            child: Row(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(2),
-                                    color: secondaryColor,
-                                  ),
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 3, horizontal: 7),
-                                  child: Text(
-                                    '$discount%',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: responsiveFont(9)),
-                                  ),
-                                ),
-                                Container(
-                                  width: 5,
-                                ),
-                                RichText(
-                                  text: TextSpan(
-                                    style: TextStyle(color: Colors.black),
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                          text: stringToCurrency(
-                                              double.parse(productDetail
-                                                  .productRegPrice),
-                                              context),
-                                          style: TextStyle(
-                                              decoration:
-                                                  TextDecoration.lineThrough,
-                                              fontSize: responsiveFont(9),
-                                              color: HexColor("C4C4C4"))),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
+                        // Visibility(
+                        //   visible: discount != "0",
+                        //   child: Flexible(
+                        //     flex: 1,
+                        //     child: Row(
+                        //       children: [
+                        //         Container(
+                        //           decoration: BoxDecoration(
+                        //             borderRadius: BorderRadius.circular(2),
+                        //             color: secondaryColor,
+                        //           ),
+                        //           padding: EdgeInsets.symmetric(
+                        //               vertical: 3, horizontal: 7),
+                        //           child: Text(
+                        //             '$discount%',
+                        //             style: TextStyle(
+                        //                 color: Colors.white,
+                        //                 fontSize: responsiveFont(9)),
+                        //           ),
+                        //         ),
+                        //         Container(
+                        //           width: 5,
+                        //         ),
+                        //         RichText(
+                        //           text: TextSpan(
+                        //             style: TextStyle(color: Colors.black),
+                        //             children: <TextSpan>[
+                        //               TextSpan(
+                        //                   text: stringToCurrency(
+                        //                       double.parse(productDetail
+                        //                           .productRegPrice),
+                        //                       context),
+                        //                   style: TextStyle(
+                        //                       decoration:
+                        //                           TextDecoration.lineThrough,
+                        //                       fontSize: responsiveFont(9),
+                        //                       color: HexColor("C4C4C4"))),
+                        //             ],
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   ),
+                        // ),
+                        RichText(
+                          text: TextSpan(
+                            style: TextStyle(color: Colors.black),
+                            children: <TextSpan>[
+                              TextSpan(
+                                  text: price.toString() + " Vnd",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: responsiveFont(11),
+                                      color: secondaryColor)),
+                            ],
                           ),
                         ),
-                        productDetail.type == 'simple'
-                            ? RichText(
-                                text: TextSpan(
-                                  style: TextStyle(color: Colors.black),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: stringToCurrency(
-                                            double.parse(
-                                                productDetail.productPrice),
-                                            context),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: responsiveFont(11),
-                                            color: secondaryColor)),
-                                  ],
-                                ),
-                              )
-                            : RichText(
-                                text: TextSpan(
-                                  style: TextStyle(color: Colors.black),
-                                  children: <TextSpan>[
-                                    productDetail.variationPrices!.isEmpty
-                                        ? TextSpan(
-                                            text: '',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: responsiveFont(11),
-                                                color: secondaryColor))
-                                        : TextSpan(
-                                            text: productDetail.variationPrices!
-                                                        .first ==
-                                                    productDetail
-                                                        .variationPrices!.last
-                                                ? '${stringToCurrency(productDetail.variationPrices!.first!, context)}'
-                                                : '${stringToCurrency(productDetail.variationPrices!.first!, context)} - ${stringToCurrency(productDetail.variationPrices!.last!, context)}',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: responsiveFont(11),
-                                                color: secondaryColor)),
-                                  ],
-                                ),
-                              ),
+
                         Container(
                           height: 5,
                         ),
-                        buildStock(productDetail, stock)
+                        // buildStock(productDetail, stock)
                       ],
                     ),
                   )),
@@ -484,13 +454,14 @@ class _BrandProductsState extends State<BrandProducts>
                         shape: new RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(5))),
                     onPressed: () {
-                      if (!isOutOfStock && productDetail.productStock! >= 1) {
+                      if (!isOutOfStock &&
+                          productDetail.vouchers!.length >= 1) {
                         showMaterialModalBottomSheet(
                           context: context,
-                          builder: (context) => ModalSheetCart(
+                          builder: (context) => ModalSheetCartCombo(
                             product: productDetail,
                             type: 'add',
-                            loadCount: loadCartCount,
+                            // loadCount: loadCartCount,
                           ),
                         );
                       } else {

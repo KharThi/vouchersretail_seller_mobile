@@ -1,11 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:nyoba/pages/product/product_detail_screen.dart';
 import 'package:nyoba/models/product_model.dart';
-import 'package:nyoba/utils/currency_format.dart';
 import 'package:nyoba/utils/utility.dart';
-import 'package:hexcolor/hexcolor.dart';
 
 class CardItemPqVoucher extends StatelessWidget {
   final Voucher? voucher;

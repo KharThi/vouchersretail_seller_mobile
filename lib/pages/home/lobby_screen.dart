@@ -1,6 +1,7 @@
+// ignore_for_file: unused_local_variable
+
 /* Dart Package */
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:draggable_widget/draggable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
@@ -9,15 +10,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 
 import 'package:nyoba/pages/category/brand_product_screen.dart';
-import 'package:nyoba/pages/home/socmed_screen.dart';
-import 'package:nyoba/pages/order/coupon_screen.dart';
-import 'package:nyoba/pages/product/product_detail_screen.dart';
-import 'package:nyoba/pages/product/product_more_screen.dart';
-import 'package:nyoba/pages/wishlist/wishlist_screen.dart';
 import 'package:nyoba/pages/auth/login_screen.dart';
 import 'package:nyoba/pages/notification/notification_screen.dart';
 import 'package:nyoba/models/product_model.dart';
-import 'package:nyoba/pages/order/my_order_screen.dart';
 import 'package:nyoba/pages/search/search_screen.dart';
 import 'package:nyoba/provider/combo_provider.dart';
 import 'package:nyoba/provider/coupon_provider.dart';
@@ -28,21 +23,16 @@ import 'package:nyoba/provider/wallet_provider.dart';
 import 'package:nyoba/services/session.dart';
 import 'package:nyoba/widgets/home/card_item_small_pq.dart';
 import 'package:nyoba/widgets/home/card_item_small_pq_voucher.dart';
-import 'package:nyoba/widgets/home/grid_item_pq.dart';
 import 'package:nyoba/widgets/home/flashsale/flash_sale_countdown.dart';
 import 'package:provider/provider.dart';
 
 /* Widget  */
 import 'package:nyoba/widgets/home/banner/banner_container.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:shimmer/shimmer.dart';
 import '../../app_localizations.dart';
 import '../../widgets/home/categories/badge_category.dart';
-import '../../widgets/home/card_item_small.dart';
-import '../../widgets/home/grid_item.dart';
 
 /* Provider */
-import '../../provider/category_provider.dart';
 
 /* Helper */
 import '../../utils/utility.dart';
@@ -868,9 +858,7 @@ class _LobbyScreenState extends State<LobbyScreen>
                                             categoryId: clickIndex == 0
                                                 ? ''
                                                 : clickIndex.toString(),
-                                            brandName: selectedCategory ??
-                                                AppLocalizations.of(context)!
-                                                    .translate('new_product'),
+                                            brandName: "Combo",
                                             sortIndex: 1,
                                           )));
                             },

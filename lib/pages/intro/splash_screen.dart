@@ -1,6 +1,7 @@
+// ignore_for_file: dead_code
+
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:nyoba/pages/intro/intro_screen.dart';

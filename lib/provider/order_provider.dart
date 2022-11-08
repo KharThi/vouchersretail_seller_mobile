@@ -446,6 +446,77 @@ class OrderProvider with ChangeNotifier {
     }
   }
 
+  Future buyNowCombo(context, Combo? product, List<int>? quantity, String date,
+      Customer customer, Future<dynamic> Function() onFinishBuyNow) async {
+    if (Session.data.getBool('isLogin')!) {
+      // CartModel cart = new CartModel();
+      // cart.listItem = [];
+      // cart.listItem!.add(new CartProductItem(
+      //     productId: product!.id, quantity: quantity, variationId: 1));
+
+      // //init list coupon
+      // cart.listCoupon = [];
+
+      // //add to cart model
+      // cart.paymentMethod = "xendit_bniva";
+      // cart.paymentMethodTitle = "Bank Transfer - BNI";
+      // cart.setPaid = true;
+      // cart.customerId = Session.data.getInt('id');
+      // cart.status = 'completed';
+      // cart.token = Session.data.getString('cookie');
+
+      //Encode Json
+      var now = new DateTime.now();
+      var formatter = new DateFormat('yyyy-MM-dd');
+      String formattedDate = formatter.format(now);
+      SharedPreferences data = await SharedPreferences.getInstance();
+      String? sellerId = data.getInt("id").toString();
+      Map orderItems = {
+        "status": "Active",
+        "orderId": 0,
+        "orderProductId": product!.productId,
+        "priceId": product.prices!.length > 0 ? product.prices!.first.id : 0,
+        "profileId": customer.userInfoId,
+        "useDate": date
+      };
+      Map orderData = {
+        "status": "Active",
+        "createDate": formattedDate,
+        "orderStatus": "Processing",
+        "customerId": customer.id,
+        "sellerId": sellerId,
+        "orderItems": [orderItems],
+      };
+      final jsonOrder = json.encode(orderData);
+      printLog(jsonOrder, name: 'Json Order');
+
+      //Convert Json to bytes
+      // var bytes = utf8.encode(jsonOrder);
+
+      // //Convert bytes to base64
+      // var order = base64.encode(bytes);
+
+      //Generate link WebView checkout
+      await Provider.of<OrderProvider>(context, listen: false)
+          .checkoutV2(jsonOrder)
+          .then((value) async {
+        printLog(value, name: 'Link Order');
+        snackBar(context, message: "Mua thành công!");
+        // await Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (context) => CheckoutWebView(
+        //               url: value,
+        //               onFinish: onFinishBuyNow,
+        //             )));
+      });
+    } else {
+      Navigator.pop(context);
+      snackBar(context,
+          message: "Bạn cần đăng nhập trước khi thực hiện chức năng này!");
+    }
+  }
+
   Future testBuyNowVoucher(
       context,
       Voucher? product,
@@ -539,6 +610,31 @@ class OrderProvider with ChangeNotifier {
     return false;
   }
 
+  Future<bool> addCartCombo(
+      context, Combo? product, String date, Customer customer) async {
+    if (Session.data.getBool('isLogin')!) {
+      bool check = false;
+      for (var i = 0; i < product!.prices!.length; i++) {
+        if (product.prices![i].quantity != null) {
+          await OrderAPI()
+              .addCartItem(customer.id, product.prices![i].quantity!,
+                  product.prices![i].id!, date)
+              .then((data) {
+            if (data["id"] != null) {
+              check = true;
+            }
+          });
+        }
+      }
+      return check;
+    } else {
+      Navigator.pop(context);
+      snackBar(context,
+          message: "Bạn cần đăng nhập trước khi thực hiện chức năng này!");
+    }
+    return false;
+  }
+
   Future<Cart?> getCustomerCart(context, int? customerId) async {
     if (Session.data.getBool('isLogin')!) {
       Cart cart = await OrderAPI().getCartByCustomerId(customerId!);
@@ -549,76 +645,6 @@ class OrderProvider with ChangeNotifier {
           message: "Bạn cần đăng nhập trước khi thực hiện chức năng này!");
     }
     return null;
-  }
-
-  Future buyNowCombo(context, Combo? product, int? quantity, String date,
-      Customer customer, Future<dynamic> Function() onFinishBuyNow) async {
-    if (Session.data.getBool('isLogin')!) {
-      // CartModel cart = new CartModel();
-      // cart.listItem = [];
-      // cart.listItem!.add(new CartProductItem(
-      //     productId: product!.id, quantity: quantity, variationId: 1));
-
-      // //init list coupon
-      // cart.listCoupon = [];
-
-      // //add to cart model
-      // cart.paymentMethod = "xendit_bniva";
-      // cart.paymentMethodTitle = "Bank Transfer - BNI";
-      // cart.setPaid = true;
-      // cart.customerId = Session.data.getInt('id');
-      // cart.status = 'completed';
-      // cart.token = Session.data.getString('cookie');
-
-      //Encode Json
-      var now = new DateTime.now();
-      var formatter = new DateFormat('yyyy-MM-dd');
-      String formattedDate = formatter.format(now);
-      SharedPreferences data = await SharedPreferences.getInstance();
-      String? sellerId = data.getInt("id").toString();
-      Map orderItems = {
-        "status": "Active",
-        "orderId": 0,
-        "orderProductId": product!.productId,
-        "priceId": product.prices!.length > 0 ? product.prices!.first.id : 0,
-        "profileId": customer.userInfoId,
-        "useDate": date
-      };
-      Map orderData = {
-        "status": "Active",
-        "createDate": formattedDate,
-        "orderStatus": "Processing",
-        "customerId": customer.id,
-        "sellerId": sellerId,
-        "orderItems": [orderItems],
-      };
-      final jsonOrder = json.encode(orderData);
-      printLog(jsonOrder, name: 'Json Order');
-
-      //Convert Json to bytes
-      // var bytes = utf8.encode(jsonOrder);
-
-      // //Convert bytes to base64
-      // var order = base64.encode(bytes);
-
-      //Generate link WebView checkout
-      await Provider.of<OrderProvider>(context, listen: false)
-          .checkoutV2(jsonOrder)
-          .then((value) async {
-        printLog(value, name: 'Link Order');
-        await Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => CheckoutWebView(
-                      url: value,
-                      onFinish: onFinishBuyNow,
-                    )));
-      });
-    } else {
-      Navigator.pop(context);
-      snackBar(context,
-          message: "Bạn cần đăng nhập trước khi thực hiện chức năng này!");
-    }
   }
 
   Future loadItemOrder(context) async {

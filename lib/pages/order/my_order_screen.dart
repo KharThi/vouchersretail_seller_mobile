@@ -2,16 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:nyoba/models/order.dart';
-import 'package:nyoba/models/order_model.dart';
 import 'package:nyoba/pages/order/order_detail_screen.dart';
 import 'package:nyoba/provider/home_provider.dart';
 import 'package:nyoba/provider/order_provider.dart';
 import 'package:nyoba/services/session.dart';
-import 'package:nyoba/utils/currency_format.dart';
-import 'package:nyoba/widgets/order/order_list_shimmer.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import '../../app_localizations.dart';
 import '../../utils/utility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -229,7 +225,8 @@ class _MyOrderState extends State<MyOrder> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        convertHtmlUnescape("orderModel.orderItems[0]."),
+                        convertHtmlUnescape(
+                            "Order số " + orderModel.id.toString()),
                         style: TextStyle(
                             fontSize: responsiveFont(12),
                             fontWeight: FontWeight.w600),
@@ -317,7 +314,7 @@ class _MyOrderState extends State<MyOrder> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Order ID : ${orderModel.id}",
+                      "ID của order : ${orderModel.id}",
                       style: TextStyle(
                         fontSize: responsiveFont(10),
                       ),
