@@ -6,6 +6,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:nyoba/pages/category/brand_product_screen.dart';
+import 'package:nyoba/pages/category/brand_product_screen_voucher.dart';
 import 'package:nyoba/pages/order/cart_screen.dart';
 import 'package:nyoba/pages/product/modal_sheet_cart/modal_sheet_cart_voucher.dart';
 import 'package:nyoba/pages/product/product_more_screen.dart';
@@ -21,6 +22,7 @@ import 'package:nyoba/utils/share_link.dart';
 import 'package:nyoba/widgets/contact/contact_fab.dart';
 import 'package:nyoba/widgets/home/card_item_shimmer.dart';
 import 'package:nyoba/widgets/home/card_item_small.dart';
+import 'package:nyoba/widgets/home/card_item_small_pq_voucher.dart';
 import 'package:nyoba/widgets/product/product_photoview.dart';
 import 'package:nyoba/widgets/product/product_detail_shimmer.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +30,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../app_localizations.dart';
 import '../../models/product_model.dart';
+import '../../provider/voucher_provider.dart';
 import '../../utils/utility.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:colorful_safe_area/colorful_safe_area.dart';
@@ -55,6 +58,7 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
   int itemCount = 10;
 
   bool? isWishlist = false;
+  bool isLoading = true;
 
   int cartCount = 0;
   TextEditingController reviewController = new TextEditingController();
@@ -65,6 +69,8 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
   bool isFlashSale = false;
 
   Voucher? productModel;
+  List<Voucher> moreVoucher = List.empty(growable: true);
+  List<Price> listPrice = List.empty(growable: true);
   final CarouselController _controller = CarouselController();
   int _current = 0;
 
@@ -82,6 +88,7 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
     _textAnimationController =
         AnimationController(vsync: this, duration: Duration(seconds: 0));
     loadDetail();
+    loadVoucher();
   }
 
   @override
@@ -102,11 +109,30 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
     }
   }
 
+  loadVoucher() async {
+    await Provider.of<VoucherProvider>(context, listen: false)
+        .fetchVouchers("", "3")
+        .then((value) {
+      this.setState(() {
+        moreVoucher = value!;
+        for (var element in moreVoucher) {
+          print(element.voucherName);
+        }
+        isLoading = false;
+      });
+      Future.delayed(Duration(milliseconds: 3500), () {
+        print('Delayed Done');
+        this.setState(() {});
+      });
+    });
+  }
+
   Future loadDetail() async {
     final productProvider =
         Provider.of<ProductProvider>(context, listen: false);
 
     loadCartCount();
+    loadVoucher();
     if (widget.slug == null) {
       await Provider.of<ProductProvider>(context, listen: false)
           .fetchProductDetailVoucher(widget.productId)
@@ -277,30 +303,30 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
   Widget build(BuildContext context) {
     final product = Provider.of<ProductProvider>(context, listen: false);
 
-    Widget buildWishlistBtn = LikeButton(
-      size: 25,
-      onTap: setWishlist,
-      circleColor: CircleColor(start: primaryColor, end: secondaryColor),
-      bubblesColor: BubblesColor(
-        dotPrimaryColor: primaryColor,
-        dotSecondaryColor: secondaryColor,
-      ),
-      isLiked: isWishlist,
-      likeBuilder: (bool isLiked) {
-        if (!isLiked) {
-          return Icon(
-            Icons.favorite_border,
-            color: Colors.grey,
-            size: 25,
-          );
-        }
-        return Icon(
-          Icons.favorite,
-          color: Colors.red,
-          size: 25,
-        );
-      },
-    );
+    // Widget buildWishlistBtn = LikeButton(
+    //   size: 25,
+    //   onTap: setWishlist,
+    //   circleColor: CircleColor(start: primaryColor, end: secondaryColor),
+    //   bubblesColor: BubblesColor(
+    //     dotPrimaryColor: primaryColor,
+    //     dotSecondaryColor: secondaryColor,
+    //   ),
+    //   isLiked: isWishlist,
+    //   likeBuilder: (bool isLiked) {
+    //     if (!isLiked) {
+    //       return Icon(
+    //         Icons.favorite_border,
+    //         color: Colors.grey,
+    //         size: 25,
+    //       );
+    //     }
+    //     return Icon(
+    //       Icons.favorite,
+    //       color: Colors.red,
+    //       size: 25,
+    //     );
+    //   },
+    // );
 
     return ListenableProvider.value(
       value: product,
@@ -585,7 +611,7 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
                             ),
                           ),
                         ),
-                        firstPart(productModel!, buildWishlistBtn),
+                        firstPart(productModel!),
                         Container(
                           margin: EdgeInsets.symmetric(vertical: 15),
                           width: double.infinity,
@@ -869,11 +895,11 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
 
   Widget featuredProduct() {
     return Consumer<ProductProvider>(builder: (context, value, child) {
-      if (value.loadingFeatured) {
+      if (isLoading) {
         return customLoading();
       }
       return Visibility(
-          visible: value.listFeaturedProduct.isNotEmpty,
+          visible: moreVoucher.isNotEmpty,
           child: Column(
             children: [
               Container(
@@ -893,7 +919,14 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => AllFeaturedProducts()));
+                                builder: (context) => BrandProductsVoucher(
+                                      categoryId: "",
+                                      brandName: "Voucher",
+                                      sortIndex: 1,
+                                    ))).then((value) => setState(() {
+                              isLoading = true;
+                              loadDetail();
+                            }));
                       },
                       child: Text(
                         "Xem thêm",
@@ -909,13 +942,13 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
               AspectRatio(
                 aspectRatio: 3 / 2,
                 child: ListView.separated(
-                  itemCount: value.listFeaturedProduct.length,
+                  itemCount: moreVoucher.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, i) {
-                    return CardItem(
-                      product: value.listFeaturedProduct[i],
+                    return CardItemPqVoucher(
+                      voucher: moreVoucher[i],
                       i: i,
-                      itemCount: value.listFeaturedProduct.length,
+                      itemCount: moreVoucher.length,
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) {
@@ -1291,7 +1324,7 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
     );
   }
 
-  Widget firstPart(Voucher model, Widget btnFav) {
+  Widget firstPart(Voucher model) {
     return Container(
       margin: EdgeInsets.all(15),
       child: Column(
@@ -1344,7 +1377,7 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
                         ],
                       ),
                     ),
-              btnFav
+              // btnFav
             ],
           ),
           SizedBox(
@@ -1487,59 +1520,59 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
         style: TextStyle(fontSize: responsiveFont(14)),
       ),
       actions: [
-        InkWell(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => CartScreen(
-                          isFromHome: false,
-                        )));
-          },
-          child: Container(
-            width: 65,
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Icon(
-                  Icons.shopping_cart,
-                  color: Colors.black,
-                ),
-                Positioned(
-                  right: 0,
-                  top: 7,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: primaryColor),
-                    alignment: Alignment.center,
-                    child: Text(
-                      cartCount.toString(),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: responsiveFont(9),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-        InkWell(
-          onTap: () {
-            shareLinks('product', model.content);
-          },
-          child: Container(
-            margin: EdgeInsets.only(right: 15),
-            child: Icon(
-              Icons.share,
-              color: Colors.black,
-            ),
-          ),
-        )
+        // InkWell(
+        //   onTap: () {
+        //     Navigator.push(
+        //         context,
+        //         MaterialPageRoute(
+        //             builder: (context) => CartScreen(
+        //                   isFromHome: false,
+        //                 )));
+        //   },
+        //   child: Container(
+        //     width: 65,
+        //     padding: EdgeInsets.symmetric(horizontal: 8),
+        //     child: Stack(
+        //       alignment: Alignment.center,
+        //       children: [
+        //         Icon(
+        //           Icons.shopping_cart,
+        //           color: Colors.black,
+        //         ),
+        //         Positioned(
+        //           right: 0,
+        //           top: 7,
+        //           child: Container(
+        //             padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+        //             decoration: BoxDecoration(
+        //                 shape: BoxShape.circle, color: primaryColor),
+        //             alignment: Alignment.center,
+        //             child: Text(
+        //               cartCount.toString(),
+        //               textAlign: TextAlign.center,
+        //               style: TextStyle(
+        //                 color: Colors.white,
+        //                 fontSize: responsiveFont(9),
+        //               ),
+        //             ),
+        //           ),
+        //         )
+        //       ],
+        //     ),
+        //   ),
+        // ),
+        // InkWell(
+        //   onTap: () {
+        //     shareLinks('product', model.content);
+        //   },
+        //   child: Container(
+        //     margin: EdgeInsets.only(right: 15),
+        //     child: Icon(
+        //       Icons.share,
+        //       color: Colors.black,
+        //     ),
+        //   ),
+        // )
       ],
     );
   }

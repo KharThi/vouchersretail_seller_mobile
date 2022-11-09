@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:nyoba/models/product_model.dart';
-import 'package:nyoba/pages/product/modal_sheet_cart/modal_sheet_cart_combo.dart';
+import 'package:nyoba/pages/product/modal_sheet_cart/modal_sheet_cart_voucher.dart';
 import 'package:nyoba/pages/product/product_detail_screen.dart';
 import 'package:nyoba/provider/combo_provider.dart';
 import 'package:nyoba/provider/product_provider.dart';
@@ -12,30 +12,33 @@ import 'package:nyoba/widgets/product/grid_item_shimmer.dart';
 import 'package:provider/provider.dart';
 
 import '../../app_localizations.dart';
+import '../../provider/voucher_provider.dart';
 
-class BrandProducts extends StatefulWidget {
+class BrandProductsVoucher extends StatefulWidget {
   final String? categoryId;
   final String? brandName;
   final int? sortIndex;
-  BrandProducts({Key? key, this.categoryId, this.brandName, this.sortIndex})
+  BrandProductsVoucher(
+      {Key? key, this.categoryId, this.brandName, this.sortIndex})
       : super(key: key);
 
   @override
-  _BrandProductsState createState() => _BrandProductsState();
+  _BrandProductsVoucherState createState() => _BrandProductsVoucherState();
 }
 
-class _BrandProductsState extends State<BrandProducts>
+class _BrandProductsVoucherState extends State<BrandProductsVoucher>
     with SingleTickerProviderStateMixin {
   int? currentIndex = 0;
   TabController? _tabController;
 
-  List<Combo> listCombo = List.empty(growable: true);
+  List<Voucher> listVoucher = List.empty(growable: true);
 
   int page = 1;
   String order = 'desc';
   String orderBy = 'popularity';
   int cartCount = 0;
   int? price;
+  bool isLoading = true;
 
   ScrollController _scrollController = new ScrollController();
 
@@ -47,7 +50,7 @@ class _BrandProductsState extends State<BrandProducts>
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        if (listCombo.length % 8 == 0) {
+        if (listVoucher.length % 8 == 0) {
           setState(() {
             page++;
           });
@@ -66,22 +69,18 @@ class _BrandProductsState extends State<BrandProducts>
   }
 
   loadProductByBrand() async {
-    // listCombo = await Provider.of<ComboProvider>(context, listen: false).fetchCombos();
-    await Provider.of<ComboProvider>(context, listen: false)
-        .fetchCombos()
+    await Provider.of<VoucherProvider>(context, listen: false)
+        .fetchVouchers("", "")
         .then((value) {
       this.setState(() {
-        listCombo = value!;
-        // for (var element in listProduct) {
-        //   print(element.description);
-        // }
+        listVoucher = value!;
+        isLoading = false;
       });
       Future.delayed(Duration(milliseconds: 3500), () {
         print('Delayed Done');
         this.setState(() {});
       });
     });
-    // loadCartCount();
   }
 
   // Future loadCartCount() async {
@@ -137,24 +136,31 @@ class _BrandProductsState extends State<BrandProducts>
                 }),
           );
         }
-        if (listCombo.isEmpty) {
-          return buildSearchEmpty(context, "Không tìm thấy sản phẩm nào");
+        if (isLoading) {
+          return Center(
+            // padding: const EdgeInsets.all(20.0),
+            child: customLoading(),
+          );
+        } else {
+          if (listVoucher.isEmpty) {
+            return buildSearchEmpty(context, "Không tìm thấy sản phẩm nào");
+          }
+          return Expanded(
+            child: GridView.builder(
+                controller: _scrollController,
+                shrinkWrap: true,
+                itemCount: listVoucher.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    childAspectRatio: 1 / 2,
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 15,
+                    crossAxisSpacing: 15),
+                itemBuilder: (context, i) {
+                  return itemGridList(listVoucher[i].voucherName!, i,
+                      listVoucher[i].bannerImg, listVoucher[i]);
+                }),
+          );
         }
-        return Expanded(
-          child: GridView.builder(
-              controller: _scrollController,
-              shrinkWrap: true,
-              itemCount: listCombo.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: 1 / 2,
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 15,
-                  crossAxisSpacing: 15),
-              itemBuilder: (context, i) {
-                return itemGridList(listCombo[i].name!, i,
-                    listCombo[i].bannerImg, listCombo[i]);
-              }),
-        );
       }),
     );
 
@@ -229,58 +235,60 @@ class _BrandProductsState extends State<BrandProducts>
             // ),
           ],
         ),
-        body: Container(
-          margin: EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 15,
+        body: isLoading
+            ? customLoading()
+            : Container(
+                margin: EdgeInsets.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 15,
+                    ),
+                    // Text(AppLocalizations.of(context)!.translate('sort')!,
+                    //     style: TextStyle(
+                    //         fontSize: responsiveFont(12),
+                    //         fontWeight: FontWeight.w500)),
+                    // Container(
+                    //   margin: EdgeInsets.symmetric(vertical: 15),
+                    //   child: TabBar(
+                    //     controller: _tabController,
+                    //     labelPadding: EdgeInsets.symmetric(horizontal: 5),
+                    //     onTap: (i) {
+                    //       setState(() {
+                    //         currentIndex = i;
+                    //         page = 1;
+                    //       });
+                    //       _onSortChange(i);
+                    //       loadProductByBrand();
+                    //     },
+                    //     isScrollable: true,
+                    //     indicatorSize: TabBarIndicatorSize.label,
+                    //     indicator: BoxDecoration(
+                    //       borderRadius: BorderRadius.circular(5),
+                    //       color: primaryColor,
+                    //     ),
+                    //     tabs: [
+                    //       tabStyle(0,
+                    //           AppLocalizations.of(context)!.translate('popularity')!),
+                    //       tabStyle(
+                    //           1, AppLocalizations.of(context)!.translate('latest')!),
+                    //       tabStyle(
+                    //           2,
+                    //           AppLocalizations.of(context)!
+                    //               .translate('highest_price')!),
+                    //       tabStyle(
+                    //           3,
+                    //           AppLocalizations.of(context)!
+                    //               .translate('lowest_price')!),
+                    //     ],
+                    //   ),
+                    // ),
+                    buildItems,
+                    if (product.loadingBrand && page != 1) customLoading()
+                  ],
+                ),
               ),
-              // Text(AppLocalizations.of(context)!.translate('sort')!,
-              //     style: TextStyle(
-              //         fontSize: responsiveFont(12),
-              //         fontWeight: FontWeight.w500)),
-              // Container(
-              //   margin: EdgeInsets.symmetric(vertical: 15),
-              //   child: TabBar(
-              //     controller: _tabController,
-              //     labelPadding: EdgeInsets.symmetric(horizontal: 5),
-              //     onTap: (i) {
-              //       setState(() {
-              //         currentIndex = i;
-              //         page = 1;
-              //       });
-              //       _onSortChange(i);
-              //       loadProductByBrand();
-              //     },
-              //     isScrollable: true,
-              //     indicatorSize: TabBarIndicatorSize.label,
-              //     indicator: BoxDecoration(
-              //       borderRadius: BorderRadius.circular(5),
-              //       color: primaryColor,
-              //     ),
-              //     tabs: [
-              //       tabStyle(0,
-              //           AppLocalizations.of(context)!.translate('popularity')!),
-              //       tabStyle(
-              //           1, AppLocalizations.of(context)!.translate('latest')!),
-              //       tabStyle(
-              //           2,
-              //           AppLocalizations.of(context)!
-              //               .translate('highest_price')!),
-              //       tabStyle(
-              //           3,
-              //           AppLocalizations.of(context)!
-              //               .translate('lowest_price')!),
-              //     ],
-              //   ),
-              // ),
-              buildItems,
-              if (product.loadingBrand && page != 1) customLoading()
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -316,8 +324,8 @@ class _BrandProductsState extends State<BrandProducts>
       int i,
       // int? stock,
       String? image,
-      Combo productDetail) {
-    bool isOutOfStock = productDetail.vouchers!.length == 0;
+      Voucher productDetail) {
+    bool isOutOfStock = productDetail.inventory == 0;
     int? price = productDetail.prices!
         .firstWhere((currency) => currency.isDefault == false)
         .price;
@@ -346,13 +354,13 @@ class _BrandProductsState extends State<BrandProducts>
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: image == ''
+                  child: image == null
                       ? Icon(
                           Icons.image_not_supported,
                           size: 50,
                         )
                       : CachedNetworkImage(
-                          imageUrl: image!,
+                          imageUrl: image,
                           placeholder: (context, url) => customLoading(),
                           errorWidget: (context, url, error) => Icon(
                             Icons.image_not_supported_rounded,
@@ -459,20 +467,17 @@ class _BrandProductsState extends State<BrandProducts>
                         shape: new RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(5))),
                     onPressed: () {
-                      if (!isOutOfStock &&
-                          productDetail.vouchers!.length >= 1) {
+                      if (!isOutOfStock && productDetail.inventory! >= 1) {
                         showMaterialModalBottomSheet(
                           context: context,
-                          builder: (context) => ModalSheetCartCombo(
+                          builder: (context) => ModalSheetCartVoucher(
                             product: productDetail,
                             type: 'add',
                             // loadCount: loadCartCount,
                           ),
                         );
                       } else {
-                        snackBar(context,
-                            message: AppLocalizations.of(context)!
-                                .translate('product_out_stock')!);
+                        snackBar(context, message: "Sản phẩm đã hết hàng");
                       }
                     },
                     child: Row(
@@ -484,8 +489,7 @@ class _BrandProductsState extends State<BrandProducts>
                           color: isOutOfStock ? Colors.grey : secondaryColor,
                         ),
                         Text(
-                          AppLocalizations.of(context)!
-                              .translate('add_to_cart')!,
+                          "Thêm vào giỏ hàng",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: responsiveFont(9),

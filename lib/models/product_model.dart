@@ -473,7 +473,6 @@ class Voucher {
     this.isRequireProfileInfo,
     this.startDate,
     this.endDate,
-    this.productId,
     this.serviceId,
     this.description,
     this.summary,
@@ -489,9 +488,8 @@ class Voucher {
   int? inventory;
   int? limitPerDay;
   bool? isRequireProfileInfo;
-  String? startDate;
-  String? endDate;
-  int? productId;
+  DateTime? startDate;
+  DateTime? endDate;
   int? serviceId;
   String? description;
   String? summary;
@@ -507,11 +505,10 @@ class Voucher {
         inventory: json["inventory"],
         limitPerDay: json["limitPerDay"],
         isRequireProfileInfo: json["isRequireProfileInfo"],
-        startDate: json["startDate"],
-        endDate: json["endDate"],
-        productId: json["productId"],
+        startDate: DateTime.parse(json["startDate"]),
+        endDate: DateTime.parse(json["endDate"]),
         serviceId: json["serviceId"],
-        description: json["description"] == null ? null : json["description"],
+        description: json["description"],
         summary: json["summary"],
         bannerImg: json["bannerImg"],
         content: json["content"],
@@ -528,9 +525,8 @@ class Voucher {
         "isRequireProfileInfo": isRequireProfileInfo,
         "startDate": startDate,
         "endDate": endDate,
-        "productId": productId,
         "serviceId": serviceId,
-        "description": description == null ? null : description,
+        "description": description,
         "summary": summary,
         "bannerImg": bannerImg,
         "content": content,

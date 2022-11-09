@@ -400,21 +400,23 @@ class OrderProvider with ChangeNotifier {
       String formattedDate = formatter.format(now);
       SharedPreferences data = await SharedPreferences.getInstance();
       String? sellerId = data.getInt("id").toString();
-      Map orderItems = {
+      List<Map> orderItems = List.empty(growable: true);
+      Map orderItem = {
         "status": "Active",
         "orderId": 0,
-        "orderProductId": product!.productId,
+        "voucherId": product!.id,
         "priceId": product.prices!.length > 0 ? product.prices!.first.id : 0,
         "profileId": customer.userInfoId,
         "useDate": date
       };
+      orderItems.add(orderItem);
       Map orderData = {
         "status": "Active",
         "createDate": formattedDate,
         "orderStatus": "Processing",
         "customerId": customer.id,
         "sellerId": sellerId,
-        "orderItems": [orderItems],
+        "orderItems": orderItems,
       };
       final jsonOrder = json.encode(orderData);
       printLog(jsonOrder, name: 'Json Order');
@@ -517,73 +519,73 @@ class OrderProvider with ChangeNotifier {
     }
   }
 
-  Future testBuyNowVoucher(
-      context,
-      Voucher? product,
-      List<int>? quantity,
-      String date,
-      Customer customer,
-      Future<dynamic> Function() onFinishBuyNow) async {
-    if (Session.data.getBool('isLogin')!) {
-      // ignore: unused_local_variable
-      Cart cart = await OrderAPI().getCartByCustomerId(customer.id);
-      for (var i = 0; i < cart.cartItems!.length; i++) {
-        if (cart.cartItems![i].productId != product!.productId) {
-          OrderAPI().addCartItem(customer.id, product.prices![i].quantity!,
-              product.prices![i].id!, date);
-        }
-      }
+  // Future testBuyNowVoucher(
+  //     context,
+  //     Voucher? product,
+  //     List<int>? quantity,
+  //     String date,
+  //     Customer customer,
+  //     Future<dynamic> Function() onFinishBuyNow) async {
+  //   if (Session.data.getBool('isLogin')!) {
+  //     // ignore: unused_local_variable
+  //     Cart cart = await OrderAPI().getCartByCustomerId(customer.id);
+  //     for (var i = 0; i < cart.cartItems!.length; i++) {
+  //       if (cart.cartItems![i].productId != product!.productId) {
+  //         OrderAPI().addCartItem(customer.id, product.prices![i].quantity!,
+  //             product.prices![i].id!, date);
+  //       }
+  //     }
 
-      var now = new DateTime.now();
-      var formatter = new DateFormat('yyyy-MM-dd');
-      String formattedDate = formatter.format(now);
-      SharedPreferences data = await SharedPreferences.getInstance();
-      String? sellerId = data.getInt("id").toString();
-      Map orderItems = {
-        "status": "Active",
-        "orderId": 0,
-        "orderProductId": product!.productId,
-        "priceId": product.prices!.length > 0 ? product.prices!.first.id : 0,
-        "profileId": customer.userInfoId,
-        "useDate": date
-      };
-      Map orderData = {
-        "status": "Active",
-        "createDate": formattedDate,
-        "orderStatus": "Processing",
-        "customerId": customer.id,
-        "sellerId": sellerId,
-        "orderItems": [orderItems],
-      };
-      final jsonOrder = json.encode(orderData);
-      printLog(jsonOrder, name: 'Json Order');
+  //     var now = new DateTime.now();
+  //     var formatter = new DateFormat('yyyy-MM-dd');
+  //     String formattedDate = formatter.format(now);
+  //     SharedPreferences data = await SharedPreferences.getInstance();
+  //     String? sellerId = data.getInt("id").toString();
+  //     Map orderItems = {
+  //       "status": "Active",
+  //       "orderId": 0,
+  //       "orderProductId": product!.productId,
+  //       "priceId": product.prices!.length > 0 ? product.prices!.first.id : 0,
+  //       "profileId": customer.userInfoId,
+  //       "useDate": date
+  //     };
+  //     Map orderData = {
+  //       "status": "Active",
+  //       "createDate": formattedDate,
+  //       "orderStatus": "Processing",
+  //       "customerId": customer.id,
+  //       "sellerId": sellerId,
+  //       "orderItems": [orderItems],
+  //     };
+  //     final jsonOrder = json.encode(orderData);
+  //     printLog(jsonOrder, name: 'Json Order');
 
-      //Convert Json to bytes
-      // var bytes = utf8.encode(jsonOrder);
+  //     //Convert Json to bytes
+  //     // var bytes = utf8.encode(jsonOrder);
 
-      // //Convert bytes to base64
-      // var order = base64.encode(bytes);
+  //     // //Convert bytes to base64
+  //     // var order = base64.encode(bytes);
 
-      //Generate link WebView checkout
-      await Provider.of<OrderProvider>(context, listen: false)
-          .checkoutV2(jsonOrder)
-          .then((value) async {
-        printLog(value, name: 'Link Order');
-        snackBar(context, message: "Mua thành công!");
-        // await Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) => CheckoutWebView(
-        //               url: value,
-        //               onFinish: onFinishBuyNow,
-        //             )));
-      });
-    } else {
-      Navigator.pop(context);
-      snackBar(context,
-          message: "Bạn cần đăng nhập trước khi thực hiện chức năng này!");
-    }
-  }
+  //     //Generate link WebView checkout
+  //     await Provider.of<OrderProvider>(context, listen: false)
+  //         .checkoutV2(jsonOrder)
+  //         .then((value) async {
+  //       printLog(value, name: 'Link Order');
+  //       snackBar(context, message: "Mua thành công!");
+  //       // await Navigator.push(
+  //       //     context,
+  //       //     MaterialPageRoute(
+  //       //         builder: (context) => CheckoutWebView(
+  //       //               url: value,
+  //       //               onFinish: onFinishBuyNow,
+  //       //             )));
+  //     });
+  //   } else {
+  //     Navigator.pop(context);
+  //     snackBar(context,
+  //         message: "Bạn cần đăng nhập trước khi thực hiện chức năng này!");
+  //   }
+  // }
 
   Future<bool> addCartVoucher(
       context, Voucher? product, String date, Customer customer) async {

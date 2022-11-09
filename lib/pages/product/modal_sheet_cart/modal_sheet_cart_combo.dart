@@ -81,23 +81,23 @@ class _ModalSheetCartComboState extends State<ModalSheetCartCombo> {
 
   /*add to cart*/
   void addCart(Combo product) async {
-    print('Add Cart');
-    await Provider.of<OrderProvider>(context, listen: false)
-        .addCartCombo(context, widget.product, _forCallApiDate, customers.first)
-        .then((value) {
-      this.setState(() {
-        print("add to cart return value: " + value.toString());
-        if (value == true) {
-          snackBar(context, message: "Thêm vào giỏ hàng thành công!");
-        } else {
-          snackBar(context, message: "Thêm vào giỏ hàng thất bại!");
-        }
-      });
-    });
-    Navigator.pop(context);
-    snackBar(context,
-        message:
-            AppLocalizations.of(context)!.translate('product_success_atc')!);
+    // print('Add Cart');
+    // await Provider.of<OrderProvider>(context, listen: false)
+    //     .addCartCombo(context, widget.product, _forCallApiDate, customers.first)
+    //     .then((value) {
+    //   this.setState(() {
+    //     print("add to cart return value: " + value.toString());
+    //     if (value == true) {
+    //       snackBar(context, message: "Thêm vào giỏ hàng thành công!");
+    //     } else {
+    //       snackBar(context, message: "Thêm vào giỏ hàng thất bại!");
+    //     }
+    //   });
+    // });
+    // Navigator.pop(context);
+    // snackBar(context,
+    //     message:
+    //         AppLocalizations.of(context)!.translate('product_success_atc')!);
   }
 
   /*get variant id, if product have variant*/

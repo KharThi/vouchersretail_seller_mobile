@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/current_remaining_time.dart';
@@ -1299,17 +1301,18 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     for (var item in productModel!.vouchers!)
-                      ListTile(
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProductDetailVoucher(
-                                      productId: item.productId.toString(),
-                                    ))),
-                        title: Text(item.voucherName.toString()),
-                        // subtitle: Text(item.price.toString() + " Vnd"),
-                        // leading: {};
-                      ),
+                      ListTile(onTap: () => null
+                          //   Navigator.push(
+                          //       context,
+                          //       MaterialPageRoute(
+                          //           builder: (context) => ProductDetailVoucher(
+                          //                 productId: item.productId.toString(),
+                          //               ))),
+                          //   title: Text(item.voucherName.toString()),
+                          //   // subtitle: Text(item.price.toString() + " Vnd"),
+                          //   // leading: {};
+                          // )
+                          ),
                   ],
                 )
               : Container(),

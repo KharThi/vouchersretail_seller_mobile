@@ -9,30 +9,31 @@ import 'package:nyoba/utils/utility.dart';
 import '../../pages/product/product_detail_screen_voucher.dart';
 
 class ListItemProduct2 extends StatelessWidget {
-  final Product? product;
+  final Voucher? product;
   final int? i, itemCount;
+  final String price;
 
-  ListItemProduct2({this.product, this.i, this.itemCount});
+  ListItemProduct2({this.product, this.i, this.itemCount, required this.price});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        if (product!.type == "Voucher") {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ProductDetailVoucher(
-                        productId: product!.id.toString(),
-                      )));
-        } else {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ProductDetailCombo(
-                        productId: product!.id.toString(),
-                      )));
-        }
+        // if (product!.type == "Voucher") {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProductDetailVoucher(
+                      productId: product!.id.toString(),
+                    )));
+        // } else {
+        //   Navigator.push(
+        //       context,
+        //       MaterialPageRoute(
+        //           builder: (context) => ProductDetailCombo(
+        //                 productId: product!.id.toString(),
+        //               )));
+        // }
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 2),
@@ -51,7 +52,7 @@ class ListItemProduct2 extends StatelessWidget {
                   ),
                   width: 60.h,
                   height: 60.h,
-                  child: product!.bannerImg.toString().isEmpty
+                  child: product!.bannerImg == null
                       ? Icon(
                           Icons.image_not_supported,
                           size: 50,
@@ -75,7 +76,7 @@ class ListItemProduct2 extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            product!.summary.toString(),
+                            product!.voucherName.toString(),
                             style: TextStyle(
                                 fontSize: responsiveFont(10),
                                 fontWeight: FontWeight.w500),
@@ -87,7 +88,7 @@ class ListItemProduct2 extends StatelessWidget {
                             // product!.description!.length > 100
                             //     ? '${product!.description!.substring(0, 100)} ...'
                             //     :
-                            product!.description.toString(),
+                            product!.summary.toString(),
                             textStyle: TextStyle(
                                 fontWeight: FontWeight.w300,
                                 fontSize: responsiveFont(9)),
@@ -122,67 +123,51 @@ class ListItemProduct2 extends StatelessWidget {
                           // SizedBox(
                           //   width: 5,
                           // ),
-                          product!.prices?.length.toString() == "1"
-                              ? RichText(
-                                  text: TextSpan(
-                                    style: TextStyle(color: Colors.black),
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                          text: product!.prices?.length != 0
-                                              ? product!.prices!.first.price
-                                                      .toString() +
-                                                  " Vnd"
-                                              : "Null",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: responsiveFont(11),
-                                              color: secondaryColor)),
-                                    ],
-                                  ),
-                                )
-                              : RichText(
-                                  text: TextSpan(
-                                    style: TextStyle(color: Colors.black),
-                                    children: <TextSpan>[
-                                      product!.prices?.length.toString() != "0"
-                                          ? TextSpan(
-                                              text: '',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: responsiveFont(11),
-                                                  color: secondaryColor))
-                                          : TextSpan(
-                                              text:
-                                                  // product!.prices!.first.price
-                                                  //             .toString() ==
-                                                  //         product!
-                                                  //             .prices!.first.price
-                                                  //             .toString()
-                                                  //     ?
-                                                  // '${stringToCurrency(100, context)}' +
-                                                  product!.prices?.length != 0
-                                                      ? product!.prices!.first
-                                                              .price
-                                                              .toString() +
-                                                          "-" +
-                                                          product!
-                                                              .prices![product!
-                                                                      .prices!
-                                                                      .length -
-                                                                  1]
-                                                              .price
-                                                              .toString() +
-                                                          " Vnd"
-                                                      : "Null"
-                                              // : '${stringToCurrency(100, context)} - ${stringToCurrency(50, context)}'
-                                              ,
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: responsiveFont(11),
-                                                  color: secondaryColor)),
-                                    ],
-                                  ),
-                                ),
+                          // product!.prices?.length.toString() == "1"
+                          //     ?
+                          RichText(
+                            text: TextSpan(
+                              style: TextStyle(color: Colors.black),
+                              children: <TextSpan>[
+                                TextSpan(
+                                    text: price + " Vnd",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: responsiveFont(11),
+                                        color: secondaryColor)),
+                              ],
+                            ),
+                          )
+                          // : RichText(
+                          //     text: TextSpan(
+                          //       style: TextStyle(color: Colors.black),
+                          //       children: <TextSpan>[
+                          //         product!.prices?.length.toString() != "0"
+                          //             ? TextSpan(
+                          //                 text: '',
+                          //                 style: TextStyle(
+                          //                     fontWeight: FontWeight.w600,
+                          //                     fontSize: responsiveFont(11),
+                          //                     color: secondaryColor))
+                          //             : TextSpan(
+                          //                 text:
+                          //                     // product!.prices!.first.price
+                          //                     //             .toString() ==
+                          //                     //         product!
+                          //                     //             .prices!.first.price
+                          //                     //             .toString()
+                          //                     //     ?
+                          //                     // '${stringToCurrency(100, context)}' +
+                          //                     price + " Vnd"
+                          //                 // : '${stringToCurrency(100, context)} - ${stringToCurrency(50, context)}'
+                          //                 ,
+                          //                 style: TextStyle(
+                          //                     fontWeight: FontWeight.w600,
+                          //                     fontSize: responsiveFont(11),
+                          //                     color: secondaryColor)),
+                          //       ],
+                          //     ),
+                          //   ),
                         ],
                       )
                     ],

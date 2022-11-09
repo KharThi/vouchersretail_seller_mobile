@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nyoba/models/product_model.dart';
+import 'package:nyoba/pages/product/product_detail_screen_voucher.dart';
 import 'package:nyoba/utils/utility.dart';
 
 class CardItemPqVoucher extends StatelessWidget {
@@ -15,12 +16,12 @@ class CardItemPqVoucher extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) => ProductDetail(
-        //               productId: product!.id.toString(),
-        //             )));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ProductDetailVoucher(
+                      productId: voucher!.id.toString(),
+                    )));
       },
       child: Container(
         margin: EdgeInsets.only(
@@ -48,7 +49,7 @@ class CardItemPqVoucher extends StatelessWidget {
                             topRight: Radius.circular(5),
                             topLeft: Radius.circular(5)),
                       ),
-                      child: voucher!.bannerImg!.isEmpty
+                      child: voucher!.bannerImg == null
                           ? Icon(
                               Icons.image_not_supported,
                               size: 50,
@@ -66,7 +67,7 @@ class CardItemPqVoucher extends StatelessWidget {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
                     child: Text(
-                      voucher!.content!,
+                      voucher!.voucherName!,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: responsiveFont(10)),
