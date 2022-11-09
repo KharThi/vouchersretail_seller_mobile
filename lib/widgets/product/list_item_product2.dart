@@ -77,6 +77,7 @@ class ListItemProduct2 extends StatelessWidget {
                         children: [
                           Text(
                             product!.voucherName.toString(),
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                                 fontSize: responsiveFont(10),
                                 fontWeight: FontWeight.w500),

@@ -376,7 +376,8 @@ class OrderProvider with ChangeNotifier {
       List<int>? quantity,
       String date,
       Customer customer,
-      Future<dynamic> Function() onFinishBuyNow) async {
+      Future<dynamic> Function() onFinishBuyNow,
+      List<Price> listPrice) async {
     if (Session.data.getBool('isLogin')!) {
       // CartModel cart = new CartModel();
       // cart.listItem = [];
@@ -401,15 +402,26 @@ class OrderProvider with ChangeNotifier {
       SharedPreferences data = await SharedPreferences.getInstance();
       String? sellerId = data.getInt("id").toString();
       List<Map> orderItems = List.empty(growable: true);
-      Map orderItem = {
-        "status": "Active",
-        "orderId": 0,
-        "voucherId": product!.id,
-        "priceId": product.prices!.length > 0 ? product.prices!.first.id : 0,
-        "profileId": customer.userInfoId,
-        "useDate": date
-      };
-      orderItems.add(orderItem);
+      // Map orderItem = {
+      //   "status": "Active",
+      //   "orderId": 0,
+      //   "voucherId": product!.id,
+      //   "priceId": product.prices!.length > 0 ? product.prices!.first.id : 0,
+      //   "profileId": customer.userInfoId,
+      //   "useDate": date
+      // };
+      for (var element in listPrice) {
+        Map orderItem = {
+          "status": "Active",
+          "orderId": 0,
+          "voucherId": product!.id,
+          "priceId": element.id,
+          "profileId": customer.userInfoId,
+          "useDate": date
+        };
+        orderItems.add(orderItem);
+      }
+
       Map orderData = {
         "status": "Active",
         "createDate": formattedDate,
@@ -587,29 +599,22 @@ class OrderProvider with ChangeNotifier {
   //   }
   // }
 
-  Future<bool> addCartVoucher(
-      context, Voucher? product, String date, Customer customer) async {
+  Future<bool> addCartVoucher(context, Voucher? product, String date,
+      Customer customer, List<Price> listPrice) async {
+    bool check = false;
     if (Session.data.getBool('isLogin')!) {
-      bool check = false;
-      for (var i = 0; i < product!.prices!.length; i++) {
-        if (product.prices![i].quantity != null) {
-          await OrderAPI()
-              .addCartItem(customer.id, product.prices![i].quantity!,
-                  product.prices![i].id!, date)
-              .then((data) {
-            if (data["id"] != null) {
-              check = true;
-            }
-          });
+      print("List Price length" + listPrice.length.toString());
+      await OrderAPI().addCartItem(customer.id, date, listPrice).then((data) {
+        if (data) {
+          check = true;
         }
-      }
-      return check;
+      });
     } else {
       Navigator.pop(context);
       snackBar(context,
           message: "Bạn cần đăng nhập trước khi thực hiện chức năng này!");
     }
-    return false;
+    return check;
   }
 
   Future<bool> addCartCombo(
@@ -618,14 +623,14 @@ class OrderProvider with ChangeNotifier {
       bool check = false;
       for (var i = 0; i < product!.prices!.length; i++) {
         if (product.prices![i].quantity != null) {
-          await OrderAPI()
-              .addCartItem(customer.id, product.prices![i].quantity!,
-                  product.prices![i].id!, date)
-              .then((data) {
-            if (data["id"] != null) {
-              check = true;
-            }
-          });
+          // await OrderAPI()
+          //     .addCartItem(customer.id, product.prices![i].quantity!,
+          //         product.prices![i].id!, date)
+          //     .then((data) {
+          //   if (data["id"] != null) {
+          //     check = true;
+          //   }
+          // });
         }
       }
       return check;

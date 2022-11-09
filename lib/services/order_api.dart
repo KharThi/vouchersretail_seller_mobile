@@ -9,6 +9,8 @@ import 'package:nyoba/utils/utility.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+import '../models/product_model.dart';
+
 class OrderAPI {
   checkoutOrder(order) async {
     var response =
@@ -56,34 +58,59 @@ class OrderAPI {
     return cart;
   }
 
-  addCartItem(int customerId, int quantity, int priceId, String date) async {
+  addCartItem(int customerId, String date, List<Price> listPrice) async {
     SharedPreferences data = await SharedPreferences.getInstance();
     String? jwt = data.getString("jwt");
-    Map customerData = {
-      "status": "Active",
-      "quantity": quantity,
-      "priceId": priceId,
-      "useDate": date
-    };
-    var body = json.encode(customerData);
+    List<Map> sendData = List.empty(growable: true);
+    bool check = true;
 
-    var response = await http.post(
-        Uri.parse(
-            "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/" +
-                customerId.toString() +
-                "/cart/items"),
-        body: body,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + jwt.toString()
-        });
-    print("addCartItem Link api " +
-        "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/" +
-        customerId.toString() +
-        "/cart/items");
-    Map<String, dynamic> dataResponse = await json.decode(response.body);
-    print("addCartItem in orderApi" + dataResponse.toString());
-    return dataResponse;
+    for (var element in listPrice) {
+      Map customerData = {
+        "status": "Active",
+        "quantity": element.quantity,
+        "priceId": element.id,
+        "useDate": date
+      };
+      // sendData.add(customerData);
+
+      var body = json.encode(customerData);
+      print("CustomerData" + customerData.toString());
+
+      var response = await http.post(
+          Uri.parse(
+              "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/" +
+                  customerId.toString() +
+                  "/cart/items"),
+          body: body,
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + jwt.toString()
+          });
+      Map<String, dynamic> dataResponse = await json.decode(response.body);
+      print("response" + response.body);
+      if (dataResponse["id"] == null) {
+        check = false;
+      }
+    }
+    // var body = json.encode(sendData);
+
+    // var response = await http.post(
+    //     Uri.parse(
+    //         "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/" +
+    //             customerId.toString() +
+    //             "/cart/items"),
+    //     body: body,
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       "Authorization": "Bearer " + jwt.toString()
+    //     });
+    // print("addCartItem Link api " +
+    //     "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/" +
+    //     customerId.toString() +
+    //     "/cart/items");
+
+    // print("addCartItem in orderApi" + dataResponse.toString());
+    return check;
   }
 
   updateCart(int customerId, Cart cart) async {

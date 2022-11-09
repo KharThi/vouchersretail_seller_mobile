@@ -447,7 +447,7 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      cart!.cartItems![index].product!.summary.toString(),
+                      cart!.cartItems![index].voucher!.voucherName.toString(),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(fontSize: responsiveFont(9)),
@@ -580,10 +580,10 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                                 width: 16.w,
                                 height: 16.h,
                                 child: InkWell(
-                                    onTap: cart!.cartItems![index].product!
+                                    onTap: cart!.cartItems![index].voucher!
                                                     .inventory !=
                                                 null &&
-                                            cart!.cartItems![index].product!
+                                            cart!.cartItems![index].voucher!
                                                     .inventory! <=
                                                 cart!
                                                     .cartItems![index].quantity!
@@ -610,10 +610,10 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                                             });
                                             increaseQuantity(index);
                                           },
-                                    child: cart!.cartItems![index].product!
+                                    child: cart!.cartItems![index].voucher!
                                                     .inventory !=
                                                 null &&
-                                            cart!.cartItems![index].product!
+                                            cart!.cartItems![index].voucher!
                                                     .inventory! >
                                                 cart!
                                                     .cartItems![index].quantity!

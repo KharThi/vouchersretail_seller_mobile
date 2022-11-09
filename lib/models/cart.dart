@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'package:nyoba/models/product_model.dart';
+
 List<Cart> cartFromJson(String str) =>
     List<Cart>.from(json.decode(str).map((x) => Cart.fromJson(x)));
 
@@ -39,18 +41,20 @@ class CartItem {
   CartItem({
     this.id,
     this.quantity,
-    this.product,
-    this.productId,
+    this.voucher,
+    this.voucherId,
     this.price,
     this.priceId,
+    this.useDate,
   });
 
   int? id;
   int? quantity;
-  Product? product;
-  int? productId;
+  VoucherForCart? voucher;
+  int? voucherId;
   int? price;
   int? priceId;
+  DateTime? useDate;
   bool? isSelected;
   bool? isChange;
   int? oldQuantity;
@@ -58,58 +62,68 @@ class CartItem {
   factory CartItem.fromJson(Map<String, dynamic> json) => CartItem(
         id: json["id"],
         quantity: json["quantity"],
-        product: Product.fromJson(json["product"]),
-        productId: json["productId"],
+        voucher: VoucherForCart.fromJson(json["voucher"]),
+        voucherId: json["voucherId"],
         price: json["price"],
         priceId: json["priceId"],
+        useDate: DateTime.parse(json["useDate"]),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "quantity": quantity,
-        "product": product!.toJson(),
-        "productId": productId,
+        "voucher": voucher,
+        "voucherId": voucherId,
         "price": price,
         "priceId": priceId,
+        "useDate": useDate,
       };
 }
 
-class Product {
-  Product({
+class VoucherForCart {
+  VoucherForCart({
     this.id,
-    this.description,
-    this.summary,
-    this.bannerImg,
-    this.content,
+    this.voucherName,
+    this.price,
     this.inventory,
-    this.type,
+    this.limitPerDay,
+    this.isRequireProfileInfo,
+    this.startDate,
+    this.endDate,
+    this.serviceId,
   });
 
   int? id;
-  String? description;
-  String? summary;
-  String? bannerImg;
-  String? content;
+  String? voucherName;
+  int? price;
   int? inventory;
-  String? type;
+  int? limitPerDay;
+  bool? isRequireProfileInfo;
+  DateTime? startDate;
+  DateTime? endDate;
+  int? serviceId;
 
-  factory Product.fromJson(Map<String, dynamic> json) => Product(
+  factory VoucherForCart.fromJson(Map<String, dynamic> json) => VoucherForCart(
         id: json["id"],
-        description: json["description"],
-        summary: json["summary"],
-        bannerImg: json["bannerImg"],
-        content: json["content"],
+        voucherName: json["voucherName"],
+        price: json["price"],
         inventory: json["inventory"],
-        type: json["type"],
+        limitPerDay: json["limitPerDay"],
+        isRequireProfileInfo: json["isRequireProfileInfo"],
+        startDate: DateTime.parse(json["startDate"]),
+        endDate: DateTime.parse(json["endDate"]),
+        serviceId: json["serviceId"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "description": description,
-        "summary": summary,
-        "bannerImg": bannerImg,
-        "content": content,
+        "voucherName": voucherName,
+        "price": price,
         "inventory": inventory,
-        "type": type,
+        "limitPerDay": limitPerDay,
+        "isRequireProfileInfo": isRequireProfileInfo,
+        "startDate": startDate,
+        "endDate": endDate,
+        "serviceId": serviceId,
       };
 }

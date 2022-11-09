@@ -55,6 +55,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
   int? variationStock = 0;
   Map<String, dynamic>? variationResult;
   String? variationName;
+  List<Price> listPrice = List.empty(growable: true);
 
   String _selectedDate = 'Bấm vào để chọn ngày';
   String _forCallApiDate = "";
@@ -83,8 +84,8 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
   void addCart(Voucher product) async {
     print('Add Cart');
     await Provider.of<OrderProvider>(context, listen: false)
-        .addCartVoucher(
-            context, widget.product, _forCallApiDate, customers.first)
+        .addCartVoucher(context, widget.product, _forCallApiDate,
+            customers.first, listPrice)
         .then((value) {
       this.setState(() {
         print("add to cart return value: " + value.toString());
@@ -96,9 +97,6 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
       });
     });
     Navigator.pop(context);
-    snackBar(context,
-        message:
-            AppLocalizations.of(context)!.translate('product_success_atc')!);
   }
 
   /*get variant id, if product have variant*/
@@ -229,7 +227,8 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
         listQuantity,
         _forCallApiDate,
         customers.first,
-        onFinishBuyNow);
+        onFinishBuyNow,
+        listPrice);
   }
 
   getListCustomerOrder() async {
@@ -353,6 +352,15 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                                         .product!
                                                         .prices![index]
                                                         .quantity);
+                                                    if (widget
+                                                            .product!
+                                                            .prices![index]
+                                                            .quantity ==
+                                                        0) {
+                                                      listPrice.remove(widget
+                                                          .product!
+                                                          .prices![index]);
+                                                    }
                                                   }
                                                 });
                                               },
@@ -404,6 +412,16 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                                         .product!
                                                         .prices![index]
                                                         .quantity);
+                                                    if (widget
+                                                            .product!
+                                                            .prices![index]
+                                                            .quantity! >
+                                                        0) {
+                                                      print("add");
+                                                      listPrice.add(widget
+                                                          .product!
+                                                          .prices![index]);
+                                                    }
                                                     // }
                                                   });
                                                 },

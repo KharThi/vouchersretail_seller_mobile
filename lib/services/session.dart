@@ -180,7 +180,7 @@ class Session {
     data.setString("status", seller.userInfo!.status!);
     data.setString("commissionRate", seller.commissionRate.toString());
     data.setString("profit", seller.profit.toString());
-    data.setString("orders", seller.orders!);
+    data.setString("orders", seller.orders.toString());
     data.setString("busyLevel", seller.busyLevel!);
 
     // data.setString("email", user.email!);
