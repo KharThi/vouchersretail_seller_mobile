@@ -7,9 +7,9 @@ class CustomerProvider with ChangeNotifier {
   bool loading = false;
   bool loadingUse = false;
 
-  Future<bool> addCustomer(context, customer) async {
+  Future<bool> addCustomer(context, customer, Profile profile) async {
     loading = true;
-    await CustomerAPI().postCustomer(customer).then((data) {
+    await CustomerAPI().postCustomer(customer, profile).then((data) {
       if (data != null || data != "") {
         snackBar(context,
             message: 'Tạo mới customer thành công!', color: Color(0xFF00FF00));

@@ -25,8 +25,6 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   bool loadHomeSuccess = true;
 
-  String? _versionName;
-
   bool isVideo = false;
   late VideoPlayerController _controller;
 
@@ -190,9 +188,8 @@ class _SplashScreenState extends State<SplashScreen> {
               future: _init(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  _versionName = snapshot.data as String?;
                   return Text(
-                    'Version ' + _versionName!,
+                    'Phiên bản ' + "1.0.0",
                   );
                 } else {
                   return Container();

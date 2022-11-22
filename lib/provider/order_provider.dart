@@ -39,7 +39,7 @@ class OrderProvider with ChangeNotifier {
 
   List<Customer?> listCustomerOrder = [];
 
-  OrderModel? detailOrder;
+  Order? detailOrder;
   int cartCount = 0;
 
   Future checkout(order) async {
@@ -61,11 +61,11 @@ class OrderProvider with ChangeNotifier {
     return result;
   }
 
-  Future<bool> placeOrder(customerId) async {
-    bool check = false;
+  Future<String> placeOrder(customerId) async {
+    String check = "";
     await OrderAPI().placeOrder(customerId).then((data) {
       // printLog(data, name: 'Link Order From API');
-      check = data["id"].toString() != "";
+      check = data["payUrl"];
       print("Return data" + data.toString());
     });
     return check;
@@ -154,12 +154,10 @@ class OrderProvider with ChangeNotifier {
     isLoading = true;
     var result;
     await OrderAPI().detailOrder(orderId).then((data) {
+      print(data.toString());
+      detailOrder = Order.fromJson(data[0]);
       result = data;
       printLog(result.toString());
-
-      for (Map item in result) {
-        detailOrder = OrderModel.fromJson(item);
-      }
 
       isLoading = false;
       notifyListeners();
@@ -604,7 +602,7 @@ class OrderProvider with ChangeNotifier {
     bool check = false;
     if (Session.data.getBool('isLogin')!) {
       print("List Price length" + listPrice.length.toString());
-      await OrderAPI().addCartItem(customer.id, date, listPrice).then((data) {
+      await OrderAPI().addCartItem(customer, date, listPrice).then((data) {
         if (data) {
           check = true;
         }
@@ -658,9 +656,9 @@ class OrderProvider with ChangeNotifier {
     loadDataOrder = true;
     if (detailOrder != null) {
       listProductOrder.clear();
-      detailOrder!.productItems!.forEach((element) async {
+      detailOrder!.orderItems!.forEach((element) async {
         await Provider.of<ProductProvider>(context, listen: false)
-            .fetchProductDetail(element.productId.toString())
+            .fetchProductDetail(element.priceId.toString())
             .then((value) {
           listProductOrder.add(value);
         });
@@ -670,23 +668,23 @@ class OrderProvider with ChangeNotifier {
   }
 
   Future<void> actionBuyAgain(context) async {
-    detailOrder!.productItems!.forEach((elementOrder) {
+    detailOrder!.orderItems!.forEach((elementOrder) {
       listProductOrder.forEach((element) {
-        if (element!.id == elementOrder.productId) {
-          print('${element.id} == ${elementOrder.productId}');
-          element.cartQuantity = elementOrder.quantity;
-          element.variantId = elementOrder.variationId;
-          element.priceTotal =
-              double.parse(element.productPrice) * element.cartQuantity!;
-          element.attributes!.forEach((elementAttr) {
-            elementOrder.metaData!.forEach((elementMeta) {
-              if (elementAttr.name!.toLowerCase().replaceAll(" ", "-") ==
-                  elementMeta.key) {
-                elementAttr.selectedVariant = elementMeta.value;
-              }
-            });
-          });
-        }
+        // if (element!.id == elementOrder.priceId) {
+        //   print('${element.id} == ${elementOrder.productId}');
+        //   element.cartQuantity = elementOrder.quantity;
+        //   element.variantId = elementOrder.variationId;
+        //   element.priceTotal =
+        //       double.parse(element.productPrice) * element.cartQuantity!;
+        //   element.attributes!.forEach((elementAttr) {
+        //     elementOrder.metaData!.forEach((elementMeta) {
+        //       if (elementAttr.name!.toLowerCase().replaceAll(" ", "-") ==
+        //           elementMeta.key) {
+        //         elementAttr.selectedVariant = elementMeta.value;
+        //       }
+        //     });
+        //   });
+        // }
       });
     });
     for (int i = 0; i < listProductOrder.length; i++) {

@@ -13,8 +13,7 @@ class ComboAPI {
     String? jwt = data.getString("jwt");
 
     var response = await http.get(
-        Uri.parse(
-            "https://webapp-221010174451.azurewebsites.net/api/v1/combos"),
+        Uri.parse("https://phuquocvoucher.azurewebsites.net/api/v1/combos"),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + jwt.toString()

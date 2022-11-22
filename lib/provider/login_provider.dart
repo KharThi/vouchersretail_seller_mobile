@@ -62,7 +62,8 @@ class LoginProvider with ChangeNotifier {
           inputDeviceToken();
           // }
         } else {
-          snackBar(context, message: result['message'], color: Colors.red);
+          snackBar(context,
+              message: "Sai tài khoản hoặc mật khẩu", color: Colors.red);
         }
         loading = false;
 

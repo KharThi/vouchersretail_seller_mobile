@@ -26,7 +26,7 @@ class Order {
   String? orderStatus;
   int? customerId;
   int? sellerId;
-  dynamic paymentDetail;
+  PaymentDetail? paymentDetail;
   List<OrderItem>? orderItems;
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
@@ -34,8 +34,10 @@ class Order {
         totalPrice: json["totalPrice"],
         orderStatus: json["orderStatus"],
         customerId: json["customerId"],
-        sellerId: json["sellerId"],
-        paymentDetail: json["paymentDetail"],
+        sellerId: json["sellerId"] == null ? null : json["sellerId"],
+        paymentDetail: json["paymentDetail"] == null
+            ? null
+            : PaymentDetail.fromJson(json["paymentDetail"]),
         orderItems: List<OrderItem>.from(
             json["orderItems"].map((x) => OrderItem.fromJson(x))),
       );
@@ -45,8 +47,8 @@ class Order {
         "totalPrice": totalPrice,
         "orderStatus": orderStatus,
         "customerId": customerId,
-        "sellerId": sellerId,
-        "paymentDetail": paymentDetail,
+        "sellerId": sellerId == null ? null : sellerId,
+        "paymentDetail": paymentDetail == null ? null : paymentDetail!.toJson(),
         "orderItems": List<dynamic>.from(orderItems!.map((x) => x.toJson())),
       };
 }
@@ -55,7 +57,7 @@ class OrderItem {
   OrderItem({
     this.id,
     this.orderId,
-    this.orderProductId,
+    this.voucherId,
     this.priceId,
     this.profileId,
     this.useDate,
@@ -63,27 +65,58 @@ class OrderItem {
 
   int? id;
   int? orderId;
-  int? orderProductId;
+  int? voucherId;
   int? priceId;
-  dynamic profileId;
+  int? profileId;
   DateTime? useDate;
 
   factory OrderItem.fromJson(Map<String, dynamic> json) => OrderItem(
         id: json["id"],
         orderId: json["orderId"],
-        orderProductId: json["orderProductId"],
+        voucherId: json["voucherId"],
         priceId: json["priceId"],
-        profileId: json["profileId"],
-        useDate:
-            json["useDate"] == null ? null : DateTime.parse(json["useDate"]),
+        profileId: json["profileId"] == null ? null : json["profileId"],
+        useDate: DateTime.parse(json["useDate"]),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "orderId": orderId,
-        "orderProductId": orderProductId,
+        "voucherId": voucherId,
         "priceId": priceId,
-        "profileId": profileId,
-        "useDate": useDate == null ? null : useDate!.toIso8601String(),
+        "profileId": profileId == null ? null : profileId,
+        "useDate": useDate,
+      };
+}
+
+class PaymentDetail {
+  PaymentDetail({
+    this.id,
+    this.amount,
+    this.paymentDate,
+    this.content,
+    this.orderId,
+  });
+
+  int? id;
+  int? amount;
+  DateTime? paymentDate;
+  String? content;
+  int? orderId;
+
+  factory PaymentDetail.fromJson(Map<String, dynamic> json) => PaymentDetail(
+        id: json["id"],
+        amount: json["amount"],
+        paymentDate: DateTime.parse(json["paymentDate"]),
+        content: json["content"],
+        orderId: json["orderId"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "amount": amount,
+        "paymentDate": paymentDate,
+        "content": content,
+        "orderId": orderId,
       };
 }

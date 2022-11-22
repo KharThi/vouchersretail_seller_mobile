@@ -41,17 +41,17 @@ class ProductAPI {
     return response;
   }
 
-  hitViewProductsAPI(productId) async {
-    Map data = {
-      "cookie": Session.data.getString('cookie'),
-      "product_id": productId,
-      "ip_address": Session.data.getString('ip')
-    };
-    var response =
-        await baseAPI.postAsync('$hitViewedProducts', data, isCustom: true);
-    printLog(Session.data.getString('cookie')!);
-    return response;
-  }
+  // hitViewProductsAPI(productId) async {
+  //   Map data = {
+  //     "cookie": Session.data.getString('cookie'),
+  //     "product_id": productId,
+  //     "ip_address": Session.data.getString('ip')
+  //   };
+  //   var response =
+  //       await baseAPI.postAsync('$hitViewedProducts', data, isCustom: true);
+  //   printLog(Session.data.getString('cookie')!);
+  //   return response;
+  // }
 
   fetchDetailProduct(String? productId) async {
     var response = await baseAPI.getAsync('$product/$productId');
@@ -66,7 +66,7 @@ class ProductAPI {
 
     var response = await http.get(
         Uri.parse(
-            "https://webapp-221010174451.azurewebsites.net/api/v1/vouchers?ProductId=" +
+            "https://phuquocvoucher.azurewebsites.net/api/v1/vouchers?ProductId=" +
                 productId.toString()),
         headers: {
           "Content-Type": "application/json",
@@ -85,7 +85,7 @@ class ProductAPI {
 
     var response = await http.get(
         Uri.parse(
-            "https://webapp-221010174451.azurewebsites.net/api/v1/combos?ProductId=" +
+            "https://phuquocvoucher.azurewebsites.net/api/v1/combos?ProductId=" +
                 productId.toString()),
         headers: {
           "Content-Type": "application/json",
@@ -111,7 +111,7 @@ class ProductAPI {
 
     var response = await http.get(
         Uri.parse(
-            "https://webapp-221010174451.azurewebsites.net/api/v1/products?Summary=" +
+            "https://phuquocvoucher.azurewebsites.net/api/v1/products?Summary=" +
                 search),
         headers: {
           "Content-Type": "application/json",
@@ -132,7 +132,7 @@ class ProductAPI {
 
     var response = await http.get(
         Uri.parse(
-            "https://webapp-221010174451.azurewebsites.net/api/v1/customers?UserName=" +
+            "https://phuquocvoucher.azurewebsites.net/api/v1/customers?UserName=" +
                 search),
         headers: {
           "Content-Type": "application/json",
@@ -221,8 +221,7 @@ class ProductAPI {
     String? jwt = data.getString("jwt");
 
     var response = await http.get(
-        Uri.parse(
-            "https://webapp-221010174451.azurewebsites.net/api/v1/products"),
+        Uri.parse("https://phuquocvoucher.azurewebsites.net/api/v1/products"),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + jwt.toString()

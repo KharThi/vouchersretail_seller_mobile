@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:nyoba/models/product_model.dart';
 import 'package:nyoba/pages/search/qr_scanner_screen.dart';
 import 'package:nyoba/provider/home_provider.dart';
-import 'package:nyoba/provider/product_provider.dart';
 import 'package:nyoba/provider/search_provider.dart';
 import 'package:nyoba/provider/voucher_provider.dart';
 import 'package:nyoba/utils/utility.dart';

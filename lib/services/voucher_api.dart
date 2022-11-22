@@ -12,7 +12,7 @@ class VoucherAPI {
     SharedPreferences data = await SharedPreferences.getInstance();
     String? jwt = data.getString("jwt");
     String url =
-        "https://webapp-221010174451.azurewebsites.net/api/v1/vouchers?VoucherName=" +
+        "https://phuquocvoucher.azurewebsites.net/api/v1/vouchers?VoucherName=" +
             search;
     // if (search != "") {
     //   url = url + "VoucherName=" + pageSize;

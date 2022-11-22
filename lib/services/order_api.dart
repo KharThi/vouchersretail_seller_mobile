@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:nyoba/constant/constants.dart';
 import 'package:nyoba/constant/global_url.dart';
 import 'package:nyoba/models/cart.dart';
+import 'package:nyoba/models/customer.dart';
 import 'package:nyoba/models/order.dart';
 import 'package:nyoba/services/session.dart';
 import 'package:nyoba/utils/utility.dart';
@@ -24,12 +25,13 @@ class OrderAPI {
 
     var response = await http.post(
         Uri.parse(
-            "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/order"),
+            "https://phuquocvoucher.azurewebsites.net/api/v1/sellers/order"),
         body: order,
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + jwt.toString()
         });
+    print(response.body);
     Map<String, dynamic> dataResponse = await json.decode(response.body);
     print(dataResponse.toString());
     return dataResponse["data"];
@@ -41,27 +43,25 @@ class OrderAPI {
 
     var response = await http.get(
         Uri.parse(
-            "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/" +
+            "https://phuquocvoucher.azurewebsites.net/api/v1/sellers/customers/" +
                 customerId.toString() +
                 "/cart"),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + jwt.toString()
         });
-    print(
-        "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/" +
-            customerId.toString() +
-            "/cart");
+    print("https://phuquocvoucher.azurewebsites.net/api/v1/sellers/customers/" +
+        customerId.toString() +
+        "/cart");
     Map<String, dynamic> dataResponse = await json.decode(response.body);
     print(dataResponse.toString());
     Cart cart = Cart.fromJson(dataResponse);
     return cart;
   }
 
-  addCartItem(int customerId, String date, List<Price> listPrice) async {
+  addCartItem(Customer customer, String date, List<Price> listPrice) async {
     SharedPreferences data = await SharedPreferences.getInstance();
     String? jwt = data.getString("jwt");
-    List<Map> sendData = List.empty(growable: true);
     bool check = true;
 
     for (var element in listPrice) {
@@ -69,17 +69,18 @@ class OrderAPI {
         "status": "Active",
         "quantity": element.quantity,
         "priceId": element.id,
-        "useDate": date
+        "useDate": date,
+        "profileId": customer.userInfoId
       };
       // sendData.add(customerData);
 
       var body = json.encode(customerData);
-      print("CustomerData" + customerData.toString());
+      print("CustomerData" + body.toString());
 
       var response = await http.post(
           Uri.parse(
-              "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/" +
-                  customerId.toString() +
+              "https://phuquocvoucher.azurewebsites.net/api/v1/sellers/customers/" +
+                  customer.id.toString() +
                   "/cart/items"),
           body: body,
           headers: {
@@ -96,7 +97,7 @@ class OrderAPI {
 
     // var response = await http.post(
     //     Uri.parse(
-    //         "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/" +
+    //         "https://phuquocvoucher.azurewebsites.net/api/v1/sellers/customers/" +
     //             customerId.toString() +
     //             "/cart/items"),
     //     body: body,
@@ -105,7 +106,7 @@ class OrderAPI {
     //       "Authorization": "Bearer " + jwt.toString()
     //     });
     // print("addCartItem Link api " +
-    //     "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/" +
+    //     "https://phuquocvoucher.azurewebsites.net/api/v1/sellers/customers/" +
     //     customerId.toString() +
     //     "/cart/items");
 
@@ -128,7 +129,7 @@ class OrderAPI {
 
     var response = await http.put(
         Uri.parse(
-            "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/" +
+            "https://phuquocvoucher.azurewebsites.net/api/v1/sellers/customers/" +
                 customerId.toString() +
                 "/cart/items"),
         body: body,
@@ -147,7 +148,7 @@ class OrderAPI {
 
     var response = await http.delete(
         Uri.parse(
-            "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/" +
+            "https://phuquocvoucher.azurewebsites.net/api/v1/sellers/customers/" +
                 customerId.toString() +
                 "/cart/items/" +
                 cartItemId.toString()),
@@ -166,7 +167,7 @@ class OrderAPI {
 
     var response = await http.post(
         Uri.parse(
-            "https://webapp-221010174451.azurewebsites.net/api/v1/sellers/customers/" +
+            "https://phuquocvoucher.azurewebsites.net/api/v1/sellers/customers/" +
                 customerId.toString() +
                 "/place-order"),
         headers: {
@@ -175,7 +176,9 @@ class OrderAPI {
         });
     Map<String, dynamic> dataResponse = await json.decode(response.body);
     print(dataResponse.toString());
-    return dataResponse;
+    Map<String, dynamic> dataResponse2 = await json.decode(response.body);
+    print(dataResponse2.toString());
+    return dataResponse2;
   }
 
   listMyOrder(
@@ -203,17 +206,16 @@ class OrderAPI {
     print("jwt " + jwt.toString());
 
     var response = await http.get(
-        Uri.parse(
-            "https://webapp-221010174451.azurewebsites.net/api/v1/orders" +
-                "?OrderStatus=" +
-                orderStatus +
-                "&SellerId=" +
-                sellerId.toString()),
+        Uri.parse("https://phuquocvoucher.azurewebsites.net/api/v1/orders" +
+            "?OrderStatus=" +
+            orderStatus +
+            "&SellerId=" +
+            sellerId.toString()),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + jwt.toString()
         });
-    print("https://webapp-221010174451.azurewebsites.net/api/v1/orders" +
+    print("https://phuquocvoucher.azurewebsites.net/api/v1/orders" +
         "?OrderStatus=" +
         orderStatus +
         "&SellerId=" +
@@ -229,16 +231,26 @@ class OrderAPI {
   }
 
   detailOrder(String? orderId) async {
-    Map data = {
-      "cookie": Session.data.getString('cookie'),
-      "order_id": orderId
-    };
-    printLog(data.toString());
-    var response = await baseAPI.postAsync(
-      '$listOrders',
-      data,
-      isCustom: true,
-    );
-    return response;
+    SharedPreferences data = await SharedPreferences.getInstance();
+    String? jwt = data.getString("jwt");
+    print("jwt " + jwt.toString());
+
+    var response = await http.get(
+        Uri.parse(
+            "https://webapp-221010174451.azurewebsites.net/api/v1/orders?Id=" +
+                orderId.toString()),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + jwt.toString()
+        });
+    print("https://webapp-221010174451.azurewebsites.net/api/v1/orders?Id=" +
+        orderId.toString());
+    // ignore: unused_local_variable
+    // List<dynamic> dataResponse = await json.decode(response.body);
+    // Map dataResponse = await json.decode(response.body);
+    Map<String, dynamic> dataResponse = await json.decode(response.body);
+    return dataResponse["data"];
+    // Order order = Order.fromJson(dataResponse["data"]);
+    // return dataResponse;
   }
 }

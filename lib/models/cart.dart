@@ -4,8 +4,6 @@
 
 import 'dart:convert';
 
-import 'package:nyoba/models/product_model.dart';
-
 List<Cart> cartFromJson(String str) =>
     List<Cart>.from(json.decode(str).map((x) => Cart.fromJson(x)));
 

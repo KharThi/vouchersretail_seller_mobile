@@ -466,6 +466,8 @@ String voucherToJson(List<Voucher> data) =>
 
 class Voucher {
   Voucher({
+    this.createAt,
+    this.updateAt,
     this.id,
     this.voucherName,
     this.inventory,
@@ -478,46 +480,65 @@ class Voucher {
     this.summary,
     this.bannerImg,
     this.content,
-    this.isForKid,
-    this.type,
+    this.service,
+    this.serviceType,
+    this.displayPrice,
     this.prices,
+    this.slotNumber,
+    this.tags,
+    this.status,
   });
 
+  String? createAt;
+  String? updateAt;
   int? id;
   String? voucherName;
   int? inventory;
   int? limitPerDay;
   bool? isRequireProfileInfo;
-  DateTime? startDate;
-  DateTime? endDate;
+  String? startDate;
+  String? endDate;
   int? serviceId;
   String? description;
   String? summary;
   String? bannerImg;
   String? content;
-  bool? isForKid;
-  String? type;
+  Service? service;
+  ServiceType? serviceType;
+  String? displayPrice;
   List<Price>? prices;
+  int? slotNumber;
+  List<ServiceType>? tags;
+  String? status;
 
   factory Voucher.fromJson(Map<String, dynamic> json) => Voucher(
+        createAt: json["createAt"],
+        updateAt: json["updateAt"],
         id: json["id"],
         voucherName: json["voucherName"],
         inventory: json["inventory"],
         limitPerDay: json["limitPerDay"],
         isRequireProfileInfo: json["isRequireProfileInfo"],
-        startDate: DateTime.parse(json["startDate"]),
-        endDate: DateTime.parse(json["endDate"]),
+        startDate: json["startDate"],
+        endDate: json["endDate"],
         serviceId: json["serviceId"],
         description: json["description"],
         summary: json["summary"],
-        bannerImg: json["bannerImg"],
+        bannerImg: json["bannerImg"] == null ? null : json["bannerImg"],
         content: json["content"],
-        isForKid: json["isForKid"],
-        type: json["type"],
+        service: Service.fromJson(json["service"]),
+        serviceType: ServiceType.fromJson(json["serviceType"]),
+        displayPrice: json["displayPrice"],
         prices: List<Price>.from(json["prices"].map((x) => Price.fromJson(x))),
+        slotNumber: json["slotNumber"],
+        tags: List<ServiceType>.from(
+            json["tags"].map((x) => ServiceType.fromJson(x))),
+        status: json["status"],
       );
 
   Map<String, dynamic> toJson() => {
+        "createAt": createAt,
+        "updateAt": updateAt == null ? null : updateAt,
         "id": id,
         "voucherName": voucherName,
         "inventory": inventory,
@@ -528,11 +549,87 @@ class Voucher {
         "serviceId": serviceId,
         "description": description,
         "summary": summary,
-        "bannerImg": bannerImg,
+        "bannerImg": bannerImg == null ? null : bannerImg,
         "content": content,
-        "isForKid": isForKid,
-        "type": type,
+        "service": service,
+        "serviceType": serviceType,
+        "displayPrice": displayPrice,
         "prices": List<dynamic>.from(prices!.map((x) => x.toJson())),
+        "slotNumber": slotNumber,
+        "tags": List<dynamic>.from(tags!.map((x) => x.toJson())),
+        "status": status,
+      };
+}
+
+class Service {
+  Service({
+    this.id,
+    this.name,
+    this.description,
+    this.typeId,
+    this.type,
+    this.locationName,
+    this.serviceLocationId,
+    this.providerName,
+    this.providerId,
+    this.status,
+  });
+
+  int? id;
+  String? name;
+  String? description;
+  String? typeId;
+  String? type;
+  String? locationName;
+  int? serviceLocationId;
+  String? providerName;
+  int? providerId;
+  String? status;
+
+  factory Service.fromJson(Map<String, dynamic> json) => Service(
+        id: json["id"],
+        name: json["name"],
+        description: json["description"],
+        typeId: json["typeId"],
+        type: json["type"],
+        locationName: json["locationName"],
+        serviceLocationId: json["serviceLocationId"],
+        providerName: json["providerName"],
+        providerId: json["providerId"],
+        status: json["status"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "description": description,
+        "typeId": typeId,
+        "type": type,
+        "locationName": locationName,
+        "serviceLocationId": serviceLocationId,
+        "providerName": providerName,
+        "providerId": providerId,
+        "status": status,
+      };
+}
+
+class ServiceType {
+  ServiceType({
+    this.id,
+    this.name,
+  });
+
+  int? id;
+  String? name;
+
+  factory ServiceType.fromJson(Map<String, dynamic> json) => ServiceType(
+        id: json["id"],
+        name: json["name"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
       };
 }
 

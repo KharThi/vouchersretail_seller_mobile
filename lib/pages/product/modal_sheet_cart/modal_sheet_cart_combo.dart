@@ -18,7 +18,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:slugify/slugify.dart';
 
-import '../../../app_localizations.dart';
 import '../../search/search_screen_customer.dart';
 
 class ModalSheetCartCombo extends StatefulWidget {

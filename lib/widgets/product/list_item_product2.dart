@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:nyoba/models/product_model.dart';
-import 'package:nyoba/pages/product/product_detail_screen_combo.dart';
 import 'package:nyoba/utils/utility.dart';
 
 import '../../pages/product/product_detail_screen_voucher.dart';

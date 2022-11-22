@@ -18,7 +18,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:slugify/slugify.dart';
 
-import '../../../app_localizations.dart';
 import '../../search/search_screen_customer.dart';
 
 class ModalSheetCartVoucher extends StatefulWidget {
@@ -221,14 +220,10 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
 
   buyNow() async {
     print("Buy Now");
-    await Provider.of<OrderProvider>(context, listen: false).buyNowVoucher(
-        context,
-        widget.product,
-        listQuantity,
-        _forCallApiDate,
-        customers.first,
-        onFinishBuyNow,
-        listPrice);
+    await Provider.of<OrderProvider>(context, listen: false)
+        .buyNowVoucher(context, widget.product, listQuantity, _forCallApiDate,
+            customers.first, onFinishBuyNow, listPrice)
+        .then((value) => {});
   }
 
   getListCustomerOrder() async {
@@ -318,14 +313,22 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                           // AppLocalizations.of(context)!
                                           //     .translate('qty')!
                                           widget.product!.prices![index]
-                                              .priceLevelName
-                                              .toString(),
+                                                      .priceLevelName
+                                                      .toString() ==
+                                                  "AdultCustomer"
+                                              ? "Người lớn"
+                                              : "Trẻ em",
                                           style: TextStyle(
                                               fontSize: responsiveFont(12)),
                                         ),
                                       ),
                                       SizedBox(
-                                        width: 25,
+                                        width: widget.product!.prices![index]
+                                                    .priceLevelName
+                                                    .toString() ==
+                                                "AdultCustomer"
+                                            ? 25
+                                            : 44,
                                       ),
                                       Row(
                                         children: [

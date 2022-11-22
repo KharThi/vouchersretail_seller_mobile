@@ -48,8 +48,8 @@ class _AllFeaturedProductsState extends State<AllFeaturedProducts> {
     await Provider.of<OrderProvider>(context, listen: false)
         .loadCartCount()
         .then((value) => setState(() {
-      cartCount = value;
-    }));
+              cartCount = value;
+            }));
   }
 
   fetchNewProduct() async {

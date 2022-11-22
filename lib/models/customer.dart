@@ -93,3 +93,47 @@ class UserInfo {
         "status": status,
       };
 }
+
+Profile profileFromJson(String str) => Profile.fromJson(json.decode(str));
+
+String profileToJson(Profile data) => json.encode(data.toJson());
+
+class Profile {
+  Profile({
+    this.status,
+    this.sex,
+    this.phoneNumber,
+    this.dateOfBirth,
+    this.name,
+    this.civilIdentify,
+    this.customerId,
+  });
+
+  String? status;
+  int? sex;
+  String? phoneNumber;
+  String? dateOfBirth;
+  String? name;
+  String? civilIdentify;
+  int? customerId;
+
+  factory Profile.fromJson(Map<String, dynamic> json) => Profile(
+        status: json["status"],
+        sex: json["sex"],
+        phoneNumber: json["phoneNumber"],
+        dateOfBirth: json["dateOfBirth"],
+        name: json["name"],
+        civilIdentify: json["civilIdentify"],
+        customerId: json["customerId"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "status": status,
+        "sex": sex,
+        "phoneNumber": phoneNumber,
+        "dateOfBirth": dateOfBirth,
+        "name": name,
+        "civilIdentify": civilIdentify,
+        "customerId": customerId,
+      };
+}

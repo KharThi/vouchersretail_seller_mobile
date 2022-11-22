@@ -10,7 +10,6 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:nyoba/pages/category/brand_product_screen.dart';
 import 'package:nyoba/pages/order/cart_screen.dart';
 import 'package:nyoba/pages/product/modal_sheet_cart/modal_sheet_cart_combo.dart';
-import 'package:nyoba/pages/product/product_detail_screen_voucher.dart';
 import 'package:nyoba/pages/product/product_more_screen.dart';
 import 'package:nyoba/pages/wishlist/wishlist_screen.dart';
 import 'package:nyoba/provider/flash_sale_provider.dart';

@@ -3,6 +3,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:nyoba/pages/order/momo_payment.dart';
 import 'package:nyoba/provider/coupon_provider.dart';
 import 'package:nyoba/provider/order_provider.dart';
 import 'package:nyoba/utils/currency_format.dart';
@@ -202,25 +203,37 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
 
   /*Checkout*/
   checkOut() async {
-    await Provider.of<OrderProvider>(context, listen: false)
-        .placeOrder(widget.customerId)
-        .then((value) {
-      this.setState(() {
-        if (value == true) {
-          snackBar(context, message: "Tạo đơn hàng thành công!");
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    CustomerCartScreen(customerId: widget.customerId)),
-            (Route<dynamic> route) => false,
-          ); // pop current page
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MoMoWebView(
+                  url: "value",
+                ))).then((value) => this.setState(() {}));
+    // await Provider.of<OrderProvider>(context, listen: false)
+    //     .placeOrder(widget.customerId)
+    //     .then((value) {
+    //   this.setState(() {
+    //     if (value != "") {
+    //       snackBar(context, message: "Tạo đơn hàng thành công!");
+    //       Navigator.push(
+    //           context,
+    //           MaterialPageRoute(
+    //               builder: (context) => MoMoWebView(
+    //                     url: "value",
+    //                   ))).then((value) => this.setState(() {}));
+    //       // Navigator.pushAndRemoveUntil(
+    //       //   context,
+    //       //   MaterialPageRoute(
+    //       //       builder: (context) =>
+    //       //           CustomerCartScreen(customerId: widget.customerId)),
+    //       //   (Route<dynamic> route) => false,
+    //       // ); // pop current page
 
-        } else {
-          snackBar(context, message: "Tạo đơn hàng thất bại!");
-        }
-      });
-    });
+    //     } else {
+    //       snackBar(context, message: "Tạo đơn hàng thất bại!");
+    //     }
+    //   });
+    // });
   }
 
   update() async {
@@ -230,13 +243,15 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
       if (check) {
         updateCart = false;
         snackBar(context, message: "Cập nhật giỏ hàng thành công!");
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  CustomerCartScreen(customerId: widget.customerId)),
-          (Route<dynamic> route) => false,
-        ); // pop current page
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (BuildContext context) => super.widget));
+        // Navigator.pushAndRemoveUntil(
+        //   context,
+        //   MaterialPageRoute(
+        //       builder: (context) =>
+        //           CustomerCartScreen(customerId: widget.customerId)),
+        //   (Route<dynamic> route) => false,
+        // ); // pop current page
 
       } else {
         updateCart = false;
@@ -252,14 +267,17 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
       this.setState(() {
         if (value == true) {
           snackBar(context, message: "Xóa sản phẩm thành công!");
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    CustomerCartScreen(customerId: widget.customerId)),
-            (Route<dynamic> route) => false,
-          ); // pop current page
-
+          // Navigator.pushAndRemoveUntil(
+          //   context,
+          //   MaterialPageRoute(
+          //       builder: (context) =>
+          //           CustomerCartScreen(customerId: widget.customerId)),
+          //   (Route<dynamic> route) => false,
+          // ); // pop current page
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => super.widget));
         } else {
           Navigator.pop(context);
           snackBar(context, message: "Xóa sản phẩm thất bại!");

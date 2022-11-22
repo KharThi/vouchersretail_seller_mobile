@@ -124,9 +124,9 @@ class _ProductDetailState extends State<ProductDetail>
           printLog('Load Stop', name: 'Load Stop');
           productProvider.loadingDetail = false;
         });
-        if (Session.data.getBool('isLogin')!)
-          await productProvider.hitViewProducts(widget.productId).then(
-              (value) async => await productProvider.fetchRecentProducts());
+        // if (Session.data.getBool('isLogin')!)
+        //   await productProvider.hitViewProducts(widget.productId).then(
+        //       (value) async => await productProvider.fetchRecentProducts());
       });
     } else {
       await Provider.of<ProductProvider>(context, listen: false)

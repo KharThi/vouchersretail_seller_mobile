@@ -245,12 +245,12 @@ class ProductProvider with ChangeNotifier {
     return true;
   }
 
-  Future<bool> hitViewProducts(productId) async {
-    await ProductAPI().hitViewProductsAPI(productId).then((data) {
-      notifyListeners();
-    });
-    return true;
-  }
+  // Future<bool> hitViewProducts(productId) async {
+  //   await ProductAPI().hitViewProductsAPI(productId).then((data) {
+  //     notifyListeners();
+  //   });
+  //   return true;
+  // }
 
   Future<bool> fetchRecommendationProducts(String productId) async {
     await ProductAPI().fetchProduct(include: productId).then((data) {

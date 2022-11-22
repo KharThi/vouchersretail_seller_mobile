@@ -85,30 +85,33 @@ class ListItemCustomerCart extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              customer.userInfo!.userName.toString(),
-                              style: TextStyle(
-                                  fontSize: responsiveFont(10),
-                                  fontWeight: FontWeight.w500),
-                              maxLines: 2,
-                              overflow: TextOverflow.clip,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            HtmlWidget(
-                              // product!.description!.length > 100
-                              //     ? '${product!.description!.substring(0, 100)} ...'
-                              //     :
-                              customer.userInfo!.phoneNumber.toString(),
-                              textStyle: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: responsiveFont(9)),
-                            ),
-                          ],
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                customer.userInfo!.userName.toString(),
+                                style: TextStyle(
+                                    fontSize: responsiveFont(10),
+                                    fontWeight: FontWeight.w500),
+                                maxLines: 2,
+                                overflow: TextOverflow.clip,
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              HtmlWidget(
+                                // product!.description!.length > 100
+                                //     ? '${product!.description!.substring(0, 100)} ...'
+                                //     :
+                                customer.userInfo!.phoneNumber.toString(),
+                                textStyle: TextStyle(
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: responsiveFont(9)),
+                              ),
+                            ],
+                          ),
                         ),
                         SizedBox(
                           height: 10.h,

@@ -1,15 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:nyoba/models/order_model.dart';
+import 'package:nyoba/models/order.dart';
 import 'package:nyoba/provider/home_provider.dart';
 import 'package:nyoba/provider/order_provider.dart';
 import 'package:nyoba/services/session.dart';
 import 'package:nyoba/utils/currency_format.dart';
 import 'package:nyoba/utils/utility.dart';
 import 'package:nyoba/widgets/order/order_detail_shimmer.dart';
-import 'package:nyoba/widgets/webview/checkout_webview.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -128,17 +126,17 @@ class _OrderDetailState extends State<OrderDetail> {
                                     fontSize: responsiveFont(12),
                                     fontWeight: FontWeight.w500),
                               ),
-                              order.detailOrder!.shippingServices!.isEmpty
-                                  ? Text(
-                                      "-",
-                                      style: TextStyle(
-                                          fontSize: responsiveFont(10)),
-                                    )
-                                  : Text(
-                                      "${order.detailOrder!.shippingServices![0].serviceName} - ",
-                                      style: TextStyle(
-                                          fontSize: responsiveFont(10)),
-                                    )
+                              // order.detailOrder!.paymentDetail!.isEmpty
+                              //     ? Text(
+                              //         "-",
+                              //         style: TextStyle(
+                              //             fontSize: responsiveFont(10)),
+                              //       )
+                              //     :
+                              Text(
+                                "${order.detailOrder!.paymentDetail!.amount} - ",
+                                style: TextStyle(fontSize: responsiveFont(10)),
+                              )
                             ],
                           ),
                         )
@@ -266,57 +264,57 @@ class _OrderDetailState extends State<OrderDetail> {
                       ],
                     ),
                   ),
-                  Visibility(
-                    visible: order.detailOrder!.customerNote!.isNotEmpty,
-                    child: Column(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.symmetric(vertical: 10),
-                          color: HexColor("EEEEEE"),
-                          height: 2,
-                          width: double.infinity,
-                        ),
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 15),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                  width: 30.w,
-                                  height: 30.h,
-                                  child: Icon(Icons.assignment_outlined)),
-                              Container(
-                                width: 10,
-                              ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      AppLocalizations.of(context)!
-                                          .translate('order_notes')!,
-                                      style: TextStyle(
-                                          fontSize: responsiveFont(12),
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      "Order Note",
-                                      style: TextStyle(
-                                          fontSize: responsiveFont(12),
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  // Visibility(
+                  //   visible: order.detailOrder!.customerNote!.isNotEmpty,
+                  //   child: Column(
+                  //     children: [
+                  //       Container(
+                  //         margin: EdgeInsets.symmetric(vertical: 10),
+                  //         color: HexColor("EEEEEE"),
+                  //         height: 2,
+                  //         width: double.infinity,
+                  //       ),
+                  //       Container(
+                  //         margin: EdgeInsets.symmetric(horizontal: 15),
+                  //         child: Row(
+                  //           crossAxisAlignment: CrossAxisAlignment.start,
+                  //           children: [
+                  //             Container(
+                  //                 width: 30.w,
+                  //                 height: 30.h,
+                  //                 child: Icon(Icons.assignment_outlined)),
+                  //             Container(
+                  //               width: 10,
+                  //             ),
+                  //             Expanded(
+                  //               child: Column(
+                  //                 crossAxisAlignment: CrossAxisAlignment.start,
+                  //                 children: [
+                  //                   Text(
+                  //                     AppLocalizations.of(context)!
+                  //                         .translate('order_notes')!,
+                  //                     style: TextStyle(
+                  //                         fontSize: responsiveFont(12),
+                  //                         fontWeight: FontWeight.w500),
+                  //                   ),
+                  //                   SizedBox(
+                  //                     height: 10,
+                  //                   ),
+                  //                   Text(
+                  //                     "Order Note",
+                  //                     style: TextStyle(
+                  //                         fontSize: responsiveFont(12),
+                  //                         fontWeight: FontWeight.w400),
+                  //                   ),
+                  //                 ],
+                  //               ),
+                  //             )
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
                   Container(
                     color: HexColor("EEEEEE"),
                     margin: EdgeInsets.only(top: 15, bottom: 15),
@@ -326,9 +324,9 @@ class _OrderDetailState extends State<OrderDetail> {
                   ListView.builder(
                       shrinkWrap: true,
                       physics: ScrollPhysics(),
-                      itemCount: order.detailOrder!.productItems!.length,
+                      itemCount: order.detailOrder!.orderItems!.length,
                       itemBuilder: (context, i) {
-                        return item(order.detailOrder!.productItems![i]);
+                        return item(order.detailOrder!.orderItems![i]);
                       }),
                   Container(
                     height: 5,
@@ -340,19 +338,19 @@ class _OrderDetailState extends State<OrderDetail> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              AppLocalizations.of(context)!
-                                  .translate('subtotal')!,
-                              style: TextStyle(
-                                  fontSize: responsiveFont(11),
-                                  color: Colors.grey[600],
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            Text(
-                              stringToCurrency(
-                                  order.detailOrder!.subTotal!, context),
-                              style: TextStyle(fontSize: responsiveFont(11)),
-                            )
+                            // Text(
+                            //   AppLocalizations.of(context)!
+                            //       .translate('subtotal')!,
+                            //   style: TextStyle(
+                            //       fontSize: responsiveFont(11),
+                            //       color: Colors.grey[600],
+                            //       fontWeight: FontWeight.w500),
+                            // ),
+                            // Text(
+                            //   stringToCurrency(
+                            //       order.detailOrder!.subTotal!, context),
+                            //   style: TextStyle(fontSize: responsiveFont(11)),
+                            // )
                           ],
                         ),
                         Row(
@@ -366,33 +364,30 @@ class _OrderDetailState extends State<OrderDetail> {
                                     color: Colors.grey[600],
                                     fontWeight: FontWeight.w500)),
                             Text(
-                                stringToCurrency(
-                                    double.parse(
-                                        order.detailOrder!.shippingTotal!),
-                                    context),
+                                stringToCurrency(double.parse("1009"), context),
                                 style: TextStyle(fontSize: responsiveFont(11))),
                           ],
                         ),
-                        Visibility(
-                          visible: order.detailOrder!.discountTotal != "0.0",
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                  AppLocalizations.of(context)!
-                                      .translate('discount')!,
-                                  style: TextStyle(
-                                      fontSize: responsiveFont(11),
-                                      color: Colors.grey[600],
-                                      fontWeight: FontWeight.w500)),
-                              Text(
-                                  "-${stringToCurrency(double.parse(order.detailOrder!.discountTotal!), context)}",
-                                  style: TextStyle(
-                                      fontSize: responsiveFont(11),
-                                      color: primaryColor)),
-                            ],
-                          ),
-                        ),
+                        // Visibility(
+                        //   visible: order.detailOrder!.paymentDetail != "0.0",
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //     children: [
+                        //       Text(
+                        //           AppLocalizations.of(context)!
+                        //               .translate('discount')!,
+                        //           style: TextStyle(
+                        //               fontSize: responsiveFont(11),
+                        //               color: Colors.grey[600],
+                        //               fontWeight: FontWeight.w500)),
+                        //       Text(
+                        //           "-${stringToCurrency(double.parse(order.detailOrder!.discountTotal!), context)}",
+                        //           style: TextStyle(
+                        //               fontSize: responsiveFont(11),
+                        //               color: primaryColor)),
+                        //     ],
+                        //   ),
+                        // ),
                         Container(
                           color: HexColor("EEEEEE"),
                           margin: EdgeInsets.only(top: 5, bottom: 5),
@@ -408,23 +403,21 @@ class _OrderDetailState extends State<OrderDetail> {
                                 style: TextStyle(
                                     fontSize: responsiveFont(12),
                                     fontWeight: FontWeight.w600)),
-                            order.detailOrder!.discountTotal != "0"
-                                ? Text(
-                                    stringToCurrency(
-                                        double.parse(order.detailOrder!.total!),
-                                        context),
-                                    style: TextStyle(
-                                      fontSize: responsiveFont(12),
-                                      fontWeight: FontWeight.w600,
-                                    ))
-                                : Text(
-                                    stringToCurrency(
-                                        double.parse(order.detailOrder!.total!),
-                                        context),
-                                    style: TextStyle(
-                                      fontSize: responsiveFont(12),
-                                      fontWeight: FontWeight.w600,
-                                    )),
+                            // order.detailOrder!.discountTotal != "0"
+                            //     ? Text(
+                            //         order.detailOrder!.totalPrice.toString(),
+                            //         style: TextStyle(
+                            //           fontSize: responsiveFont(12),
+                            //           fontWeight: FontWeight.w600,
+                            //         ))
+                            //     : Text(
+                            //         stringToCurrency(
+                            //             double.parse(order.detailOrder!.total!),
+                            //             context),
+                            //         style: TextStyle(
+                            //           fontSize: responsiveFont(12),
+                            //           fontWeight: FontWeight.w600,
+                            //         )),
                           ],
                         )
                       ],
@@ -523,7 +516,7 @@ class _OrderDetailState extends State<OrderDetail> {
         body: buildOrder);
   }
 
-  Widget item(ProductItems productItems) {
+  Widget item(OrderItem productItems) {
     return Container(
       height: 80.h,
       margin: EdgeInsets.only(left: 15),
@@ -532,22 +525,22 @@ class _OrderDetailState extends State<OrderDetail> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: 55.h,
-                height: 55.h,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: HexColor("c4c4c4")),
-                child: productItems.image == null && productItems.image == ''
-                    ? Icon(
-                        Icons.image_not_supported_outlined,
-                      )
-                    : CachedNetworkImage(
-                        imageUrl: productItems.image!,
-                        placeholder: (context, url) => Container(),
-                        errorWidget: (context, url, error) =>
-                            Icon(Icons.image_not_supported_outlined)),
-              ),
+              // Container(
+              //   width: 55.h,
+              //   height: 55.h,
+              //   decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(5),
+              //       color: HexColor("c4c4c4")),
+              //   child: productItems.image == null && productItems.image == ''
+              //       ? Icon(
+              //           Icons.image_not_supported_outlined,
+              //         )
+              //       : CachedNetworkImage(
+              //           imageUrl: productItems.image!,
+              //           placeholder: (context, url) => Container(),
+              //           errorWidget: (context, url, error) =>
+              //               Icon(Icons.image_not_supported_outlined)),
+              // ),
               SizedBox(
                 width: 15,
               ),
@@ -558,16 +551,16 @@ class _OrderDetailState extends State<OrderDetail> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        convertHtmlUnescape(productItems.productName!),
+                        convertHtmlUnescape(productItems.id.toString()),
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontSize: responsiveFont(12),
                             fontWeight: FontWeight.w600),
                       ),
-                      Text(
-                        "${productItems.quantity} x ${stringToCurrency((double.parse(productItems.subTotal!)), context)}",
-                        style: TextStyle(fontSize: responsiveFont(10)),
-                      ),
+                      // Text(
+                      //   "${productItems.quantity} x ${stringToCurrency((double.parse(productItems.subTotal!)), context)}",
+                      //   style: TextStyle(fontSize: responsiveFont(10)),
+                      // ),
                     ],
                   ),
                 ),
@@ -646,11 +639,9 @@ class _OrderDetailState extends State<OrderDetail> {
       return Container();
     }
     return Visibility(
-      visible: order.detailOrder!.paymentMethodTitle == 'OVO' ||
-          order.detailOrder!.paymentMethodTitle == 'GOPAY' &&
-              order.detailOrder!.datePaid == null,
-      child: order.detailOrder!.status == 'pending' ||
-              order.detailOrder!.status == 'on-hold'
+      visible: true,
+      child: order.detailOrder!.orderStatus == 'pending' ||
+              order.detailOrder!.orderStatus == 'on-hold'
           ? Container(
               margin: EdgeInsets.only(right: 15),
               decoration: BoxDecoration(
@@ -663,17 +654,17 @@ class _OrderDetailState extends State<OrderDetail> {
               width: 50.w,
               child: TextButton(
                 onPressed: () async {
-                  print(order.detailOrder!.paymentUrl);
-                  await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CheckoutWebView(
-                                url: order.detailOrder!.paymentUrl,
-                                fromOrder: true,
-                              ))).then((value) {
-                    this.setState(() {});
-                    this.loadOrder();
-                  });
+                  // print(order.detailOrder!.paymentUrl);
+                  // await Navigator.push(
+                  //     context,
+                  //     MaterialPageRoute(
+                  //         builder: (context) => CheckoutWebView(
+                  //               url: order.detailOrder!.paymentUrl,
+                  //               fromOrder: true,
+                  //             ))).then((value) {
+                  //   this.setState(() {});
+                  //   this.loadOrder();
+                  // });
                 },
                 child: Text(
                   AppLocalizations.of(context)!.translate('pay')!,

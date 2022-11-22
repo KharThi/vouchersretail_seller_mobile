@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/current_remaining_time.dart';
@@ -7,7 +9,6 @@ import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart
 import 'package:hexcolor/hexcolor.dart';
 import 'package:nyoba/pages/category/brand_product_screen.dart';
 import 'package:nyoba/pages/category/brand_product_screen_voucher.dart';
-import 'package:nyoba/pages/order/cart_screen.dart';
 import 'package:nyoba/pages/product/modal_sheet_cart/modal_sheet_cart_voucher.dart';
 import 'package:nyoba/pages/product/product_more_screen.dart';
 import 'package:nyoba/pages/wishlist/wishlist_screen.dart';
@@ -18,7 +19,6 @@ import 'package:nyoba/provider/review_provider.dart';
 import 'package:nyoba/provider/wishlist_provider.dart';
 import 'package:nyoba/services/session.dart';
 import 'package:nyoba/utils/currency_format.dart';
-import 'package:nyoba/utils/share_link.dart';
 import 'package:nyoba/widgets/contact/contact_fab.dart';
 import 'package:nyoba/widgets/home/card_item_shimmer.dart';
 import 'package:nyoba/widgets/home/card_item_small.dart';
@@ -37,9 +37,6 @@ import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'product_review_screen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:like_button/like_button.dart';
-
-import 'featured_products/all_featured_product_screen.dart';
 
 class ProductDetailVoucher extends StatefulWidget {
   final String? productId;
@@ -146,9 +143,9 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
         //   printLog('Load Stop', name: 'Load Stop');
         //   productProvider.loadingDetail = false;
         // });
-        if (Session.data.getBool('isLogin')!)
-          await productProvider.hitViewProducts(widget.productId).then(
-              (value) async => await productProvider.fetchRecentProducts());
+        // if (Session.data.getBool('isLogin')!)
+        //   await productProvider.hitViewProducts(widget.productId).then(
+        //       (value) async => await productProvider.fetchRecentProducts());
       });
     }
     // else {
@@ -182,7 +179,7 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
       checkWishlist.then((value) {
         printLog('Cek Wishlist Success');
         setState(() {
-          isWishlist = value!['message'];
+          // isWishlist = value!['message'];
         });
       });
     }
@@ -1316,7 +1313,7 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
             height: 5,
           ),
           HtmlWidget(
-            model.description.toString(),
+            model.service!.description.toString(),
             textStyle: TextStyle(color: HexColor("929292")),
           ),
         ],
@@ -1495,7 +1492,7 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
             height: 10,
           ),
           HtmlWidget(
-            "Loại sản phẩm Voucher",
+            "Loại dịch vụ " + model.serviceType!.name.toString(),
             textStyle: TextStyle(
                 color: HexColor("929292"), fontSize: responsiveFont(10)),
           ),

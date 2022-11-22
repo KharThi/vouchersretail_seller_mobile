@@ -9,7 +9,6 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 
-import 'package:nyoba/pages/category/brand_product_screen.dart';
 import 'package:nyoba/pages/auth/login_screen.dart';
 import 'package:nyoba/pages/category/brand_product_screen_voucher.dart';
 import 'package:nyoba/pages/notification/notification_screen.dart';
@@ -22,7 +21,6 @@ import 'package:nyoba/provider/product_provider.dart';
 import 'package:nyoba/provider/voucher_provider.dart';
 import 'package:nyoba/provider/wallet_provider.dart';
 import 'package:nyoba/services/session.dart';
-import 'package:nyoba/widgets/home/card_item_small_pq.dart';
 import 'package:nyoba/widgets/home/card_item_small_pq_voucher.dart';
 import 'package:nyoba/widgets/home/flashsale/flash_sale_countdown.dart';
 import 'package:provider/provider.dart';
@@ -31,12 +29,12 @@ import 'package:provider/provider.dart';
 import 'package:nyoba/widgets/home/banner/banner_container.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../../app_localizations.dart';
-import '../../widgets/home/categories/badge_category.dart';
 
 /* Provider */
 
 /* Helper */
 import '../../utils/utility.dart';
+import '../product/product_detail_screen_voucher.dart';
 
 class LobbyScreen extends StatefulWidget {
   LobbyScreen({Key? key}) : super(key: key);
@@ -360,10 +358,25 @@ class _LobbyScreenState extends State<LobbyScreen>
               itemCount: listVoucher.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, i) {
-                return CardItemPqVoucher(
-                  voucher: listVoucher[i],
-                  i: i,
-                  itemCount: listVoucher.length,
+                return new InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => new ProductDetailVoucher(
+                                  productId: listVoucher[i].id.toString(),
+                                ))).then((value) => setState(() {
+                          isLoading = true;
+                          loadVoucher();
+                        }));
+                  },
+                  child: Container(
+                    child: CardItemPqVoucher(
+                      voucher: listVoucher[i],
+                      i: i,
+                      itemCount: listVoucher.length,
+                    ),
+                  ),
                 );
               },
               separatorBuilder: (BuildContext context, int index) {
