@@ -18,14 +18,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:slugify/slugify.dart';
 
+import '../../order/momo_payment.dart';
 import '../../search/search_screen_customer.dart';
 
 class ModalSheetCartVoucher extends StatefulWidget {
   final Voucher? product;
   final String? type;
+  final OrderProvider? order;
   // final int? quantity;
   final Future<dynamic> Function()? loadCount;
-  ModalSheetCartVoucher({Key? key, this.product, this.type, this.loadCount})
+  ModalSheetCartVoucher(
+      {Key? key, this.product, this.type, this.loadCount, this.order})
       : super(key: key);
 
   @override
@@ -221,9 +224,33 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
   buyNow() async {
     print("Buy Now");
     await Provider.of<OrderProvider>(context, listen: false)
-        .buyNowVoucher(context, widget.product, listQuantity, _forCallApiDate,
-            customers.first, onFinishBuyNow, listPrice)
-        .then((value) => {});
+        .buyNowVoucher(context, widget.product, _forCallApiDate,
+            customers.first, listPrice)
+        .then((value) {
+      // if (value != null) {
+      snackBar(context, message: "Tạo đơn hàng thành công!");
+      // widget.order!.payUrl = value[1];
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MoMoWebView(
+                    url: value[1],
+                    orderId: value[0],
+                  ))).then((value) => this.setState(() {}));
+      // Navigator.pushAndRemoveUntil(
+      //   context,
+      //   MaterialPageRoute(
+      //       builder: (context) => MoMoWebView(
+      //             url: value[1],
+      //             orderId: value[0],
+      //           )),
+      //   (Route<dynamic> route) => false,
+      // );
+      // Navigator.pop(context); // pop current page
+      // } else {
+      //   snackBar(context, message: "Tạo đơn hàng thất bại!");
+      // }
+    });
   }
 
   getListCustomerOrder() async {

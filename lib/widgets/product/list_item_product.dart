@@ -97,7 +97,8 @@ class ListItemProduct extends StatelessWidget {
                                 children: <TextSpan>[
                                   TextSpan(
                                       text: stringToCurrency(
-                                          double.parse(product!.productRegPrice),
+                                          double.parse(
+                                              product!.productRegPrice),
                                           context),
                                       style: TextStyle(
                                           decoration:

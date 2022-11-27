@@ -80,7 +80,7 @@ class _ProductReviewState extends State<ProductReview> {
                   );
                 });
           }
-          if (listReview.isEmpty){
+          if (listReview.isEmpty) {
             return Container(
               margin: EdgeInsets.symmetric(vertical: 15),
               child: Column(
@@ -90,7 +90,10 @@ class _ProductReviewState extends State<ProductReview> {
                     size: 48,
                     color: primaryColor,
                   ),
-                  Text(AppLocalizations.of(context)!.translate('empty_review_product')!,)
+                  Text(
+                    AppLocalizations.of(context)!
+                        .translate('empty_review_product')!,
+                  )
                 ],
               ),
             );

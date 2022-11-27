@@ -1801,19 +1801,19 @@ class _LobbyScreenState extends State<LobbyScreen>
                   //     ),
                   //   ),
                   // ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => NotificationScreen()));
-                    },
-                    child: Container(
-                        width: 27.w,
-                        child: Image.asset(
-                          "images/lobby/bellRinging.png",
-                        )),
-                  )
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //             builder: (context) => NotificationScreen()));
+                  //   },
+                  //   child: Container(
+                  //       width: 27.w,
+                  //       child: Image.asset(
+                  //         "images/lobby/bellRinging.png",
+                  //       )),
+                  // )
                 ],
               ),
             ],

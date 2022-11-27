@@ -35,12 +35,13 @@ class OrderProvider with ChangeNotifier {
   List<OrderModel> tempOrder2 = [];
   int orderPage = 1;
 
-  List<ProductModel?> listProductOrder = [];
+  List<Voucher?> listProductOrder = [];
 
   List<Customer?> listCustomerOrder = [];
 
   Order? detailOrder;
   int cartCount = 0;
+  String? payUrl;
 
   Future checkout(order) async {
     var result;
@@ -61,11 +62,11 @@ class OrderProvider with ChangeNotifier {
     return result;
   }
 
-  Future<String> placeOrder(customerId) async {
-    String check = "";
+  Future<List<String>> placeOrder(customerId) async {
+    List<String> check = List.empty(growable: true);
     await OrderAPI().placeOrder(customerId).then((data) {
       // printLog(data, name: 'Link Order From API');
-      check = data["payUrl"];
+      check = data;
       print("Return data" + data.toString());
     });
     return check;
@@ -94,6 +95,17 @@ class OrderProvider with ChangeNotifier {
     await OrderAPI().removeCartItem(customerId, cartItemId).then((data) {
       // printLog(data, name: 'Link Order From API');
       check = data["id"].toString() != "";
+      print("Return data" + data.toString());
+    });
+    return check;
+    // return result;
+  }
+
+  Future<bool> sendEmailToCustomer(int orderId) async {
+    bool check = false;
+    await OrderAPI().sendEmailToCustomer(orderId).then((data) {
+      // printLog(data, name: 'Link Order From API');
+      check = data;
       print("Return data" + data.toString());
     });
     return check;
@@ -150,13 +162,14 @@ class OrderProvider with ChangeNotifier {
     return orders;
   }
 
-  Future<List?> fetchDetailOrder(orderId) async {
+  Future<Order?> fetchDetailOrder(orderId) async {
     isLoading = true;
     var result;
     await OrderAPI().detailOrder(orderId).then((data) {
+      // Order order = Order.fromJson(data);
       print(data.toString());
       detailOrder = Order.fromJson(data[0]);
-      result = data;
+      result = detailOrder;
       printLog(result.toString());
 
       isLoading = false;
@@ -368,94 +381,31 @@ class OrderProvider with ChangeNotifier {
     }
   }
 
-  Future buyNowVoucher(
-      context,
-      Voucher? product,
-      List<int>? quantity,
-      String date,
-      Customer customer,
-      Future<dynamic> Function() onFinishBuyNow,
-      List<Price> listPrice) async {
+  Future<List<String>> buyNowVoucher(context, Voucher? product, String date,
+      Customer customer, List<Price> listPrice) async {
+    // bool check = false;
+    List<String> check = List.empty(growable: true);
     if (Session.data.getBool('isLogin')!) {
-      // CartModel cart = new CartModel();
-      // cart.listItem = [];
-      // cart.listItem!.add(new CartProductItem(
-      //     productId: product!.id, quantity: quantity, variationId: 1));
-
-      // //init list coupon
-      // cart.listCoupon = [];
-
-      // //add to cart model
-      // cart.paymentMethod = "xendit_bniva";
-      // cart.paymentMethodTitle = "Bank Transfer - BNI";
-      // cart.setPaid = true;
-      // cart.customerId = Session.data.getInt('id');
-      // cart.status = 'completed';
-      // cart.token = Session.data.getString('cookie');
-
-      //Encode Json
-      var now = new DateTime.now();
-      var formatter = new DateFormat('yyyy-MM-dd');
-      String formattedDate = formatter.format(now);
-      SharedPreferences data = await SharedPreferences.getInstance();
-      String? sellerId = data.getInt("id").toString();
-      List<Map> orderItems = List.empty(growable: true);
-      // Map orderItem = {
-      //   "status": "Active",
-      //   "orderId": 0,
-      //   "voucherId": product!.id,
-      //   "priceId": product.prices!.length > 0 ? product.prices!.first.id : 0,
-      //   "profileId": customer.userInfoId,
-      //   "useDate": date
-      // };
-      for (var element in listPrice) {
-        Map orderItem = {
-          "status": "Active",
-          "orderId": 0,
-          "voucherId": product!.id,
-          "priceId": element.id,
-          "profileId": customer.userInfoId,
-          "useDate": date
-        };
-        orderItems.add(orderItem);
-      }
-
-      Map orderData = {
-        "status": "Active",
-        "createDate": formattedDate,
-        "orderStatus": "Processing",
-        "customerId": customer.id,
-        "sellerId": sellerId,
-        "orderItems": orderItems,
-      };
-      final jsonOrder = json.encode(orderData);
-      printLog(jsonOrder, name: 'Json Order');
-
-      //Convert Json to bytes
-      // var bytes = utf8.encode(jsonOrder);
-
-      // //Convert bytes to base64
-      // var order = base64.encode(bytes);
-
-      //Generate link WebView checkout
-      await Provider.of<OrderProvider>(context, listen: false)
-          .checkoutV2(jsonOrder)
-          .then((value) async {
-        printLog(value, name: 'Link Order');
-        snackBar(context, message: "Mua thành công!");
-        // await Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) => CheckoutWebView(
-        //               url: value,
-        //               onFinish: onFinishBuyNow,
-        //             )));
+      print("List Price length" + listPrice.length.toString());
+      await OrderAPI()
+          .addCartItem(customer, date, listPrice)
+          .then((data) async {
+        if (data != null) {
+          await OrderAPI().placeOrder(customer.id).then((data) {
+            // printLog(data, name: 'Link Order From API');
+            check = data;
+            print("Return data" + data.toString());
+            return check;
+          });
+          return check;
+        }
       });
     } else {
       Navigator.pop(context);
       snackBar(context,
           message: "Bạn cần đăng nhập trước khi thực hiện chức năng này!");
     }
+    return check;
   }
 
   Future buyNowCombo(context, Combo? product, List<int>? quantity, String date,
@@ -658,7 +608,7 @@ class OrderProvider with ChangeNotifier {
       listProductOrder.clear();
       detailOrder!.orderItems!.forEach((element) async {
         await Provider.of<ProductProvider>(context, listen: false)
-            .fetchProductDetail(element.priceId.toString())
+            .fetchProductDetailVoucher(element.voucherId.toString())
             .then((value) {
           listProductOrder.add(value);
         });
@@ -688,7 +638,7 @@ class OrderProvider with ChangeNotifier {
       });
     });
     for (int i = 0; i < listProductOrder.length; i++) {
-      await addCart(listProductOrder[i], context);
+      // await addCart(listProductOrder[i], context);
     }
     snackBar(context,
         message: AppLocalizations.of(context)!.translate('add_cart_message')!);

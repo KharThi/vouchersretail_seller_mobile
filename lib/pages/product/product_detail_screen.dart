@@ -116,7 +116,7 @@ class _ProductDetailState extends State<ProductDetail>
           .fetchProductDetail(widget.productId)
           .then((value) async {
         setState(() {
-          productModel = value;
+          // productModel = value;
           printLog(productModel.toString(), name: 'Product Model');
           productModel!.isSelected = false;
         });

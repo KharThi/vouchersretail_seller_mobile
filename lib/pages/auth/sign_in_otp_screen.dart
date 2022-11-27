@@ -53,7 +53,7 @@ class _SignInOTPScreenState extends State<SignInOTPScreen> {
       FirebaseAuth auth = FirebaseAuth.instance;
       FocusScopeNode currentFocus = FocusScope.of(context);
       var countryCode =
-      Provider.of<LoginProvider>(context, listen: false).countryCode!;
+          Provider.of<LoginProvider>(context, listen: false).countryCode!;
 
       if (!currentFocus.hasPrimaryFocus) {
         currentFocus.unfocus();
@@ -161,7 +161,8 @@ class _SignInOTPScreenState extends State<SignInOTPScreen> {
                           otpInvalid
                               ? AppLocalizations.of(context)!
                                   .translate('send_otp')!
-                              : AppLocalizations.of(context)!.translate('login')!,
+                              : AppLocalizations.of(context)!
+                                  .translate('login')!,
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: responsiveFont(12),

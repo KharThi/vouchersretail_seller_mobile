@@ -10,6 +10,8 @@ import 'package:nyoba/services/product_api.dart';
 import 'package:nyoba/services/review_api.dart';
 import 'package:nyoba/services/voucher_api.dart';
 import 'package:nyoba/utils/utility.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class ProductProvider with ChangeNotifier {
   bool loadingFeatured = false;
@@ -272,23 +274,21 @@ class ProductProvider with ChangeNotifier {
     return true;
   }
 
-  Future<ProductModel?> fetchProductDetail(String? productId) async {
-    loadingDetail = true;
-    await ProductAPI().fetchDetailProduct(productId).then((data) {
-      if (data.statusCode == 200) {
-        final responseJson = json.decode(data.body);
+  Future<Voucher?> fetchProductDetail(String? productId) async {
+    SharedPreferences data = await SharedPreferences.getInstance();
+    String? jwt = data.getString("jwt");
 
-        productDetail = ProductModel.fromJson(responseJson);
-
-        loadingDetail = false;
-        notifyListeners();
-      } else {
-        print("Load Failed");
-        loadingDetail = false;
-        notifyListeners();
-      }
-    });
-    return productDetail;
+    var response = await http.get(
+        Uri.parse(
+            "https://phuquocvoucher.azurewebsites.net/api/v1/vouchers?Id=" +
+                productId.toString()),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + jwt.toString()
+        });
+    print(response.body);
+    Map<String, dynamic> dataResponse = await json.decode(response.body);
+    return dataResponse["data"];
   }
 
   Future<Voucher?> fetchProductDetailVoucher(String? productId) async {

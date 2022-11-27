@@ -31,7 +31,8 @@ class FlashSaleContainer extends StatelessWidget {
   bool scrollListener(ScrollNotification scrollInfo) {
     if (scrollInfo.metrics.axis == Axis.horizontal) {
       colorAnimationController!.animateTo(scrollInfo.metrics.pixels / 150);
-      textAnimationController!.animateTo((scrollInfo.metrics.pixels - 350) / 50);
+      textAnimationController!
+          .animateTo((scrollInfo.metrics.pixels - 350) / 50);
       return true;
     } else {
       return false;
@@ -74,8 +75,9 @@ class FlashSaleContainer extends StatelessWidget {
                   decoration: BoxDecoration(
                       image: DecorationImage(
                           image: (customImage != null
-                              ? NetworkImage(customImage!)
-                              : AssetImage("images/lobby/laptop.png")) as ImageProvider<Object>)),
+                                  ? NetworkImage(customImage!)
+                                  : AssetImage("images/lobby/laptop.png"))
+                              as ImageProvider<Object>)),
                   child: Container(
                     width: double.infinity,
                     height: double.infinity,
@@ -102,9 +104,8 @@ class FlashSaleContainer extends StatelessWidget {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => ProductDetail(
-                                                  productId: _list[i]
-                                                      .id
-                                                      .toString(),
+                                                  productId:
+                                                      _list[i].id.toString(),
                                                 )));
                                   },
                                   child: Card(
@@ -121,29 +122,35 @@ class FlashSaleContainer extends StatelessWidget {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          AspectRatio(aspectRatio: 1/1, child: Container(
-                                            width: double.infinity,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.only(
-                                                  topRight: Radius.circular(5),
-                                                  topLeft: Radius.circular(5)),
-                                              color: Colors.transparent,
-                                            ),
-                                            child: CachedNetworkImage(
-                                              imageUrl:
-                                              _list[i].images![0].src!,
-                                              placeholder: (context, url) =>
-                                                  Container(
-                                                    height: 25,
-                                                  ),
-                                              errorWidget:
-                                                  (context, url, error) => Icon(
-                                                Icons
-                                                    .image_not_supported_rounded,
-                                                size: 25,
+                                          AspectRatio(
+                                            aspectRatio: 1 / 1,
+                                            child: Container(
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.only(
+                                                    topRight:
+                                                        Radius.circular(5),
+                                                    topLeft:
+                                                        Radius.circular(5)),
+                                                color: Colors.transparent,
+                                              ),
+                                              child: CachedNetworkImage(
+                                                imageUrl:
+                                                    _list[i].images![0].src!,
+                                                placeholder: (context, url) =>
+                                                    Container(
+                                                  height: 25,
+                                                ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Icon(
+                                                  Icons
+                                                      .image_not_supported_rounded,
+                                                  size: 25,
+                                                ),
                                               ),
                                             ),
-                                          ),),
+                                          ),
                                           Expanded(
                                               child: Container(
                                             margin: EdgeInsets.symmetric(
@@ -165,9 +172,8 @@ class FlashSaleContainer extends StatelessWidget {
                                                   ),
                                                 ),
                                                 Visibility(
-                                                  visible: _list[i]
-                                                          .discProduct !=
-                                                      0,
+                                                  visible:
+                                                      _list[i].discProduct != 0,
                                                   child: Flexible(
                                                     flex: 2,
                                                     child: Row(
@@ -202,10 +208,9 @@ class FlashSaleContainer extends StatelessWidget {
                                                         ),
                                                         Text(
                                                           stringToCurrency(
-                                                              double.parse(
-                                                                  _list[
-                                                                          i]
-                                                                      .productRegPrice),
+                                                              double.parse(_list[
+                                                                      i]
+                                                                  .productRegPrice),
                                                               context),
                                                           style: TextStyle(
                                                               fontSize:
@@ -226,67 +231,82 @@ class FlashSaleContainer extends StatelessWidget {
                                                 ),
                                                 _list[i].type == 'simple'
                                                     ? RichText(
-                                                  text: TextSpan(
-                                                    style: TextStyle(color: Colors.black),
-                                                    children: <TextSpan>[
-                                                      TextSpan(
-                                                          text: stringToCurrency(
-                                                              double.parse(
-                                                                  _list[i].productPrice),
-                                                              context),
+                                                        text: TextSpan(
                                                           style: TextStyle(
-                                                              fontWeight: FontWeight.w600,
-                                                              fontSize:
-                                                              responsiveFont(11),
-                                                              color: secondaryColor)),
-                                                    ],
-                                                  ),
-                                                )
+                                                              color:
+                                                                  Colors.black),
+                                                          children: <TextSpan>[
+                                                            TextSpan(
+                                                                text: stringToCurrency(
+                                                                    double.parse(
+                                                                        _list[i]
+                                                                            .productPrice),
+                                                                    context),
+                                                                style: TextStyle(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
+                                                                    fontSize:
+                                                                        responsiveFont(
+                                                                            11),
+                                                                    color:
+                                                                        secondaryColor)),
+                                                          ],
+                                                        ),
+                                                      )
                                                     : RichText(
-                                                  text: TextSpan(
-                                                    style: TextStyle(color: Colors.black),
-                                                    children: <TextSpan>[
-                                                      _list[i].variationPrices!.isEmpty
-                                                          ? TextSpan(
-                                                          text: '',
+                                                        text: TextSpan(
                                                           style: TextStyle(
-                                                              fontWeight:
-                                                              FontWeight.w600,
-                                                              fontSize:
-                                                              responsiveFont(11),
-                                                              color: secondaryColor))
-                                                          : TextSpan(
-                                                          text: _list[i]
-                                                              .variationPrices!
-                                                              .first ==
-                                                              _list[i]
-                                                                  .variationPrices!
-                                                                  .last
-                                                              ? '${stringToCurrency(_list[i].variationPrices!.first!, context)}'
-                                                              : '${stringToCurrency(_list[i].variationPrices!.first!, context)} - ${stringToCurrency(_list[i].variationPrices!.last!, context)}',
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                              FontWeight.w600,
-                                                              fontSize:
-                                                              responsiveFont(11),
-                                                              color: secondaryColor)),
-                                                    ],
-                                                  ),
-                                                ),
+                                                              color:
+                                                                  Colors.black),
+                                                          children: <TextSpan>[
+                                                            _list[i]
+                                                                    .variationPrices!
+                                                                    .isEmpty
+                                                                ? TextSpan(
+                                                                    text: '',
+                                                                    style: TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w600,
+                                                                        fontSize:
+                                                                            responsiveFont(
+                                                                                11),
+                                                                        color:
+                                                                            secondaryColor))
+                                                                : TextSpan(
+                                                                    text: _list[i].variationPrices!.first ==
+                                                                            _list[
+                                                                                    i]
+                                                                                .variationPrices!
+                                                                                .last
+                                                                        ? '${stringToCurrency(_list[i].variationPrices!.first!, context)}'
+                                                                        : '${stringToCurrency(_list[i].variationPrices!.first!, context)} - ${stringToCurrency(_list[i].variationPrices!.last!, context)}',
+                                                                    style: TextStyle(
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w600,
+                                                                        fontSize:
+                                                                            responsiveFont(
+                                                                                11),
+                                                                        color:
+                                                                            secondaryColor)),
+                                                          ],
+                                                        ),
+                                                      ),
                                                 Container(
                                                   height: 5,
                                                 ),
                                                 new LinearPercentIndicator(
                                                     padding: EdgeInsets.zero,
                                                     lineHeight: 5.0,
-                                                    percent: _list[i]
-                                                                    .productStock !=
-                                                                null &&
-                                                        _list[i]
-                                                                    .productStock !=
-                                                                0
-                                                        ? 1
-                                                        : 0,
+                                                    percent:
+                                                        _list[i].productStock !=
+                                                                    null &&
+                                                                _list[i].productStock !=
+                                                                    0
+                                                            ? 1
+                                                            : 0,
                                                     backgroundColor:
                                                         Colors.grey,
                                                     progressColor:
@@ -296,8 +316,7 @@ class FlashSaleContainer extends StatelessWidget {
                                                   child: Text(
                                                     _list[i].productStock !=
                                                                 null &&
-                                                        _list[i]
-                                                                    .productStock !=
+                                                            _list[i].productStock !=
                                                                 0
                                                         ? "Stock Available"
                                                         : "Stock Empty",

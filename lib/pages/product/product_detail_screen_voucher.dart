@@ -35,13 +35,16 @@ import '../../utils/utility.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:colorful_safe_area/colorful_safe_area.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../order/momo_payment.dart';
 import 'product_review_screen.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class ProductDetailVoucher extends StatefulWidget {
   final String? productId;
   final String? slug;
-  ProductDetailVoucher({Key? key, this.productId, this.slug}) : super(key: key);
+  final String? payUrl;
+  ProductDetailVoucher({Key? key, this.productId, this.slug, this.payUrl})
+      : super(key: key);
 
   @override
   _ProductDetailStateVoucher createState() => _ProductDetailStateVoucher();
@@ -759,11 +762,14 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
                           height: 30.h,
                           child: TextButton(
                             onPressed: () {
+                              final order = Provider.of<OrderProvider>(context,
+                                  listen: false);
                               //for testing
                               if (productModel!.inventory != -1) {
                                 showMaterialModalBottomSheet(
                                   context: context,
                                   builder: (context) => ModalSheetCartVoucher(
+                                    order: order,
                                     product: productModel,
                                     type: 'buy',
                                   ),
@@ -772,6 +778,14 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
                                       await SharedPreferences.getInstance();
                                   await prefrences
                                       .remove("list_customer_order");
+                                  Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => MoMoWebView(
+                                                    url: order.payUrl,
+                                                    orderId: "",
+                                                  )))
+                                      .then((value) => this.setState(() {}));
                                 });
                               } else {
                                 snackBar(context,

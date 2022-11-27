@@ -66,7 +66,7 @@ class ProductAPI {
 
     var response = await http.get(
         Uri.parse(
-            "https://phuquocvoucher.azurewebsites.net/api/v1/vouchers?ProductId=" +
+            "https://phuquocvoucher.azurewebsites.net/api/v1/vouchers?Id=" +
                 productId.toString()),
         headers: {
           "Content-Type": "application/json",

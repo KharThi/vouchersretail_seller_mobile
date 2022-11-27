@@ -218,24 +218,24 @@ class _LoginState extends State<Login> {
               Container(
                 height: 10,
               ),
-              InkWell(
-                onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ForgotPasswordScreen()))
-                    .then((value) => this.setState(() {})),
-                child: Container(
-                  alignment: Alignment.centerRight,
-                  width: double.infinity,
-                  child: Text(
-                    "Quên mật khẩu?",
-                    style: TextStyle(
-                      color: HexColor("FD490C"),
-                      fontSize: responsiveFont(10),
-                    ),
-                  ),
-                ),
-              ),
+              // InkWell(
+              //   onTap: () => Navigator.push(
+              //           context,
+              //           MaterialPageRoute(
+              //               builder: (context) => ForgotPasswordScreen()))
+              //       .then((value) => this.setState(() {})),
+              //   child: Container(
+              //     alignment: Alignment.centerRight,
+              //     width: double.infinity,
+              //     child: Text(
+              //       "Quên mật khẩu?",
+              //       style: TextStyle(
+              //         color: HexColor("FD490C"),
+              //         fontSize: responsiveFont(10),
+              //       ),
+              //     ),
+              //   ),
+              // ),
               Container(
                 height: 15,
               ),

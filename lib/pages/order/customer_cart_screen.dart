@@ -203,37 +203,36 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
 
   /*Checkout*/
   checkOut() async {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => MoMoWebView(
-                  url: "value",
-                ))).then((value) => this.setState(() {}));
-    // await Provider.of<OrderProvider>(context, listen: false)
-    //     .placeOrder(widget.customerId)
-    //     .then((value) {
-    //   this.setState(() {
-    //     if (value != "") {
-    //       snackBar(context, message: "Tạo đơn hàng thành công!");
-    //       Navigator.push(
-    //           context,
-    //           MaterialPageRoute(
-    //               builder: (context) => MoMoWebView(
-    //                     url: "value",
-    //                   ))).then((value) => this.setState(() {}));
-    //       // Navigator.pushAndRemoveUntil(
-    //       //   context,
-    //       //   MaterialPageRoute(
-    //       //       builder: (context) =>
-    //       //           CustomerCartScreen(customerId: widget.customerId)),
-    //       //   (Route<dynamic> route) => false,
-    //       // ); // pop current page
+    if (updateCart) {
+      snackBar(context, message: "Vui lòng bấm Cập nhật trước khi thanh toán!");
+    } else {
+      await Provider.of<OrderProvider>(context, listen: false)
+          .placeOrder(widget.customerId)
+          .then((value) {
+        this.setState(() {
+          if (value != null) {
+            snackBar(context, message: "Tạo đơn hàng thành công!");
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MoMoWebView(
+                          url: value[1],
+                          orderId: value[0],
+                        ))).then((value) => this.setState(() {}));
+            // Navigator.pushAndRemoveUntil(
+            //   context,
+            //   MaterialPageRoute(
+            //       builder: (context) =>
+            //           CustomerCartScreen(customerId: widget.customerId)),
+            //   (Route<dynamic> route) => false,
+            // ); // pop current page
 
-    //     } else {
-    //       snackBar(context, message: "Tạo đơn hàng thất bại!");
-    //     }
-    //   });
-    // });
+          } else {
+            snackBar(context, message: "Tạo đơn hàng thất bại!");
+          }
+        });
+      });
+    }
   }
 
   update() async {
@@ -437,24 +436,24 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
             //     ),
             //   ),
             // ),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-              ),
-              alignment: Alignment.center,
-              margin: EdgeInsets.symmetric(horizontal: 10),
-              height: 80.h,
-              width: 80.w,
-              child: CachedNetworkImage(
-                imageUrl:
-                    "https://jobsgo.vn/blog/wp-content/uploads/2021/11/du-lich-la-gi-1.jpg",
-                placeholder: (context, url) => customLoading(),
-                errorWidget: (context, url, error) => Icon(
-                  Icons.image_not_supported_rounded,
-                  size: 25,
-                ),
-              ),
-            ),
+            // Container(
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(5),
+            //   ),
+            //   alignment: Alignment.center,
+            //   margin: EdgeInsets.symmetric(horizontal: 10),
+            //   height: 80.h,
+            //   width: 80.w,
+            //   child: CachedNetworkImage(
+            //     imageUrl:
+            //         "https://jobsgo.vn/blog/wp-content/uploads/2021/11/du-lich-la-gi-1.jpg",
+            //     placeholder: (context, url) => customLoading(),
+            //     errorWidget: (context, url, error) => Icon(
+            //       Icons.image_not_supported_rounded,
+            //       size: 25,
+            //     ),
+            //   ),
+            // ),
             Expanded(
               flex: 7,
               child: Container(
@@ -468,7 +467,7 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                       cart!.cartItems![index].voucher!.voucherName.toString(),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: responsiveFont(9)),
+                      style: TextStyle(fontSize: responsiveFont(14.5)),
                     ),
                     // Visibility(
                     //     visible: productCart[index].variantId != null,
@@ -535,7 +534,7 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                             // stringToCurrency(
                             //     double.parse(cart!.cartItems![index].price),
                             //     context),
-                            cart!.cartItems![index].price.toString() + " Vnd",
+                            (cart!.cartItems![index].price).toString() + " Vnd",
                             style: TextStyle(
                                 fontSize: responsiveFont(10),
                                 color: secondaryColor,

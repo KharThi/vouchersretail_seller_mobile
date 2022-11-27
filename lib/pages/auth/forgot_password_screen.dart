@@ -65,7 +65,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               child: value.loading
                   ? customLoading()
                   : Text(
-                      AppLocalizations.of(context)!.translate('reset_password')!,
+                      AppLocalizations.of(context)!
+                          .translate('reset_password')!,
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: responsiveFont(12),
@@ -129,8 +130,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         ));
   }
 
-  Widget form(
-      String? hints, String? label, bool prefix, TextEditingController controller,
+  Widget form(String? hints, String? label, bool prefix,
+      TextEditingController controller,
       {String icon = "email"}) {
     return Container(
       height: MediaQuery.of(context).size.height / 12,

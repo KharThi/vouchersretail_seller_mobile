@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nyoba/models/order.dart';
+import 'package:nyoba/models/product_model.dart';
 import 'package:nyoba/provider/home_provider.dart';
 import 'package:nyoba/provider/order_provider.dart';
 import 'package:nyoba/services/session.dart';
@@ -12,6 +14,8 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../app_localizations.dart';
+import '../../provider/login_provider.dart';
+import '../../provider/product_provider.dart';
 
 class OrderDetail extends StatefulWidget {
   final String? orderId;
@@ -21,7 +25,8 @@ class OrderDetail extends StatefulWidget {
   _OrderDetailState createState() => _OrderDetailState();
 }
 
-class _OrderDetailState extends State<OrderDetail> {
+class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
+  String status = "";
   _launchWAURL(String? phoneNumber) async {
     String url = 'https://api.whatsapp.com/send?phone=$phoneNumber&text=Hi';
     if (await canLaunchUrlString(url)) {
@@ -31,23 +36,63 @@ class _OrderDetailState extends State<OrderDetail> {
     }
   }
 
+  List<Voucher> listOrderItem = List.empty(growable: true);
+  Order? orderDetail;
+  bool isLoading = true;
+
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
     loadOrder();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    this.setState(() {
+      loadOrder();
+    });
   }
 
   loadOrder() async {
     await Provider.of<OrderProvider>(context, listen: false)
         .fetchDetailOrder(widget.orderId)
-        .then((value) => loadOrderedItems());
+        .then((value) => {orderDetail = value, loadOrderedItems()});
   }
 
   loadOrderedItems() async {
-    await Provider.of<OrderProvider>(context, listen: false)
-        .loadItemOrder(context);
-    Session.data.remove('order_number');
-    this.setState(() {});
+    // await Provider.of<OrderProvider>(context, listen: false)
+    //     .loadItemOrder(context);
+    // Session.data.remove('order_number');
+    Future.delayed(new Duration(seconds: 3));
+    if (orderDetail!.orderStatus == "Processing") {
+      status = "Đang thực hiện";
+    }
+    if (orderDetail!.orderStatus == "Cofirm") {
+      status = "Xác nhận";
+    }
+    if (orderDetail!.orderStatus == "Failed") {
+      status = "Thất bại";
+    }
+    if (orderDetail!.orderStatus == "Completed") {
+      status = "Hoàn thành";
+    }
+    if (orderDetail!.orderStatus == "Canceled") {
+      status = "Đã hủy";
+    }
+    if (orderDetail!.orderStatus == "Used") {
+      status = "Đã sử dụng";
+    }
+    for (var element in orderDetail!.orderItems!) {
+      await Provider.of<ProductProvider>(context, listen: false)
+          .fetchProductDetailVoucher(element.voucherId.toString())
+          .then((value) {
+        listOrderItem.add(value!);
+      });
+    }
+    this.setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -80,13 +125,13 @@ class _OrderDetailState extends State<OrderDetail> {
                         Row(
                           children: [
                             Text(
-                              'Order ID : ',
+                              'ID của đơn hàng : ',
                               style: TextStyle(
                                   fontSize: responsiveFont(12),
                                   fontWeight: FontWeight.w500),
                             ),
                             Text(
-                              "OrderId",
+                              orderDetail!.id.toString(),
                               style: TextStyle(
                                   fontSize: responsiveFont(12),
                                   fontWeight: FontWeight.w500,
@@ -120,13 +165,12 @@ class _OrderDetailState extends State<OrderDetail> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                AppLocalizations.of(context)!
-                                    .translate('shipping_information')!,
+                                "Trạng thái đơn hàng",
                                 style: TextStyle(
                                     fontSize: responsiveFont(12),
                                     fontWeight: FontWeight.w500),
                               ),
-                              // order.detailOrder!.paymentDetail!.isEmpty
+                              // orderDetail!.paymentDetail!.isEmpty
                               //     ? Text(
                               //         "-",
                               //         style: TextStyle(
@@ -134,7 +178,7 @@ class _OrderDetailState extends State<OrderDetail> {
                               //       )
                               //     :
                               Text(
-                                "${order.detailOrder!.paymentDetail!.amount} - ",
+                                status.toString(),
                                 style: TextStyle(fontSize: responsiveFont(10)),
                               )
                             ],
@@ -166,24 +210,23 @@ class _OrderDetailState extends State<OrderDetail> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                AppLocalizations.of(context)!
-                                    .translate('shipping_address')!,
+                                "Thông tin chủ sở hữa",
                                 style: TextStyle(
                                     fontSize: responsiveFont(12),
                                     fontWeight: FontWeight.w500),
                               ),
                               Text(
-                                "Billing name",
+                                "Tên khách hàng: " +
+                                    orderDetail!.customer!.userInfo!.userName
+                                        .toString(),
                                 style: TextStyle(fontSize: responsiveFont(11)),
                               ),
                               Text(
-                                "Phone",
+                                "Số điện thoại: " +
+                                    orderDetail!.customer!.userInfo!.phoneNumber
+                                        .toString(),
                                 style: TextStyle(fontSize: responsiveFont(11)),
                               ),
-                              Text(
-                                "Address",
-                                style: TextStyle(fontSize: responsiveFont(11)),
-                              )
                             ],
                           ),
                         )
@@ -196,76 +239,84 @@ class _OrderDetailState extends State<OrderDetail> {
                     height: 2,
                     width: double.infinity,
                   ),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 15),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                            width: 30.w,
-                            height: 30.h,
-                            child: Icon(Icons.credit_card_outlined)),
-                        Container(
-                          width: 10,
-                        ),
-                        Expanded(
-                          child: Column(
+                  orderDetail!.paymentDetail != null
+                      ? Container(
+                          margin: EdgeInsets.symmetric(horizontal: 15),
+                          child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)!
-                                        .translate('payment_info')!,
-                                    style: TextStyle(
-                                        fontSize: responsiveFont(12),
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                  buildBtnPay()
-                                ],
+                              Container(
+                                  width: 30.w,
+                                  height: 30.h,
+                                  child: Icon(Icons.credit_card_outlined)),
+                              Container(
+                                width: 10,
                               ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                AppLocalizations.of(context)!
-                                    .translate('payment_method')!,
-                                style: TextStyle(
-                                    fontSize: responsiveFont(10),
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              Text(
-                                "Payment method",
-                                style: TextStyle(
-                                    fontSize: responsiveFont(12),
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                AppLocalizations.of(context)!
-                                    .translate('payment_description')!,
-                                style: TextStyle(
-                                    fontSize: responsiveFont(10),
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              Text(
-                                "Description",
-                                style: TextStyle(
-                                    fontSize: responsiveFont(12),
-                                    fontWeight: FontWeight.w400),
-                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Thông tin thanh toán",
+                                          style: TextStyle(
+                                              fontSize: responsiveFont(12),
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                        buildBtnPay()
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      "Ngày thanh toán",
+                                      style: TextStyle(
+                                          fontSize: responsiveFont(10),
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    Text(
+                                      orderDetail!.paymentDetail!.paymentDate !=
+                                              null
+                                          ? orderDetail!
+                                              .paymentDetail!.paymentDate
+                                              .toString()
+                                          : "Chưa được thanh toán",
+                                      style: TextStyle(
+                                          fontSize: responsiveFont(12),
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      "Nội dung thanhh toán",
+                                      style: TextStyle(
+                                          fontSize: responsiveFont(10),
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    Text(
+                                      orderDetail!.paymentDetail!.content !=
+                                              null
+                                          ? orderDetail!.paymentDetail!.content
+                                              .toString()
+                                          : "Không có nội dung thanh toán",
+                                      style: TextStyle(
+                                          fontSize: responsiveFont(12),
+                                          fontWeight: FontWeight.w400),
+                                    ),
+                                  ],
+                                ),
+                              )
                             ],
                           ),
                         )
-                      ],
-                    ),
-                  ),
+                      : Container(),
                   // Visibility(
-                  //   visible: order.detailOrder!.customerNote!.isNotEmpty,
+                  //   visible: orderDetail!.customerNote!.isNotEmpty,
                   //   child: Column(
                   //     children: [
                   //       Container(
@@ -324,9 +375,9 @@ class _OrderDetailState extends State<OrderDetail> {
                   ListView.builder(
                       shrinkWrap: true,
                       physics: ScrollPhysics(),
-                      itemCount: order.detailOrder!.orderItems!.length,
+                      itemCount: listOrderItem.length,
                       itemBuilder: (context, i) {
-                        return item(order.detailOrder!.orderItems![i]);
+                        return itemList(listOrderItem[i], i);
                       }),
                   Container(
                     height: 5,
@@ -348,28 +399,28 @@ class _OrderDetailState extends State<OrderDetail> {
                             // ),
                             // Text(
                             //   stringToCurrency(
-                            //       order.detailOrder!.subTotal!, context),
+                            //       orderDetail!.subTotal!, context),
                             //   style: TextStyle(fontSize: responsiveFont(11)),
                             // )
                           ],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                                AppLocalizations.of(context)!
-                                    .translate('shipping_cost')!,
-                                style: TextStyle(
-                                    fontSize: responsiveFont(11),
-                                    color: Colors.grey[600],
-                                    fontWeight: FontWeight.w500)),
-                            Text(
-                                stringToCurrency(double.parse("1009"), context),
-                                style: TextStyle(fontSize: responsiveFont(11))),
-                          ],
-                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        //     Text(
+                        //         AppLocalizations.of(context)!
+                        //             .translate('shipping_cost')!,
+                        //         style: TextStyle(
+                        //             fontSize: responsiveFont(11),
+                        //             color: Colors.grey[600],
+                        //             fontWeight: FontWeight.w500)),
+                        //     Text(
+                        //         stringToCurrency(double.parse("1009"), context),
+                        //         style: TextStyle(fontSize: responsiveFont(11))),
+                        //   ],
+                        // ),
                         // Visibility(
-                        //   visible: order.detailOrder!.paymentDetail != "0.0",
+                        //   visible: orderDetail!.paymentDetail != "0.0",
                         //   child: Row(
                         //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         //     children: [
@@ -381,7 +432,7 @@ class _OrderDetailState extends State<OrderDetail> {
                         //               color: Colors.grey[600],
                         //               fontWeight: FontWeight.w500)),
                         //       Text(
-                        //           "-${stringToCurrency(double.parse(order.detailOrder!.discountTotal!), context)}",
+                        //           "-${stringToCurrency(double.parse(orderDetail!.discountTotal!), context)}",
                         //           style: TextStyle(
                         //               fontSize: responsiveFont(11),
                         //               color: primaryColor)),
@@ -397,27 +448,23 @@ class _OrderDetailState extends State<OrderDetail> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                                AppLocalizations.of(context)!
-                                    .translate('total_order')!,
+                            Text("Tổng tiền",
                                 style: TextStyle(
                                     fontSize: responsiveFont(12),
                                     fontWeight: FontWeight.w600)),
-                            // order.detailOrder!.discountTotal != "0"
-                            //     ? Text(
-                            //         order.detailOrder!.totalPrice.toString(),
-                            //         style: TextStyle(
-                            //           fontSize: responsiveFont(12),
-                            //           fontWeight: FontWeight.w600,
-                            //         ))
-                            //     : Text(
-                            //         stringToCurrency(
-                            //             double.parse(order.detailOrder!.total!),
-                            //             context),
-                            //         style: TextStyle(
-                            //           fontSize: responsiveFont(12),
-                            //           fontWeight: FontWeight.w600,
-                            //         )),
+                            orderDetail!.totalPrice != "0" ||
+                                    orderDetail!.totalPrice != null
+                                ? Text(
+                                    orderDetail!.totalPrice.toString() + " Vnd",
+                                    style: TextStyle(
+                                      fontSize: responsiveFont(12),
+                                      fontWeight: FontWeight.w600,
+                                    ))
+                                : Text("0",
+                                    style: TextStyle(
+                                      fontSize: responsiveFont(12),
+                                      fontWeight: FontWeight.w600,
+                                    )),
                           ],
                         )
                       ],
@@ -444,7 +491,7 @@ class _OrderDetailState extends State<OrderDetail> {
                   child: Row(
                     children: [
                       //buy again
-                      buildBtnBuyAgain(),
+                      // buildBtnBuyAgain(),
                       Container(
                         width: 10,
                       ),
@@ -462,23 +509,30 @@ class _OrderDetailState extends State<OrderDetail> {
                                   shape: new RoundedRectangleBorder(
                                       borderRadius:
                                           new BorderRadius.circular(5))),
-                              onPressed: () {
-                                _launchWAURL(contact.wa.description);
+                              onPressed: () async {
+                                await Provider.of<OrderProvider>(context,
+                                        listen: false)
+                                    .sendEmailToCustomer(orderDetail!.id!)
+                                    .then((value) => this.setState(() {
+                                          if (value) {
+                                            snackBar(context,
+                                                message:
+                                                    'Gửi cho khách hàng thành công!');
+                                          } else {
+                                            snackBar(context,
+                                                message:
+                                                    'Gửi cho khách hàng thất bại!');
+                                          }
+                                        }));
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Image.asset(
-                                    "images/order/wa.png",
-                                    width: 20.w,
-                                    height: 20.h,
-                                  ),
                                   Text(
-                                    AppLocalizations.of(context)!
-                                        .translate('contact_seller')!,
+                                    "Gửi mail cho khách hàng",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                        fontSize: responsiveFont(9),
+                                        fontSize: responsiveFont(8),
                                         color: secondaryColor),
                                   )
                                 ],
@@ -506,17 +560,17 @@ class _OrderDetailState extends State<OrderDetail> {
             ),
           ),
           title: Text(
-            "Order Detail",
+            "Chi tiết đơn hàng",
             style: TextStyle(
                 color: Colors.black,
                 fontSize: responsiveFont(16),
                 fontWeight: FontWeight.w500),
           ),
         ),
-        body: buildOrder);
+        body: isLoading ? customLoading() : buildOrder);
   }
 
-  Widget item(OrderItem productItems) {
+  Widget item(Voucher productItems) {
     return Container(
       height: 80.h,
       margin: EdgeInsets.only(left: 15),
@@ -525,22 +579,23 @@ class _OrderDetailState extends State<OrderDetail> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Container(
-              //   width: 55.h,
-              //   height: 55.h,
-              //   decoration: BoxDecoration(
-              //       borderRadius: BorderRadius.circular(5),
-              //       color: HexColor("c4c4c4")),
-              //   child: productItems.image == null && productItems.image == ''
-              //       ? Icon(
-              //           Icons.image_not_supported_outlined,
-              //         )
-              //       : CachedNetworkImage(
-              //           imageUrl: productItems.image!,
-              //           placeholder: (context, url) => Container(),
-              //           errorWidget: (context, url, error) =>
-              //               Icon(Icons.image_not_supported_outlined)),
-              // ),
+              Container(
+                width: 55.h,
+                height: 55.h,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: HexColor("c4c4c4")),
+                child: productItems.bannerImg == null &&
+                        productItems.bannerImg == ''
+                    ? Icon(
+                        Icons.image_not_supported_outlined,
+                      )
+                    : CachedNetworkImage(
+                        imageUrl: productItems.bannerImg!,
+                        placeholder: (context, url) => Container(),
+                        errorWidget: (context, url, error) =>
+                            Icon(Icons.image_not_supported_outlined)),
+              ),
               SizedBox(
                 width: 15,
               ),
@@ -619,7 +674,7 @@ class _OrderDetailState extends State<OrderDetail> {
                 order.actionBuyAgain(context);
               },
               child: Text(
-                AppLocalizations.of(context)!.translate('buy_again')!,
+                "Mua lại",
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: responsiveFont(10),
@@ -640,8 +695,8 @@ class _OrderDetailState extends State<OrderDetail> {
     }
     return Visibility(
       visible: true,
-      child: order.detailOrder!.orderStatus == 'pending' ||
-              order.detailOrder!.orderStatus == 'on-hold'
+      child: orderDetail!.orderStatus == 'pending' ||
+              orderDetail!.orderStatus == 'on-hold'
           ? Container(
               margin: EdgeInsets.only(right: 15),
               decoration: BoxDecoration(
@@ -654,12 +709,12 @@ class _OrderDetailState extends State<OrderDetail> {
               width: 50.w,
               child: TextButton(
                 onPressed: () async {
-                  // print(order.detailOrder!.paymentUrl);
+                  // print(orderDetail!.paymentUrl);
                   // await Navigator.push(
                   //     context,
                   //     MaterialPageRoute(
                   //         builder: (context) => CheckoutWebView(
-                  //               url: order.detailOrder!.paymentUrl,
+                  //               url: orderDetail!.paymentUrl,
                   //               fromOrder: true,
                   //             ))).then((value) {
                   //   this.setState(() {});
@@ -674,6 +729,287 @@ class _OrderDetailState extends State<OrderDetail> {
               ),
             )
           : Container(),
+    );
+  }
+
+  Widget itemList(Voucher voucher, int index) {
+    String? price;
+    String? priceName;
+    for (var element in voucher.prices!) {
+      if (orderDetail!.orderItems![index].priceId == element.id) {
+        price = element.price.toString();
+        if (element.priceLevelName == "AdultCustomer") {
+          priceName = "Người lớn";
+        } else if (element.priceLevelName == "ChildrenCustomer") {
+          priceName = "Trẻ em";
+        } else {
+          priceName = element.priceLevelName;
+        }
+      }
+    }
+    return Material(
+      elevation: 5,
+      child: Container(
+        height: MediaQuery.of(context).size.height / 6,
+        color: Colors.white,
+        padding: EdgeInsets.all(15),
+        alignment: Alignment.topLeft,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Expanded(
+            //   child: Container(
+            //     height: double.infinity,
+            //     alignment: Alignment.center,
+            //     child: InkWell(
+            //       onTap: () {
+            //         setState(() {
+            //           test = !test;
+            //           cart!.cartItems![index].isSelected =
+            //               !cart!.cartItems![index].isSelected!;
+            //         });
+            //         calculateTotal(index);
+            //       },
+            //       child: AnimatedContainer(
+            //         duration: Duration(milliseconds: 300),
+            //         decoration: BoxDecoration(
+            //             border: Border.all(color: Colors.grey),
+            //             shape: BoxShape.circle,
+            //             color: cart!.cartItems![index].isSelected!
+            //                 ? primaryColor
+            //                 : Colors.white),
+            //         child: Padding(
+            //             padding: const EdgeInsets.all(3),
+            //             child: Icon(
+            //               Icons.check,
+            //               color: Colors.white,
+            //               size: 20,
+            //             )),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              alignment: Alignment.center,
+              margin: EdgeInsets.symmetric(horizontal: 10),
+              height: 80.h,
+              width: 80.w,
+              child: CachedNetworkImage(
+                imageUrl: voucher.bannerImg.toString(),
+                placeholder: (context, url) => customLoading(),
+                errorWidget: (context, url, error) => Icon(
+                  Icons.image_not_supported_rounded,
+                  size: 25,
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 7,
+              child: Container(
+                height: double.infinity,
+                alignment: Alignment.center,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: ListTile(
+                        title: Text(
+                          voucher.voucherName.toString(),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: responsiveFont(14.5)),
+                        ),
+                        subtitle: Text(priceName.toString()),
+                      ),
+                    ),
+                    // Visibility(
+                    //     visible: productCart[index].variantId != null,
+                    //     child: Row(
+                    //       children: [
+                    //         Wrap(
+                    //           children: [
+                    //             // for (var i = 0;
+                    //             //     i < productCart[index].attributes!.length;
+                    //             //     i++)
+                    //             //   Text(
+                    //             //       i == 0
+                    //             //           ? '${productCart[index].attributes![i].selectedVariant}'
+                    //             //           : ', ${productCart[index].attributes![i].selectedVariant}',
+                    //             //       style: TextStyle(
+                    //             //           fontSize: responsiveFont(9),
+                    //             //           fontStyle: FontStyle.italic)),
+                    //           ],
+                    //         ),
+                    //       ],
+                    //     )),
+                    // Visibility(
+                    //   visible: productCart[index].discProduct != 0,
+                    //   child: Container(
+                    //     margin: EdgeInsets.symmetric(vertical: 5),
+                    //     child: Row(
+                    //       children: [
+                    //         Container(
+                    //           decoration: BoxDecoration(
+                    //             borderRadius: BorderRadius.circular(5),
+                    //             color: secondaryColor,
+                    //           ),
+                    //           padding: EdgeInsets.symmetric(
+                    //               vertical: 3, horizontal: 7),
+                    //           child: Text(
+                    //             "${productCart[index].discProduct!.round()}%",
+                    //             style: TextStyle(
+                    //                 color: Colors.white,
+                    //                 fontSize: responsiveFont(9)),
+                    //           ),
+                    //         ),
+                    //         Container(
+                    //           width: 5,
+                    //         ),
+                    //         Text(
+                    //           stringToCurrency(
+                    //               double.parse(
+                    //                   productCart[index].productRegPrice),
+                    //               context),
+                    //           style: TextStyle(
+                    //               color: HexColor("C4C4C4"),
+                    //               decoration: TextDecoration.lineThrough,
+                    //               fontSize: responsiveFont(8)),
+                    //         )
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                    Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Spacer(),
+                          Text(
+                            // stringToCurrency(
+                            //     double.parse(cart!.cartItems![index].price),
+                            //     context),
+                            price.toString() + " Vnd",
+                            style: TextStyle(
+                                fontSize: responsiveFont(10),
+                                color: secondaryColor,
+                                fontWeight: FontWeight.w600),
+                          ),
+                          Row(
+                            children: [
+                              // InkWell(
+                              //   onTap: () {
+                              //     confirmDeletePopDialog(
+                              //         cart!.cartItems![index].id!);
+                              //   },
+                              //   child: Container(
+                              //       width: 16.w,
+                              //       height: 16.h,
+                              //       child:
+                              //           Image.asset("images/cart/trash.png")),
+                              // ),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              // Container(
+                              //   width: 16.w,
+                              //   height: 16.h,
+                              //   child: InkWell(
+                              //     onTap: () {
+                              //       if (cart!.cartItems![index].quantity! > 1) {
+                              //         setState(() {
+                              //           cart!.cartItems![index].quantity =
+                              //               cart!.cartItems![index].quantity! -
+                              //                   1;
+                              //           if (cart!.cartItems![index].quantity ==
+                              //               cart!.cartItems![index]
+                              //                   .oldQuantity) {
+                              //             cart!.cartItems![index].isChange =
+                              //                 false;
+                              //           } else {
+                              //             cart!.cartItems![index].isChange =
+                              //                 true;
+                              //           }
+                              //           updateCart = cart!.cartItems!.any(
+                              //               (value) => value.isChange == true);
+                              //         });
+                              //         decreaseQuantity(index);
+                              //       }
+                              //     },
+                              //     child: cart!.cartItems![index].quantity! > 1
+                              //         ? Image.asset("images/cart/minusDark.png")
+                              //         : Image.asset("images/cart/minus.png"),
+                              //   ),
+                              // ),
+                              // SizedBox(
+                              //   width: 10,
+                              // ),
+                              Text("x" + "1"),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              // Container(
+                              //   width: 16.w,
+                              //   height: 16.h,
+                              //   child: InkWell(
+                              //       onTap: cart!.cartItems![index].voucher!
+                              //                       .inventory !=
+                              //                   null &&
+                              //               cart!.cartItems![index].voucher!
+                              //                       .inventory! <=
+                              //                   cart!
+                              //                       .cartItems![index].quantity!
+                              //           ? null
+                              //           : () {
+                              //               setState(() {
+                              //                 cart!.cartItems![index].quantity =
+                              //                     cart!.cartItems![index]
+                              //                             .quantity! +
+                              //                         1;
+                              //                 if (cart!.cartItems![index]
+                              //                         .quantity ==
+                              //                     cart!.cartItems![index]
+                              //                         .oldQuantity) {
+                              //                   cart!.cartItems![index]
+                              //                       .isChange = false;
+                              //                 } else {
+                              //                   cart!.cartItems![index]
+                              //                       .isChange = true;
+                              //                 }
+                              //                 updateCart = cart!.cartItems!.any(
+                              //                     (value) =>
+                              //                         value.isChange == true);
+                              //               });
+                              //               increaseQuantity(index);
+                              //             },
+                              //       child: cart!.cartItems![index].voucher!
+                              //                       .inventory !=
+                              //                   null &&
+                              //               cart!.cartItems![index].voucher!
+                              //                       .inventory! >
+                              //                   cart!
+                              //                       .cartItems![index].quantity!
+                              //           ? Image.asset("images/cart/plus.png")
+                              //           : Image.asset(
+                              //               "images/cart/plusDark.png")),
+                              // )
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }

@@ -122,8 +122,8 @@ class GridItemCategory extends StatelessWidget {
                                                       product!.productRegPrice),
                                                   context),
                                               style: TextStyle(
-                                                  decoration:
-                                                  TextDecoration.lineThrough,
+                                                  decoration: TextDecoration
+                                                      .lineThrough,
                                                   fontSize: responsiveFont(9),
                                                   color: HexColor("C4C4C4"))),
                                         ],
@@ -134,48 +134,52 @@ class GridItemCategory extends StatelessWidget {
                               ),
                               product!.type == 'simple'
                                   ? RichText(
-                                text: TextSpan(
-                                  style: TextStyle(color: Colors.black),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: stringToCurrency(
-                                            double.parse(
-                                                product!.productPrice),
-                                            context),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: responsiveFont(11),
-                                            color: secondaryColor)),
-                                  ],
-                                ),
-                              )
+                                      text: TextSpan(
+                                        style: TextStyle(color: Colors.black),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                              text: stringToCurrency(
+                                                  double.parse(
+                                                      product!.productPrice),
+                                                  context),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: responsiveFont(11),
+                                                  color: secondaryColor)),
+                                        ],
+                                      ),
+                                    )
                                   : RichText(
-                                text: TextSpan(
-                                  style: TextStyle(color: Colors.black),
-                                  children: <TextSpan>[
-                                    product!.variationPrices!.isEmpty
-                                        ? TextSpan(
-                                        text: '',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize:
-                                            responsiveFont(11),
-                                            color: secondaryColor))
-                                        : TextSpan(
-                                        text: product!.variationPrices!
-                                            .first ==
-                                            product!.variationPrices!
-                                                .last
-                                            ? '${stringToCurrency(product!.variationPrices!.first!, context)}'
-                                            : '${stringToCurrency(product!.variationPrices!.first!, context)} - ${stringToCurrency(product!.variationPrices!.last!, context)}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize:
-                                            responsiveFont(11),
-                                            color: secondaryColor)),
-                                  ],
-                                ),
-                              ),
+                                      text: TextSpan(
+                                        style: TextStyle(color: Colors.black),
+                                        children: <TextSpan>[
+                                          product!.variationPrices!.isEmpty
+                                              ? TextSpan(
+                                                  text: '',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize:
+                                                          responsiveFont(11),
+                                                      color: secondaryColor))
+                                              : TextSpan(
+                                                  text: product!
+                                                              .variationPrices!
+                                                              .first ==
+                                                          product!
+                                                              .variationPrices!
+                                                              .last
+                                                      ? '${stringToCurrency(product!.variationPrices!.first!, context)}'
+                                                      : '${stringToCurrency(product!.variationPrices!.first!, context)} - ${stringToCurrency(product!.variationPrices!.last!, context)}',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize:
+                                                          responsiveFont(11),
+                                                      color: secondaryColor)),
+                                        ],
+                                      ),
+                                    ),
                             ],
                           ),
                         ),

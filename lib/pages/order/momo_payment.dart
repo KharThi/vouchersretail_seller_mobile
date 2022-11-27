@@ -4,6 +4,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_webview_plugin/flutter_webview_plugin.dart';
+import 'package:nyoba/pages/home/home_screen.dart';
+import 'package:nyoba/pages/home/lobby_screen.dart';
+import 'package:nyoba/pages/order/order_detail_screen.dart';
 // import 'package:flutterappmomo/main.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -23,9 +26,11 @@ final Set<JavascriptChannel> jsChannels = [
 ].toSet();
 
 class MoMoWebView extends StatefulWidget {
-  const MoMoWebView({Key? key, required this.url}) : super(key: key);
+  const MoMoWebView({Key? key, required this.url, required this.orderId})
+      : super(key: key);
 
   final String? url;
+  final String orderId;
   static bool status = false;
 
   @override
@@ -82,12 +87,19 @@ class _MoMoWebView extends State<MoMoWebView> {
     _onUrlChanged = flutterWebViewPlugin.onUrlChanged.listen((String url) {
       if (mounted) {
         setState(() {
-          if (url.contains("momo://?action=")) {
+          if (url.contains("momo")) {
             // MyAppState().setStatus("ok");
             launchUrlString(url, mode: LaunchMode.externalApplication);
             // MyApp().paymentStatus = "ok";
             flutterWebViewPlugin.close();
-            Navigator.pop(context);
+            Navigator.of(context).popUntil((route) => route.isFirst);
+            // Navigator.pop(context);
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //         builder: (context) => LobbyScreen(
+            //             // orderId: widget.orderId.toString(),
+            //             )));
           }
           if (url.contains("phuquoc")) {
             // MyAppState().setStatus("false");

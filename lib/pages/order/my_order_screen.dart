@@ -27,6 +27,7 @@ class _MyOrderState extends State<MyOrder> {
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   List<Order> orders = List.empty(growable: true);
+  bool isLoading = true;
 
   final ScrollController _scrollController = ScrollController();
 
@@ -49,6 +50,7 @@ class _MyOrderState extends State<MyOrder> {
   }
 
   loadListOrder() {
+    // isLoading = true;
     this.setState(() {});
     if (Session.data.getBool('isLogin')!) {
       // if (isNumeric(search)) {
@@ -62,6 +64,7 @@ class _MyOrderState extends State<MyOrder> {
           .fetchOrdersV2(context, currentStatus)
           .then((value) => this.setState(() {
                 orders = value;
+                isLoading = false;
                 // for (var element in orders) {
                 //   print(element.id);
                 // }
@@ -124,64 +127,66 @@ class _MyOrderState extends State<MyOrder> {
           style: TextStyle(color: Colors.black, fontSize: responsiveFont(16)),
         ),
       ),
-      body: !Session.data.getBool('isLogin')!
-          ? Center(
-              child: buildNoAuth(context),
-            )
-          : Container(
-              margin: EdgeInsets.all(15),
-              child: Column(
-                children: [
-                  // Container(
-                  //   height: 30.h,
-                  //   child: TextField(
-                  //     controller: searchController,
-                  //     style: TextStyle(fontSize: 14),
-                  //     textAlignVertical: TextAlignVertical.center,
-                  //     onSubmitted: (value) {
-                  //       setState(() {});
-                  //       context.read<OrderProvider>().resetPage();
-                  //       loadListOrder();
-                  //     },
-                  //     onChanged: (value) {
-                  //       setState(() {
-                  //         search = value;
-                  //       });
-                  //     },
-                  //     textInputAction: TextInputAction.search,
-                  //     decoration: InputDecoration(
-                  //       isDense: true,
-                  //       isCollapsed: true,
-                  //       filled: true,
-                  //       border: new OutlineInputBorder(
-                  //         borderRadius: const BorderRadius.all(
-                  //           const Radius.circular(5),
-                  //         ),
-                  //       ),
-                  //       prefixIcon: Icon(Icons.search),
-                  //       hintText: AppLocalizations.of(context)!
-                  //           .translate('search_transaction'),
-                  //       hintStyle: TextStyle(fontSize: responsiveFont(12)),
-                  //     ),
-                  //   ),
-                  // ),
-                  Container(
-                    height: 15,
+      body: isLoading
+          ? customLoading()
+          : !Session.data.getBool('isLogin')!
+              ? Center(
+                  child: buildNoAuth(context),
+                )
+              : Container(
+                  margin: EdgeInsets.all(15),
+                  child: Column(
+                    children: [
+                      // Container(
+                      //   height: 30.h,
+                      //   child: TextField(
+                      //     controller: searchController,
+                      //     style: TextStyle(fontSize: 14),
+                      //     textAlignVertical: TextAlignVertical.center,
+                      //     onSubmitted: (value) {
+                      //       setState(() {});
+                      //       context.read<OrderProvider>().resetPage();
+                      //       loadListOrder();
+                      //     },
+                      //     onChanged: (value) {
+                      //       setState(() {
+                      //         search = value;
+                      //       });
+                      //     },
+                      //     textInputAction: TextInputAction.search,
+                      //     decoration: InputDecoration(
+                      //       isDense: true,
+                      //       isCollapsed: true,
+                      //       filled: true,
+                      //       border: new OutlineInputBorder(
+                      //         borderRadius: const BorderRadius.all(
+                      //           const Radius.circular(5),
+                      //         ),
+                      //       ),
+                      //       prefixIcon: Icon(Icons.search),
+                      //       hintText: AppLocalizations.of(context)!
+                      //           .translate('search_transaction'),
+                      //       hintStyle: TextStyle(fontSize: responsiveFont(12)),
+                      //     ),
+                      //   ),
+                      // ),
+                      Container(
+                        height: 15,
+                      ),
+                      buildTabStatus(),
+                      Container(
+                        height: 10,
+                      ),
+                      Expanded(
+                        child: buildOrders,
+                      ),
+                      // if (orders.length == 0)
+                      //   Center(
+                      //     child: customLoading(),
+                      //   ),
+                    ],
                   ),
-                  buildTabStatus(),
-                  Container(
-                    height: 10,
-                  ),
-                  Expanded(
-                    child: buildOrders,
-                  ),
-                  // if (orders.length == 0)
-                  //   Center(
-                  //     child: customLoading(),
-                  //   ),
-                ],
-              ),
-            ),
+                ),
     );
   }
 
@@ -319,12 +324,12 @@ class _MyOrderState extends State<MyOrder> {
                         fontSize: responsiveFont(10),
                       ),
                     ),
-                    Text(
-                      "Chưa có create date",
-                      style: TextStyle(
-                          fontSize: responsiveFont(8),
-                          fontWeight: FontWeight.w500),
-                    )
+                    // Text(
+                    //   orderModel.orderStatus.toString(),
+                    //   style: TextStyle(
+                    //       fontSize: responsiveFont(8),
+                    //       fontWeight: FontWeight.w500),
+                    // )
                   ],
                 ),
                 buildStatusOrder(orderModel.orderStatus)
@@ -400,6 +405,7 @@ class _MyOrderState extends State<MyOrder> {
               setState(() {
                 currType = 0;
                 currentStatus = '';
+                isLoading = true;
               });
               context.read<OrderProvider>().resetPage();
               loadListOrder();
@@ -432,6 +438,7 @@ class _MyOrderState extends State<MyOrder> {
               setState(() {
                 currType = 1;
                 currentStatus = 'Confirm';
+                isLoading = true;
               });
               context.read<OrderProvider>().resetPage();
               loadListOrder();
@@ -495,6 +502,7 @@ class _MyOrderState extends State<MyOrder> {
             onTap: () {
               setState(() {
                 currType = 3;
+                isLoading = true;
                 currentStatus = 'Processing';
               });
               context.read<OrderProvider>().resetPage();
@@ -527,6 +535,7 @@ class _MyOrderState extends State<MyOrder> {
             onTap: () {
               setState(() {
                 currType = 4;
+                isLoading = true;
                 currentStatus = 'Completed';
               });
               context.read<OrderProvider>().resetPage();
@@ -559,7 +568,8 @@ class _MyOrderState extends State<MyOrder> {
             onTap: () {
               setState(() {
                 currType = 5;
-                currentStatus = 'Cancelled';
+                isLoading = true;
+                currentStatus = 'Canceled';
               });
               context.read<OrderProvider>().resetPage();
               loadListOrder();
@@ -591,6 +601,7 @@ class _MyOrderState extends State<MyOrder> {
             onTap: () {
               setState(() {
                 currType = 6;
+                isLoading = true;
                 currentStatus = 'Used';
               });
               context.read<OrderProvider>().resetPage();
@@ -623,6 +634,7 @@ class _MyOrderState extends State<MyOrder> {
             onTap: () {
               setState(() {
                 currType = 7;
+                isLoading = true;
                 currentStatus = 'Failed';
               });
               context.read<OrderProvider>().resetPage();
