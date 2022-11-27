@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:nyoba/pages/category/brand_product_screen.dart';
 import 'package:nyoba/pages/search/search_screen.dart';
 import 'package:nyoba/provider/category_provider.dart';
@@ -463,7 +464,7 @@ class _CategoryScreenState extends State<CategoryScreen>
               duration: Duration(milliseconds: 300),
               width: 5,
               height: indexTab == chosenindex ? 90.w : 0,
-              color: secondaryColor,
+              color: HexColor("960000"),
             )
           ],
         ),

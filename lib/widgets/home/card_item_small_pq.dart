@@ -95,7 +95,7 @@ class CardItemPq extends StatelessWidget {
                           //       Container(
                           //         decoration: BoxDecoration(
                           //           borderRadius: BorderRadius.circular(2),
-                          //           color: secondaryColor,
+                          //           color: HexColor("960000"),
                           //         ),
                           //         padding: EdgeInsets.symmetric(horizontal: 5),
                           //         child: Text(
@@ -141,7 +141,7 @@ class CardItemPq extends StatelessWidget {
                           //                 style: TextStyle(
                           //                     fontWeight: FontWeight.w600,
                           //                     fontSize: responsiveFont(11),
-                          //                     color: secondaryColor)),
+                          //                     color: HexColor("960000"))),
                           //           ],
                           //         ),
                           //       )
@@ -155,7 +155,7 @@ class CardItemPq extends StatelessWidget {
                           //                     style: TextStyle(
                           //                         fontWeight: FontWeight.w600,
                           //                         fontSize: responsiveFont(11),
-                          //                         color: secondaryColor))
+                          //                         color: HexColor("960000")))
                           //                 : TextSpan(
                           //                     text: product!.variationPrices!
                           //                                 .first ==
@@ -166,7 +166,7 @@ class CardItemPq extends StatelessWidget {
                           //                     style: TextStyle(
                           //                         fontWeight: FontWeight.w600,
                           //                         fontSize: responsiveFont(11),
-                          //                         color: secondaryColor)),
+                          //                         color: HexColor("960000"))),
                           //           ],
                           //         ),
                           //       ),
@@ -178,7 +178,7 @@ class CardItemPq extends StatelessWidget {
                                 // Container(
                                 //   decoration: BoxDecoration(
                                 //     borderRadius: BorderRadius.circular(2),
-                                //     color: secondaryColor,
+                                //     color: HexColor("960000"),
                                 //   ),
                                 //   padding: EdgeInsets.symmetric(horizontal: 5),
                                 //   child: Text(
@@ -226,7 +226,7 @@ class CardItemPq extends StatelessWidget {
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: responsiveFont(11),
-                                        color: secondaryColor)),
+                                        color: HexColor("960000"))),
                               ],
                             ),
                           )

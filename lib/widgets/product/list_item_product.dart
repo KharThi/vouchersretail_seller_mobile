@@ -125,7 +125,7 @@ class ListItemProduct extends StatelessWidget {
                                           style: TextStyle(
                                               fontWeight: FontWeight.w600,
                                               fontSize: responsiveFont(11),
-                                              color: secondaryColor)),
+                                              color: HexColor("960000"))),
                                     ],
                                   ),
                                 )
@@ -139,7 +139,7 @@ class ListItemProduct extends StatelessWidget {
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: responsiveFont(11),
-                                                  color: secondaryColor))
+                                                  color: HexColor("960000")))
                                           : TextSpan(
                                               text: product!.variationPrices!
                                                           .first ==
@@ -150,7 +150,7 @@ class ListItemProduct extends StatelessWidget {
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: responsiveFont(11),
-                                                  color: secondaryColor)),
+                                                  color: HexColor("960000"))),
                                     ],
                                   ),
                                 ),

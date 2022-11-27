@@ -368,7 +368,7 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
                                                   .toDouble(),
                                               context),
                                           style: TextStyle(
-                                              color: secondaryColor,
+                                              color: HexColor("960000"),
                                               fontWeight: FontWeight.w500),
                                         ),
                                         Text(
@@ -389,7 +389,7 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
                                             stringToCurrency(
                                                 variationPrice, context),
                                             style: TextStyle(
-                                                color: secondaryColor,
+                                                color: HexColor("960000"),
                                                 fontWeight: FontWeight.w500),
                                           ),
                                           Text(
@@ -441,7 +441,7 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
                         side: BorderSide(
                           color: !isAvailable || load || isOutStock
                               ? Colors.grey
-                              : secondaryColor, //Color of the border
+                              : HexColor("960000"), //Color of the border
                           //Style of the border
                         ),
                         alignment: Alignment.center,
@@ -467,7 +467,7 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
                           size: responsiveFont(9),
                           color: !isAvailable || load || isOutStock
                               ? Colors.grey
-                              : secondaryColor,
+                              : HexColor("960000"),
                         ),
                         Text(
                           AppLocalizations.of(context)!
@@ -477,7 +477,7 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
                               fontSize: responsiveFont(9),
                               color: !isAvailable || load || isOutStock
                                   ? Colors.grey
-                                  : secondaryColor),
+                                  : HexColor("960000")),
                         )
                       ],
                     )),
@@ -511,7 +511,7 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
                         end: Alignment.bottomCenter,
                         colors: !isAvailable || load
                             ? [Colors.black12, Colors.grey]
-                            : [primaryColor, secondaryColor])),
+                            : [primaryColor, HexColor("960000")])),
                 width: double.infinity,
                 height: 30.h,
                 child: TextButton(
@@ -614,7 +614,9 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
-            color: indexColor == indexes ? Colors.transparent : secondaryColor),
+            color: indexColor == indexes
+                ? Colors.transparent
+                : HexColor("960000")),
         borderRadius: BorderRadius.circular(5),
         color: indexColor == indexes ? primaryColor : Colors.white,
       ),
@@ -634,7 +636,7 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
             color: attributes[groupVariant].selectedVariant ==
                     attributes[groupVariant].options![subVariant]
                 ? Colors.transparent
-                : secondaryColor),
+                : HexColor("960000")),
         borderRadius: BorderRadius.circular(5),
         color: attributes[groupVariant].selectedVariant ==
                 attributes[groupVariant].options![subVariant]
@@ -663,7 +665,7 @@ class _ModalSheetCartState extends State<ModalSheetCart> {
                         .toString()
                         .toLowerCase()
                 ? Colors.transparent
-                : secondaryColor),
+                : HexColor("960000")),
         borderRadius: BorderRadius.circular(5),
         color: attributes[groupVariant].selectedVariant!.toLowerCase() ==
                 attributes[groupVariant]

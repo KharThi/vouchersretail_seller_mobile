@@ -498,7 +498,7 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                     //         Container(
                     //           decoration: BoxDecoration(
                     //             borderRadius: BorderRadius.circular(5),
-                    //             color: secondaryColor,
+                    //             color: HexColor("960000"),
                     //           ),
                     //           padding: EdgeInsets.symmetric(
                     //               vertical: 3, horizontal: 7),
@@ -537,7 +537,7 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                             (cart!.cartItems![index].price).toString() + " Vnd",
                             style: TextStyle(
                                 fontSize: responsiveFont(10),
-                                color: secondaryColor,
+                                color: HexColor("960000"),
                                 fontWeight: FontWeight.w600),
                           ),
                           Row(

@@ -33,6 +33,7 @@ import '../../app_localizations.dart';
 /* Provider */
 
 /* Helper */
+import '../../models/banner_model.dart';
 import '../../utils/utility.dart';
 import '../product/product_detail_screen_voucher.dart';
 
@@ -67,12 +68,36 @@ class _LobbyScreenState extends State<LobbyScreen>
     './images/pq/pq3.png',
     './images/pq/pq4.png',
   ];
+  List<BannerModel> listBanner = new List.empty(growable: true);
 
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
+    listBanner.add(new BannerModel(
+        image:
+            "https://namthientravel.com.vn/wp-content/uploads/2021/03/banner-phu-quoc.png",
+        linkTo: "",
+        name: "Đảo ngọc",
+        product: null,
+        titleSlider: "Đảo ngọc",
+        type: "Đảo ngọc"));
+    listBanner.add(new BannerModel(
+        image: "https://nicetrip.com.vn/uploads/tour/2020_08/unnamed.jpg",
+        linkTo: "",
+        name: "2",
+        product: null,
+        titleSlider: "2",
+        type: "2"));
+    listBanner.add(new BannerModel(
+        image:
+            "http://chienyenthinh.com/upload/files/sanpham/1-163802%5B1%5D.jpg",
+        linkTo: "",
+        name: "3",
+        product: null,
+        titleSlider: "3",
+        type: "3"));
     // loadProduct();
     // loadCombo();
     loadVoucher();
@@ -426,7 +451,7 @@ class _LobbyScreenState extends State<LobbyScreen>
     //                         style: TextStyle(
     //                             fontSize: responsiveFont(12),
     //                             fontWeight: FontWeight.w600,
-    //                             color: secondaryColor),
+    //                             color: HexColor("960000")),
     //                       ),
     //                     ),
     //                   ],
@@ -743,8 +768,8 @@ class _LobbyScreenState extends State<LobbyScreen>
                                     return BannerContainer(
                                       contentHeight:
                                           MediaQuery.of(context).size.height,
-                                      dataSliderLength: value.banners.length,
-                                      dataSlider: value.banners,
+                                      dataSliderLength: listBanner.length,
+                                      dataSlider: listBanner,
                                       loading: customLoading(),
                                     );
                                   }),
@@ -817,7 +842,7 @@ class _LobbyScreenState extends State<LobbyScreen>
                           //           style: TextStyle(
                           //               fontSize: responsiveFont(12),
                           //               fontWeight: FontWeight.w600,
-                          //               color: secondaryColor),
+                          //               color: HexColor("960000")),
                           //         ),
                           //       ),
                           //     ],
@@ -914,7 +939,7 @@ class _LobbyScreenState extends State<LobbyScreen>
                                     style: TextStyle(
                                         fontSize: responsiveFont(12),
                                         fontWeight: FontWeight.w600,
-                                        color: secondaryColor),
+                                        color: HexColor("960000")),
                                   ),
                                 ),
                               ],
@@ -1127,7 +1152,7 @@ class _LobbyScreenState extends State<LobbyScreen>
                           //                       style: TextStyle(
                           //                           fontSize: responsiveFont(12),
                           //                           fontWeight: FontWeight.w600,
-                          //                           color: secondaryColor),
+                          //                           color: HexColor("960000")),
                           //                     ),
                           //                   ),
                           //                 ],
@@ -1519,7 +1544,7 @@ class _LobbyScreenState extends State<LobbyScreen>
                           //           style: TextStyle(
                           //               fontSize: responsiveFont(12),
                           //               fontWeight: FontWeight.w600,
-                          //               color: secondaryColor),
+                          //               color: HexColor("960000")),
                           //         ),
                           //       ),*/
                           //     ],
@@ -1653,7 +1678,7 @@ class _LobbyScreenState extends State<LobbyScreen>
                   : Colors.white,
               border: Border.all(
                   color: clickIndex == model.id
-                      ? secondaryColor
+                      ? HexColor("960000")
                       : HexColor("B0b0b0")),
               borderRadius: BorderRadius.circular(8),
             ),
@@ -1662,7 +1687,7 @@ class _LobbyScreenState extends State<LobbyScreen>
               style: TextStyle(
                   fontSize: 13,
                   color: clickIndex == model.id
-                      ? secondaryColor
+                      ? HexColor("960000")
                       : HexColor("B0b0b0")),
             )),
       ),

@@ -99,7 +99,7 @@ class GridItemCategory extends StatelessWidget {
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(2),
-                                        color: secondaryColor,
+                                        color: HexColor("960000"),
                                       ),
                                       child: Text(
                                         "${product!.discProduct!.round()}%",
@@ -145,7 +145,7 @@ class GridItemCategory extends StatelessWidget {
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: responsiveFont(11),
-                                                  color: secondaryColor)),
+                                                  color: HexColor("960000"))),
                                         ],
                                       ),
                                     )
@@ -161,7 +161,8 @@ class GridItemCategory extends StatelessWidget {
                                                           FontWeight.w600,
                                                       fontSize:
                                                           responsiveFont(11),
-                                                      color: secondaryColor))
+                                                      color:
+                                                          HexColor("960000")))
                                               : TextSpan(
                                                   text: product!
                                                               .variationPrices!
@@ -176,7 +177,8 @@ class GridItemCategory extends StatelessWidget {
                                                           FontWeight.w600,
                                                       fontSize:
                                                           responsiveFont(11),
-                                                      color: secondaryColor)),
+                                                      color:
+                                                          HexColor("960000"))),
                                         ],
                                       ),
                                     ),
@@ -217,7 +219,7 @@ class GridItemCategory extends StatelessWidget {
                   margin: EdgeInsets.only(bottom: 15),
                   child: Icon(
                     Icons.add,
-                    color: secondaryColor,
+                    color: HexColor("960000"),
                     size: 28,
                   ),
                 ),
@@ -225,7 +227,7 @@ class GridItemCategory extends StatelessWidget {
                   child: Text(
                     AppLocalizations.of(context)!.translate('view_more')!,
                     style: TextStyle(
-                        color: secondaryColor,
+                        color: HexColor("960000"),
                         fontSize: responsiveFont(10),
                         fontWeight: FontWeight.w500),
                   ),

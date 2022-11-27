@@ -127,12 +127,12 @@ class _MyOrderState extends State<MyOrder> {
           style: TextStyle(color: Colors.black, fontSize: responsiveFont(16)),
         ),
       ),
-      body: isLoading
-          ? customLoading()
-          : !Session.data.getBool('isLogin')!
-              ? Center(
-                  child: buildNoAuth(context),
-                )
+      body: !Session.data.getBool('isLogin')!
+          ? Center(
+              child: buildNoAuth(context),
+            )
+          : isLoading
+              ? customLoading()
               : Container(
                   margin: EdgeInsets.all(15),
                   child: Column(
@@ -285,7 +285,7 @@ class _MyOrderState extends State<MyOrder> {
                       gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
-                          colors: [primaryColor, secondaryColor])),
+                          colors: [primaryColor, HexColor("960000")])),
                   height: 30.h,
                   child: TextButton(
                     onPressed: () async {

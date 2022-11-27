@@ -85,7 +85,10 @@ class OrderListShimmer extends StatelessWidget {
                                 gradient: LinearGradient(
                                     begin: Alignment.topCenter,
                                     end: Alignment.bottomCenter,
-                                    colors: [primaryColor, secondaryColor])),
+                                    colors: [
+                                      primaryColor,
+                                      HexColor("960000")
+                                    ])),
                             height: 30.h,
                             child: TextButton(
                               onPressed: null,

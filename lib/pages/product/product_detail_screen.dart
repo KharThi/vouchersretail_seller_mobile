@@ -283,10 +283,10 @@ class _ProductDetailState extends State<ProductDetail>
     Widget buildWishlistBtn = LikeButton(
       size: 25,
       onTap: setWishlist,
-      circleColor: CircleColor(start: primaryColor, end: secondaryColor),
+      circleColor: CircleColor(start: primaryColor, end: HexColor("960000")),
       bubblesColor: BubblesColor(
         dotPrimaryColor: primaryColor,
-        dotSecondaryColor: secondaryColor,
+        dotSecondaryColor: HexColor("960000"),
       ),
       isLiked: isWishlist,
       likeBuilder: (bool isLiked) {
@@ -658,7 +658,7 @@ class _ProductDetailState extends State<ProductDetail>
                                     color: productModel!.stockStatus !=
                                                 'outofstock' &&
                                             productModel!.productStock! >= 1
-                                        ? secondaryColor
+                                        ? HexColor("960000")
                                         : Colors.grey, //Color of the border
                                     //Style of the border
                                   ),
@@ -692,7 +692,7 @@ class _ProductDetailState extends State<ProductDetail>
                                     color: productModel!.stockStatus !=
                                                 'outofstock' &&
                                             productModel!.productStock! >= 1
-                                        ? secondaryColor
+                                        ? HexColor("960000")
                                         : Colors.grey,
                                   ),
                                   Text(
@@ -704,7 +704,7 @@ class _ProductDetailState extends State<ProductDetail>
                                       color: productModel!.stockStatus !=
                                                   'outofstock' &&
                                               productModel!.productStock! >= 1
-                                          ? secondaryColor
+                                          ? HexColor("960000")
                                           : Colors.grey,
                                     ),
                                   )
@@ -720,7 +720,7 @@ class _ProductDetailState extends State<ProductDetail>
                                   colors: productModel!.stockStatus !=
                                               'outofstock' &&
                                           productModel!.productStock! >= 1
-                                      ? [primaryColor, secondaryColor]
+                                      ? [primaryColor, HexColor("960000")]
                                       : [Colors.grey, Colors.grey])),
                           width: 132.w,
                           height: 30.h,
@@ -824,7 +824,7 @@ class _ProductDetailState extends State<ProductDetail>
                             style: TextStyle(
                                 fontSize: responsiveFont(12),
                                 fontWeight: FontWeight.w600,
-                                color: secondaryColor),
+                                color: HexColor("960000")),
                           ),
                         )
                       ],
@@ -888,7 +888,7 @@ class _ProductDetailState extends State<ProductDetail>
                         style: TextStyle(
                             fontSize: responsiveFont(12),
                             fontWeight: FontWeight.w600,
-                            color: secondaryColor),
+                            color: HexColor("960000")),
                       ),
                     )
                   ],
@@ -952,7 +952,7 @@ class _ProductDetailState extends State<ProductDetail>
                         style: TextStyle(
                             fontSize: responsiveFont(12),
                             fontWeight: FontWeight.w600,
-                            color: secondaryColor),
+                            color: HexColor("960000")),
                       ),
                     )
                   ],
@@ -1169,7 +1169,7 @@ class _ProductDetailState extends State<ProductDetail>
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(3),
                   color: rating != 0 && reviewController.text.isNotEmpty
-                      ? secondaryColor
+                      ? HexColor("960000")
                       : Colors.grey),
               alignment: Alignment.center,
               child: Text(
@@ -1311,7 +1311,7 @@ class _ProductDetailState extends State<ProductDetail>
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: responsiveFont(11),
-                                      color: secondaryColor))
+                                      color: HexColor("960000")))
                               : TextSpan(
                                   text: variantPrices.first ==
                                           variantPrices.last
@@ -1338,7 +1338,7 @@ class _ProductDetailState extends State<ProductDetail>
                   padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(3),
-                      color: secondaryColor),
+                      color: HexColor("960000")),
                   child: Row(
                     children: [
                       Text(
@@ -1582,7 +1582,7 @@ class _ProductDetailState extends State<ProductDetail>
                               price,
                               style: TextStyle(
                                   fontSize: responsiveFont(10),
-                                  color: secondaryColor,
+                                  color: HexColor("960000"),
                                   fontWeight: FontWeight.w600),
                             ),
                           ),

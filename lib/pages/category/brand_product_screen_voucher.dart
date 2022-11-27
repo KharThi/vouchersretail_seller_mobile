@@ -397,7 +397,7 @@ class _BrandProductsVoucherState extends State<BrandProductsVoucher>
                         //         Container(
                         //           decoration: BoxDecoration(
                         //             borderRadius: BorderRadius.circular(2),
-                        //             color: secondaryColor,
+                        //             color: HexColor("960000"),
                         //           ),
                         //           padding: EdgeInsets.symmetric(
                         //               vertical: 3, horizontal: 7),
@@ -441,7 +441,7 @@ class _BrandProductsVoucherState extends State<BrandProductsVoucher>
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: responsiveFont(11),
-                                      color: secondaryColor)),
+                                      color: HexColor("960000"))),
                             ],
                           ),
                         ),
@@ -460,7 +460,7 @@ class _BrandProductsVoucherState extends State<BrandProductsVoucher>
                         side: BorderSide(
                           color: isOutOfStock
                               ? Colors.grey
-                              : secondaryColor, //Color of the border
+                              : HexColor("960000"), //Color of the border
                           //Style of the border
                         ),
                         alignment: Alignment.center,
@@ -486,15 +486,17 @@ class _BrandProductsVoucherState extends State<BrandProductsVoucher>
                         Icon(
                           Icons.add,
                           size: responsiveFont(9),
-                          color: isOutOfStock ? Colors.grey : secondaryColor,
+                          color:
+                              isOutOfStock ? Colors.grey : HexColor("960000"),
                         ),
                         Text(
                           "Thêm vào giỏ hàng",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: responsiveFont(9),
-                              color:
-                                  isOutOfStock ? Colors.grey : secondaryColor),
+                              color: isOutOfStock
+                                  ? Colors.grey
+                                  : HexColor("960000")),
                         )
                       ],
                     )),

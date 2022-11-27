@@ -96,7 +96,7 @@ class CardItem extends StatelessWidget {
                                 Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(2),
-                                    color: secondaryColor,
+                                    color: HexColor("960000"),
                                   ),
                                   padding: EdgeInsets.symmetric(horizontal: 5),
                                   child: Text(
@@ -142,7 +142,7 @@ class CardItem extends StatelessWidget {
                                           style: TextStyle(
                                               fontWeight: FontWeight.w600,
                                               fontSize: responsiveFont(11),
-                                              color: secondaryColor)),
+                                              color: HexColor("960000"))),
                                     ],
                                   ),
                                 )
@@ -156,7 +156,7 @@ class CardItem extends StatelessWidget {
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: responsiveFont(11),
-                                                  color: secondaryColor))
+                                                  color: HexColor("960000")))
                                           : TextSpan(
                                               text: product!.variationPrices!
                                                           .first ==
@@ -167,7 +167,7 @@ class CardItem extends StatelessWidget {
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: responsiveFont(11),
-                                                  color: secondaryColor)),
+                                                  color: HexColor("960000"))),
                                     ],
                                   ),
                                 ),

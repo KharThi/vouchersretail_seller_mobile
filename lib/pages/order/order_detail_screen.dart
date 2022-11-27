@@ -135,7 +135,7 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
                               style: TextStyle(
                                   fontSize: responsiveFont(12),
                                   fontWeight: FontWeight.w500,
-                                  color: secondaryColor),
+                                  color: HexColor("960000")),
                             )
                           ],
                         ),
@@ -502,7 +502,8 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
                           child: OutlinedButton(
                               style: OutlinedButton.styleFrom(
                                   side: BorderSide(
-                                    color: secondaryColor, //Color of the border
+                                    color: HexColor(
+                                        "960000"), //Color of the border
                                     //Style of the border
                                   ),
                                   alignment: Alignment.center,
@@ -533,7 +534,7 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize: responsiveFont(8),
-                                        color: secondaryColor),
+                                        color: HexColor("960000")),
                                   )
                                 ],
                               )),
@@ -667,7 +668,7 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
                 gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [primaryColor, secondaryColor])),
+                    colors: [primaryColor, HexColor("960000")])),
             height: 30.h,
             child: TextButton(
               onPressed: () {
@@ -704,7 +705,7 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
                   gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [primaryColor, secondaryColor])),
+                      colors: [primaryColor, HexColor("960000")])),
               height: 30.h,
               width: 50.w,
               child: TextButton(
@@ -857,7 +858,7 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
                     //         Container(
                     //           decoration: BoxDecoration(
                     //             borderRadius: BorderRadius.circular(5),
-                    //             color: secondaryColor,
+                    //             color: HexColor("960000"),
                     //           ),
                     //           padding: EdgeInsets.symmetric(
                     //               vertical: 3, horizontal: 7),
@@ -897,7 +898,7 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
                             price.toString() + " Vnd",
                             style: TextStyle(
                                 fontSize: responsiveFont(10),
-                                color: secondaryColor,
+                                color: HexColor("960000"),
                                 fontWeight: FontWeight.w600),
                           ),
                           Row(

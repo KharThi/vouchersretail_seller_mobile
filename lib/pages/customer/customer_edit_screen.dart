@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:nyoba/models/customer.dart';
 import 'package:nyoba/provider/user_provider.dart';
 import 'package:provider/provider.dart';
@@ -92,8 +93,8 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
           backgroundColor: Colors.white,
           title: Text(
             "Cập nhật khách hàng",
-            style:
-                TextStyle(fontSize: responsiveFont(16), color: secondaryColor),
+            style: TextStyle(
+                fontSize: responsiveFont(16), color: HexColor("960000")),
           ),
         ),
         body: Container(
@@ -162,7 +163,7 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
                     style: TextButton.styleFrom(
                         padding: EdgeInsets.symmetric(vertical: 10),
                         backgroundColor:
-                            user.loading ? Colors.grey : secondaryColor),
+                            user.loading ? Colors.grey : HexColor("960000")),
                     onPressed: user.loading ? null : save,
                     child: user.loading
                         ? customLoading()

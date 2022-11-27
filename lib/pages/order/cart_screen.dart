@@ -468,7 +468,7 @@ class _CartScreenState extends State<CartScreen> {
                             Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
-                                color: secondaryColor,
+                                color: HexColor("960000"),
                               ),
                               padding: EdgeInsets.symmetric(
                                   vertical: 3, horizontal: 7),
@@ -506,7 +506,7 @@ class _CartScreenState extends State<CartScreen> {
                                 context),
                             style: TextStyle(
                                 fontSize: responsiveFont(10),
-                                color: secondaryColor,
+                                color: HexColor("960000"),
                                 fontWeight: FontWeight.w600),
                           ),
                           Row(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/current_remaining_time.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:nyoba/pages/product/product_more_screen.dart';
 import 'package:nyoba/provider/flash_sale_provider.dart';
 import 'package:nyoba/utils/utility.dart';
@@ -76,7 +77,7 @@ class FlashSaleCountdown extends StatelessWidget {
                   style: TextStyle(
                       fontSize: responsiveFont(12),
                       fontWeight: FontWeight.w600,
-                      color: secondaryColor),
+                      color: HexColor("960000")),
                 ),
               ),
             ],
@@ -111,7 +112,7 @@ class FlashSaleCountdown extends StatelessWidget {
                             padding: EdgeInsets.symmetric(
                                 horizontal: 4, vertical: 3),
                             decoration: BoxDecoration(
-                                color: secondaryColor,
+                                color: HexColor("960000"),
                                 borderRadius: BorderRadius.circular(5)),
                             width: 30,
                             child: Text(
@@ -127,14 +128,14 @@ class FlashSaleCountdown extends StatelessWidget {
                             child: Text(
                               ":",
                               style: TextStyle(
-                                  color: secondaryColor,
+                                  color: HexColor("960000"),
                                   fontSize: responsiveFont(12)),
                             ),
                           ),
                           Container(
                             padding: EdgeInsets.all(3),
                             decoration: BoxDecoration(
-                                color: secondaryColor,
+                                color: HexColor("960000"),
                                 borderRadius: BorderRadius.circular(5)),
                             width: 25,
                             child: Text(
@@ -150,14 +151,14 @@ class FlashSaleCountdown extends StatelessWidget {
                             child: Text(
                               ":",
                               style: TextStyle(
-                                  color: secondaryColor,
+                                  color: HexColor("960000"),
                                   fontSize: responsiveFont(12)),
                             ),
                           ),
                           Container(
                             padding: EdgeInsets.all(3),
                             decoration: BoxDecoration(
-                                color: secondaryColor,
+                                color: HexColor("960000"),
                                 borderRadius: BorderRadius.circular(5)),
                             width: 25,
                             child: Text(

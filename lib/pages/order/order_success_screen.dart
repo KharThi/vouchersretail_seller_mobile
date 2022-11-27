@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:nyoba/pages/home/home_screen.dart';
 import 'package:nyoba/provider/home_provider.dart';
 import 'package:nyoba/services/session.dart';
@@ -55,7 +56,7 @@ class _OrderSuccessState extends State<OrderSuccess> {
                       gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
-                          colors: [primaryColor, secondaryColor])),
+                          colors: [primaryColor, HexColor("960000")])),
                   height: 30.h,
                   child: TextButton(
                     onPressed: () {

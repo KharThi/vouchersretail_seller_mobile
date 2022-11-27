@@ -146,7 +146,7 @@ class _BlogScreenState extends State<BlogScreen> {
                             style: TextStyle(
                                 fontSize: responsiveFont(12),
                                 fontWeight: FontWeight.w600,
-                                color: secondaryColor),
+                                color: HexColor("960000")),
                           ),
                         )
                       ],
@@ -208,7 +208,7 @@ class _BlogScreenState extends State<BlogScreen> {
                             style: TextStyle(
                                 fontSize: responsiveFont(12),
                                 fontWeight: FontWeight.w600,
-                                color: secondaryColor),
+                                color: HexColor("960000")),
                           ),
                         )
                       ],
@@ -313,7 +313,7 @@ class _BlogScreenState extends State<BlogScreen> {
           Text(
             AppLocalizations.of(context)!.translate('head_blog')!,
             style: TextStyle(
-                color: secondaryColor,
+                color: HexColor("960000"),
                 fontSize: responsiveFont(14),
                 fontWeight: FontWeight.w600),
           ),
@@ -413,7 +413,7 @@ class _BlogScreenState extends State<BlogScreen> {
                   style: TextButton.styleFrom(
                       backgroundColor: loading || page == 1
                           ? HexColor("c4c4c4")
-                          : secondaryColor,
+                          : HexColor("960000"),
                       padding:
                           EdgeInsets.symmetric(horizontal: 18, vertical: 7)),
                   child: Text(
@@ -433,7 +433,7 @@ class _BlogScreenState extends State<BlogScreen> {
                   style: TextButton.styleFrom(
                       backgroundColor: loading || countBlog < 6
                           ? HexColor("c4c4c4")
-                          : secondaryColor,
+                          : HexColor("960000"),
                       padding:
                           EdgeInsets.symmetric(horizontal: 28, vertical: 7)),
                   child: Text(

@@ -58,7 +58,7 @@ class FlashSaleContainer extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment(
                 0.8, 0.0), // 10% of the width, so there are ten blinds.
-            colors: [primaryColor, secondaryColor],
+            colors: [primaryColor, HexColor("960000")],
             tileMode: TileMode.repeated, // repeats the gradient over the canvas
           ),
         ),
@@ -185,8 +185,8 @@ class FlashSaleContainer extends StatelessWidget {
                                                                 BorderRadius
                                                                     .circular(
                                                                         5),
-                                                            color:
-                                                                secondaryColor,
+                                                            color: HexColor(
+                                                                "960000"),
                                                           ),
                                                           padding: EdgeInsets
                                                               .symmetric(
@@ -249,8 +249,8 @@ class FlashSaleContainer extends StatelessWidget {
                                                                     fontSize:
                                                                         responsiveFont(
                                                                             11),
-                                                                    color:
-                                                                        secondaryColor)),
+                                                                    color: HexColor(
+                                                                        "960000"))),
                                                           ],
                                                         ),
                                                       )
@@ -273,11 +273,13 @@ class FlashSaleContainer extends StatelessWidget {
                                                                             responsiveFont(
                                                                                 11),
                                                                         color:
-                                                                            secondaryColor))
+                                                                            HexColor(
+                                                                                "960000")))
                                                                 : TextSpan(
-                                                                    text: _list[i].variationPrices!.first ==
-                                                                            _list[
-                                                                                    i]
+                                                                    text: _list[i]
+                                                                                .variationPrices!
+                                                                                .first ==
+                                                                            _list[i]
                                                                                 .variationPrices!
                                                                                 .last
                                                                         ? '${stringToCurrency(_list[i].variationPrices!.first!, context)}'
@@ -289,8 +291,8 @@ class FlashSaleContainer extends StatelessWidget {
                                                                         fontSize:
                                                                             responsiveFont(
                                                                                 11),
-                                                                        color:
-                                                                            secondaryColor)),
+                                                                        color: HexColor(
+                                                                            "960000"))),
                                                           ],
                                                         ),
                                                       ),

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:nyoba/app_localizations.dart';
 import 'package:nyoba/pages/home/home_screen.dart';
 import 'package:nyoba/pages/point/my_point_screen.dart';
@@ -100,14 +101,14 @@ class _AccountScreenState extends State<AccountScreen> {
                       ? Text(
                           "Xin chào",
                           style: TextStyle(
-                              color: secondaryColor,
+                              color: HexColor("960000"),
                               fontSize: responsiveFont(14),
                               fontWeight: FontWeight.w500),
                         )
                       : Text(
                           "Xin chào, ${Session.data.getString('sellerName')} !",
                           style: TextStyle(
-                              color: secondaryColor,
+                              color: HexColor("960000"),
                               fontSize: responsiveFont(14),
                               fontWeight: FontWeight.w500),
                         ),
@@ -137,7 +138,7 @@ class _AccountScreenState extends State<AccountScreen> {
             //     style: TextStyle(
             //         fontSize: responsiveFont(10),
             //         fontWeight: FontWeight.w600,
-            //         color: secondaryColor),
+            //         color: HexColor("960000")),
             //   ),
             // ),
             // accountButton("akun", "Thông tin tài khoản", func: () {
@@ -172,7 +173,7 @@ class _AccountScreenState extends State<AccountScreen> {
             //     style: TextStyle(
             //         fontSize: responsiveFont(10),
             //         fontWeight: FontWeight.w600,
-            //         color: secondaryColor),
+            //         color: HexColor("960000")),
             //   ),
             // ),
             // accountButton(
@@ -203,7 +204,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 style: TextStyle(
                     fontSize: responsiveFont(10),
                     fontWeight: FontWeight.w600,
-                    color: secondaryColor),
+                    color: HexColor("960000")),
               ),
             ),
             Column(
@@ -402,7 +403,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       .toUpperCase(),
                   style: TextStyle(
                       fontSize: responsiveFont(12),
-                      color: secondaryColor,
+                      color: HexColor("960000"),
                       fontWeight: FontWeight.w600),
                 ),
               ),
@@ -424,7 +425,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         : fullName,
                     style: TextStyle(
                         fontSize: responsiveFont(18),
-                        color: secondaryColor,
+                        color: HexColor("960000"),
                         fontWeight: FontWeight.w600),
                   )
                 ],
@@ -446,14 +447,14 @@ class _AccountScreenState extends State<AccountScreen> {
                           '-',
                           style: TextStyle(
                               fontSize: responsiveFont(18),
-                              color: secondaryColor,
+                              color: HexColor("960000"),
                               fontWeight: FontWeight.w600),
                         )
                       : Text(
                           '${point.point!.pointsBalance} ${point.point!.pointsLabel}',
                           style: TextStyle(
                               fontSize: responsiveFont(18),
-                              color: secondaryColor,
+                              color: HexColor("960000"),
                               fontWeight: FontWeight.w600),
                         )
                 ],

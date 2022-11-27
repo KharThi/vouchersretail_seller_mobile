@@ -21,6 +21,7 @@ import '../app_localizations.dart';
 
 Color primaryColor = HexColor("ED1D1D");
 Color secondaryColor = HexColor("960000");
+// Color HexColor("960000") = HexColor("960000");
 
 double responsiveFont(double designFont) {
   return ScreenUtil().setSp(designFont + 2);
@@ -28,7 +29,7 @@ double responsiveFont(double designFont) {
 
 Widget customLoading({Color? color}) {
   return LoadingFlipping.circle(
-    borderColor: color != null ? color : secondaryColor,
+    borderColor: color != null ? color : HexColor("960000"),
     borderSize: 3.0,
     size: 30.0,
     duration: Duration(milliseconds: 500),
@@ -131,7 +132,7 @@ buildNoAuth(context) {
             gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [primaryColor, secondaryColor])),
+                colors: [primaryColor, HexColor("960000")])),
         height: 30.h,
         width: MediaQuery.of(context).size.width * 0.5,
         child: TextButton(
@@ -233,7 +234,7 @@ buildButtonCart(context, product) {
     },
     child: Icon(
       Icons.add_shopping_cart,
-      color: secondaryColor,
+      color: HexColor("960000"),
       size: 20.h,
     ),
   );
@@ -257,7 +258,7 @@ buildButtonCartPq(context) {
     },
     child: Icon(
       Icons.add_shopping_cart,
-      color: secondaryColor,
+      color: HexColor("960000"),
       size: 20.h,
     ),
   );

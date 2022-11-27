@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:nyoba/models/product_model.dart';
 import 'package:nyoba/utils/utility.dart';
 
@@ -134,7 +135,7 @@ class ListItemProduct2 extends StatelessWidget {
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: responsiveFont(11),
-                                        color: secondaryColor)),
+                                        color: HexColor("960000"))),
                               ],
                             ),
                           )
@@ -148,7 +149,7 @@ class ListItemProduct2 extends StatelessWidget {
                           //                 style: TextStyle(
                           //                     fontWeight: FontWeight.w600,
                           //                     fontSize: responsiveFont(11),
-                          //                     color: secondaryColor))
+                          //                     color: HexColor("960000")))
                           //             : TextSpan(
                           //                 text:
                           //                     // product!.prices!.first.price
@@ -164,7 +165,7 @@ class ListItemProduct2 extends StatelessWidget {
                           //                 style: TextStyle(
                           //                     fontWeight: FontWeight.w600,
                           //                     fontSize: responsiveFont(11),
-                          //                     color: secondaryColor)),
+                          //                     color: HexColor("960000"))),
                           //       ],
                           //     ),
                           //   ),

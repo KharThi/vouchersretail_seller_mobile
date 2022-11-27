@@ -282,10 +282,10 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
     Widget buildWishlistBtn = LikeButton(
       size: 25,
       onTap: setWishlist,
-      circleColor: CircleColor(start: primaryColor, end: secondaryColor),
+      circleColor: CircleColor(start: primaryColor, end: HexColor("960000")),
       bubblesColor: BubblesColor(
         dotPrimaryColor: primaryColor,
-        dotSecondaryColor: secondaryColor,
+        dotSecondaryColor: HexColor("960000"),
       ),
       isLiked: isWishlist,
       likeBuilder: (bool isLiked) {
@@ -657,7 +657,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                                   side: BorderSide(
                                     color: productModel!.vouchers != null
                                         // productModel!.inventory! >= 1
-                                        ? secondaryColor
+                                        ? HexColor("960000")
                                         : Colors.grey, //Color of the border
                                     //Style of the border
                                   ),
@@ -695,7 +695,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                                     Icons.add,
                                     size: responsiveFont(9),
                                     color: productModel!.vouchers != null
-                                        ? secondaryColor
+                                        ? HexColor("960000")
                                         : Colors.grey,
                                   ),
                                   Text(
@@ -704,7 +704,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                                     style: TextStyle(
                                       fontSize: responsiveFont(9),
                                       color: productModel!.vouchers != null
-                                          ? secondaryColor
+                                          ? HexColor("960000")
                                           : Colors.grey,
                                     ),
                                   )
@@ -718,7 +718,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                                   begin: Alignment.topCenter,
                                   end: Alignment.bottomCenter,
                                   colors: productModel!.vouchers != null
-                                      ? [primaryColor, secondaryColor]
+                                      ? [primaryColor, HexColor("960000")]
                                       : [Colors.grey, Colors.grey])),
                           width: 132.w,
                           height: 30.h,
@@ -825,7 +825,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                             style: TextStyle(
                                 fontSize: responsiveFont(12),
                                 fontWeight: FontWeight.w600,
-                                color: secondaryColor),
+                                color: HexColor("960000")),
                           ),
                         )
                       ],
@@ -888,7 +888,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                         style: TextStyle(
                             fontSize: responsiveFont(12),
                             fontWeight: FontWeight.w600,
-                            color: secondaryColor),
+                            color: HexColor("960000")),
                       ),
                     )
                   ],
@@ -952,7 +952,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                         style: TextStyle(
                             fontSize: responsiveFont(12),
                             fontWeight: FontWeight.w600,
-                            color: secondaryColor),
+                            color: HexColor("960000")),
                       ),
                     )
                   ],
@@ -1169,7 +1169,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(3),
                   color: rating != 0 && reviewController.text.isNotEmpty
-                      ? secondaryColor
+                      ? HexColor("960000")
                       : Colors.grey),
               alignment: Alignment.center,
               child: Text(
@@ -1358,7 +1358,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: responsiveFont(11),
-                                      color: secondaryColor))
+                                      color: HexColor("960000")))
                               : TextSpan(
                                   text: variantPrices.first ==
                                           variantPrices.last
@@ -1386,7 +1386,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                   padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(3),
-                      color: secondaryColor),
+                      color: HexColor("960000")),
                   child: Row(
                     children: [
                       Text(
@@ -1635,7 +1635,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                               price,
                               style: TextStyle(
                                   fontSize: responsiveFont(10),
-                                  color: secondaryColor,
+                                  color: HexColor("960000"),
                                   fontWeight: FontWeight.w600),
                             ),
                           ),

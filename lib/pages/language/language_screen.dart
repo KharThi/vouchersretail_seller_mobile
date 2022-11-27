@@ -180,7 +180,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                     style: TextStyle(
                         fontSize: responsiveFont(12),
                         fontWeight: FontWeight.w600,
-                        color: secondaryColor),
+                        color: HexColor("960000")),
                   )
                 : Container()
           ],

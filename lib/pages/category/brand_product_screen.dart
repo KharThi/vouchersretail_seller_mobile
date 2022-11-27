@@ -389,7 +389,7 @@ class _BrandProductsState extends State<BrandProducts>
                         //         Container(
                         //           decoration: BoxDecoration(
                         //             borderRadius: BorderRadius.circular(2),
-                        //             color: secondaryColor,
+                        //             color: HexColor("960000"),
                         //           ),
                         //           padding: EdgeInsets.symmetric(
                         //               vertical: 3, horizontal: 7),
@@ -433,7 +433,7 @@ class _BrandProductsState extends State<BrandProducts>
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: responsiveFont(11),
-                                      color: secondaryColor)),
+                                      color: HexColor("960000"))),
                             ],
                           ),
                         ),
@@ -452,7 +452,7 @@ class _BrandProductsState extends State<BrandProducts>
                         side: BorderSide(
                           color: isOutOfStock
                               ? Colors.grey
-                              : secondaryColor, //Color of the border
+                              : HexColor("960000"), //Color of the border
                           //Style of the border
                         ),
                         alignment: Alignment.center,
@@ -481,7 +481,8 @@ class _BrandProductsState extends State<BrandProducts>
                         Icon(
                           Icons.add,
                           size: responsiveFont(9),
-                          color: isOutOfStock ? Colors.grey : secondaryColor,
+                          color:
+                              isOutOfStock ? Colors.grey : HexColor("960000"),
                         ),
                         Text(
                           AppLocalizations.of(context)!
@@ -489,8 +490,9 @@ class _BrandProductsState extends State<BrandProducts>
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: responsiveFont(9),
-                              color:
-                                  isOutOfStock ? Colors.grey : secondaryColor),
+                              color: isOutOfStock
+                                  ? Colors.grey
+                                  : HexColor("960000")),
                         )
                       ],
                     )),

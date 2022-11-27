@@ -91,7 +91,7 @@ class _AccountDetailScreenState extends State<AccountDetailScreen> {
                 padding: EdgeInsets.symmetric(vertical: 10),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(5)),
-                backgroundColor: secondaryColor),
+                backgroundColor: HexColor("960000")),
             onPressed: () {
               Navigator.push(
                   context,

@@ -277,7 +277,7 @@ class _ProductReviewState extends State<ProductReview> {
         isScrollable: true,
         indicatorSize: TabBarIndicatorSize.label,
         indicator: BoxDecoration(
-          border: Border.all(color: secondaryColor),
+          border: Border.all(color: HexColor("960000")),
           borderRadius: BorderRadius.circular(5),
           color: Colors.white,
         ),

@@ -487,7 +487,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                                 " Vnd"
                                             : "null",
                                         style: TextStyle(
-                                            color: secondaryColor,
+                                            color: HexColor("960000"),
                                             fontWeight: FontWeight.w500),
                                       ),
                                       // Text(
@@ -507,7 +507,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                   //           stringToCurrency(
                                   //               variationPrice, context),
                                   //           style: TextStyle(
-                                  //               color: secondaryColor,
+                                  //               color: HexColor("960000"),
                                   //               fontWeight: FontWeight.w500),
                                   //         ),
                                   //         Text(
@@ -697,7 +697,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                           side: BorderSide(
                             color: widget.product!.inventory == 0
                                 ? Colors.grey
-                                : secondaryColor, //Color of the border
+                                : HexColor("960000"), //Color of the border
                             //Style of the border
                           ),
                           alignment: Alignment.center,
@@ -725,7 +725,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                             size: responsiveFont(9),
                             color: widget.product!.inventory == 0
                                 ? Colors.grey
-                                : secondaryColor,
+                                : HexColor("960000"),
                           ),
                           Text(
                             // AppLocalizations.of(context)!
@@ -736,7 +736,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                 fontSize: responsiveFont(9),
                                 color: widget.product!.inventory != 0 &&
                                         widget.product!.inventory! >= 1
-                                    ? secondaryColor
+                                    ? HexColor("960000")
                                     : Colors.grey),
                           )
                         ],
@@ -772,7 +772,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                           colors: !(widget.product!.inventory != 0 &&
                                   widget.product!.inventory! >= 1)
                               ? [Colors.black12, Colors.grey]
-                              : [primaryColor, secondaryColor])),
+                              : [primaryColor, HexColor("960000")])),
                   width: double.infinity,
                   height: 30.h,
                   child: TextButton(
@@ -909,7 +909,9 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
-            color: indexColor == indexes ? Colors.transparent : secondaryColor),
+            color: indexColor == indexes
+                ? Colors.transparent
+                : HexColor("960000")),
         borderRadius: BorderRadius.circular(5),
         color: indexColor == indexes ? primaryColor : Colors.white,
       ),
@@ -929,7 +931,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
             color: attributes[groupVariant].selectedVariant ==
                     attributes[groupVariant].options![subVariant]
                 ? Colors.transparent
-                : secondaryColor),
+                : HexColor("960000")),
         borderRadius: BorderRadius.circular(5),
         color: attributes[groupVariant].selectedVariant ==
                 attributes[groupVariant].options![subVariant]
@@ -958,7 +960,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                         .toString()
                         .toLowerCase()
                 ? Colors.transparent
-                : secondaryColor),
+                : HexColor("960000")),
         borderRadius: BorderRadius.circular(5),
         color: attributes[groupVariant].selectedVariant!.toLowerCase() ==
                 attributes[groupVariant]

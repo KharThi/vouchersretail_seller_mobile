@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:nyoba/models/customer.dart';
 import 'package:nyoba/provider/customer_provider.dart';
@@ -66,10 +67,7 @@ class _CustomerAddScreenState extends State<CustomerAddScreen> {
       //   snackBar(context,
       //       message: 'Your password and confirmation password does not match.');
       // } else {
-
-      this.setState(() {
-        user.loading = true;
-      });
+      user.loading = true;
       Customer customer = new Customer(
           id: 1,
           customerName: controllerCustomerName.text,
@@ -137,8 +135,8 @@ class _CustomerAddScreenState extends State<CustomerAddScreen> {
           backgroundColor: Colors.white,
           title: Text(
             "Tạo mới khách hàng",
-            style:
-                TextStyle(fontSize: responsiveFont(16), color: secondaryColor),
+            style: TextStyle(
+                fontSize: responsiveFont(16), color: HexColor("960000")),
           ),
         ),
         body: Form(
@@ -240,7 +238,7 @@ class _CustomerAddScreenState extends State<CustomerAddScreen> {
                       style: TextButton.styleFrom(
                           padding: EdgeInsets.symmetric(vertical: 10),
                           backgroundColor:
-                              user.loading ? Colors.grey : secondaryColor),
+                              user.loading ? Colors.grey : HexColor("960000")),
                       onPressed: () {
                         // _formKey.currentState!.validate();
                         if (_formKey.currentState!.validate()) {
@@ -320,7 +318,7 @@ class _CustomerAddScreenState extends State<CustomerAddScreen> {
             final bool emailValid = RegExp(
                     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                 .hasMatch(text!);
-            if (text == null || text.isEmpty) {
+            if (text.isEmpty) {
               return 'Vui lòng nhập ' + label!;
             } else if (!emailValid) {
               return "Email sai định dạng";
@@ -436,7 +434,6 @@ class _CustomerAddScreenState extends State<CustomerAddScreen> {
 
   bool isDate(String input, String format) {
     try {
-      final DateTime d = DateFormat(format).parseStrict(input);
       //print(d);
       return true;
     } catch (e) {

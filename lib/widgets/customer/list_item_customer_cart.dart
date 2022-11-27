@@ -154,7 +154,7 @@ class ListItemCustomerCart extends StatelessWidget {
                             //                 style: TextStyle(
                             //                     fontWeight: FontWeight.w600,
                             //                     fontSize: responsiveFont(11),
-                            //                     color: secondaryColor)),
+                            //                     color: HexColor("960000"))),
                             //           ],
                             //         ),
                             //       )
@@ -168,7 +168,7 @@ class ListItemCustomerCart extends StatelessWidget {
                             //                     style: TextStyle(
                             //                         fontWeight: FontWeight.w600,
                             //                         fontSize: responsiveFont(11),
-                            //                         color: secondaryColor))
+                            //                         color: HexColor("960000")))
                             //                 : TextSpan(
                             //                     text: product!.price.toString() ==
                             //                             product!.price.toString()
@@ -180,7 +180,7 @@ class ListItemCustomerCart extends StatelessWidget {
                             //                     style: TextStyle(
                             //                         fontWeight: FontWeight.w600,
                             //                         fontSize: responsiveFont(11),
-                            //                         color: secondaryColor)),
+                            //                         color: HexColor("960000"))),
                             //           ],
                             //         ),
                             //       ),

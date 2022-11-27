@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:nyoba/provider/login_provider.dart';
 import 'package:provider/provider.dart';
 import '../../app_localizations.dart';
@@ -60,7 +61,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   padding: EdgeInsets.symmetric(vertical: 10),
                   backgroundColor: value.loading || email.text.length < 3
                       ? Colors.grey
-                      : secondaryColor),
+                      : HexColor("960000")),
               onPressed: forgotPassword,
               child: value.loading
                   ? customLoading()
@@ -90,7 +91,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             title: AutoSizeText(
               AppLocalizations.of(context)!.translate('forgot_password_title')!,
               style: TextStyle(
-                  fontSize: responsiveFont(16), color: secondaryColor),
+                  fontSize: responsiveFont(16), color: HexColor("960000")),
             ),
             backgroundColor: Colors.white),
         body: Container(
@@ -181,7 +182,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             child: TextButton(
               style: TextButton.styleFrom(
                   padding: EdgeInsets.symmetric(vertical: 10),
-                  backgroundColor: secondaryColor),
+                  backgroundColor: HexColor("960000")),
               onPressed: () => Navigator.pop(context),
               child: Text(
                 "Done",

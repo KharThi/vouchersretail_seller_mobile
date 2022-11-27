@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:nyoba/pages/auth/input_otp_screen.dart';
 import 'package:nyoba/pages/home/home_screen.dart';
 import 'package:nyoba/provider/login_provider.dart';
@@ -145,7 +146,7 @@ class _SignInOTPScreenState extends State<SignInOTPScreen> {
                       padding: EdgeInsets.symmetric(vertical: 10),
                       backgroundColor: value.loading || phone.text.length < 5
                           ? Colors.grey
-                          : secondaryColor),
+                          : HexColor("960000")),
                   onPressed: () {
                     if (phone.text.isNotEmpty) {
                       setState(() {
@@ -188,7 +189,7 @@ class _SignInOTPScreenState extends State<SignInOTPScreen> {
             title: AutoSizeText(
               AppLocalizations.of(context)!.translate('sign_in_otp')!,
               style: TextStyle(
-                  fontSize: responsiveFont(16), color: secondaryColor),
+                  fontSize: responsiveFont(16), color: HexColor("960000")),
             ),
             backgroundColor: Colors.white),
         body: Container(
@@ -213,7 +214,7 @@ class _SignInOTPScreenState extends State<SignInOTPScreen> {
                     Container(
                       margin: EdgeInsets.only(right: 5),
                       decoration: BoxDecoration(
-                          border: Border.all(color: secondaryColor),
+                          border: Border.all(color: HexColor("960000")),
                           borderRadius: BorderRadius.circular(8)),
                       child: CountryCodePicker(
                         onChanged: (e) {
@@ -232,7 +233,7 @@ class _SignInOTPScreenState extends State<SignInOTPScreen> {
                       child: Container(
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                            border: Border.all(color: secondaryColor),
+                            border: Border.all(color: HexColor("960000")),
                             borderRadius: BorderRadius.circular(8)),
                         child: TextField(
                           controller: phone,
