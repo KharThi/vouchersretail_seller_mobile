@@ -50,7 +50,7 @@ class CustomerAPI {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + jwt.toString()
         });
-    print(response.body);
+    print(response.statusCode);
     if (response.statusCode == 200) {
       print(response.body);
       Map<String, dynamic> dataResponse = await json.decode(response.body);
@@ -75,7 +75,10 @@ class CustomerAPI {
             "Content-Type": "application/json",
             "Authorization": "Bearer " + jwt.toString()
           });
+      print("object" + dataResponse["id"]);
       return dataResponse["id"];
+    } else {
+      return null;
     }
 
     return "";

@@ -331,6 +331,15 @@ class _CustomerAddScreenState extends State<CustomerAddScreen> {
               return "Sai định dạng ngày";
             }
             return null;
+          } else if (label == "Số điện thoại") {
+            if (text == null || text.isEmpty) {
+              return 'Vui lòng nhập ' + label!;
+            } else if (!isNumeric(text)) {
+              return "Số điện thoại phải toàn bộ là số";
+            } else if (text[0] != "0") {
+              return "Số điện thoại phải bắt đầu bằng 0";
+            }
+            return null;
           }
           if (text == null || text.isEmpty) {
             return 'Vui lòng nhập ' + label!;
@@ -440,5 +449,12 @@ class _CustomerAddScreenState extends State<CustomerAddScreen> {
       //print(e);
       return false;
     }
+  }
+
+  bool isNumeric(String s) {
+    if (s == null) {
+      return false;
+    }
+    return double.tryParse(s) != null;
   }
 }

@@ -106,9 +106,10 @@ class _SearchScreenCustomerState extends State<SearchScreenCustomer> {
                     child: ElevatedButton.icon(
                   onPressed: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => CustomerAddScreen()));
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CustomerAddScreen()))
+                        .then((value) => this.setState(() {}));
                   },
                   icon: Icon(Icons.add),
                   label: Text("Bấm vào đây để tạo mới khách hàng"),
