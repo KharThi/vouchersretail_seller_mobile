@@ -91,7 +91,7 @@ class ListItemCustomerCart extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                customer.userInfo!.userName.toString(),
+                                customer.customerName.toString(),
                                 style: TextStyle(
                                     fontSize: responsiveFont(10),
                                     fontWeight: FontWeight.w500),

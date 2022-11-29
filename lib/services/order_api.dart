@@ -62,7 +62,7 @@ class OrderAPI {
   addCartItem(Customer customer, String date, List<Price> listPrice) async {
     SharedPreferences data = await SharedPreferences.getInstance();
     String? jwt = data.getString("jwt");
-    bool check = true;
+    int? check;
 
     for (var element in listPrice) {
       Map customerData = {
@@ -70,7 +70,7 @@ class OrderAPI {
         "quantity": element.quantity,
         "priceId": element.id,
         "useDate": date,
-        "profileId": customer.userInfoId
+        "profileId": customer.profiles!.first.id
       };
       // sendData.add(customerData);
 
@@ -89,28 +89,14 @@ class OrderAPI {
           });
       Map<String, dynamic> dataResponse = await json.decode(response.body);
       print("response" + response.body);
-      if (dataResponse["id"] == null) {
-        check = false;
+      print("CustomerId" + (dataResponse["customerId"] != 0).toString());
+      if (dataResponse["customerId"] != 0) {
+        check = dataResponse["customerId"];
+        print(check.toString());
+      } else {
+        check = 0;
       }
     }
-    // var body = json.encode(sendData);
-
-    // var response = await http.post(
-    //     Uri.parse(
-    //         "https://phuquocvoucher.azurewebsites.net/api/v1/sellers/customers/" +
-    //             customerId.toString() +
-    //             "/cart/items"),
-    //     body: body,
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       "Authorization": "Bearer " + jwt.toString()
-    //     });
-    // print("addCartItem Link api " +
-    //     "https://phuquocvoucher.azurewebsites.net/api/v1/sellers/customers/" +
-    //     customerId.toString() +
-    //     "/cart/items");
-
-    // print("addCartItem in orderApi" + dataResponse.toString());
     return check;
   }
 

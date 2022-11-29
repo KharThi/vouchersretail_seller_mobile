@@ -217,7 +217,7 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
                               ),
                               Text(
                                 "Tên khách hàng: " +
-                                    orderDetail!.customer!.userInfo!.userName
+                                    orderDetail!.customer!.customerName
                                         .toString(),
                                 style: TextStyle(fontSize: responsiveFont(11)),
                               ),
@@ -495,58 +495,65 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
                       Container(
                         width: 10,
                       ),
-                      Expanded(
-                        child: Container(
-                          height: 30.h,
-                          margin: EdgeInsets.only(right: 15),
-                          child: OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                  side: BorderSide(
-                                    color: HexColor(
-                                        "960000"), //Color of the border
-                                    //Style of the border
-                                  ),
-                                  alignment: Alignment.center,
-                                  shape: new RoundedRectangleBorder(
-                                      borderRadius:
-                                          new BorderRadius.circular(5))),
-                              onPressed: () async {
-                                if (orderDetail!.orderStatus == "Competed" ||
-                                    orderDetail!.orderStatus == "Used") {
-                                  await Provider.of<OrderProvider>(context,
-                                          listen: false)
-                                      .sendEmailToCustomer(orderDetail!.id!)
-                                      .then((value) => this.setState(() {
-                                            if (value) {
-                                              snackBar(context,
-                                                  message:
-                                                      'Gửi cho khách hàng thành công!');
-                                            } else {
-                                              snackBar(context,
-                                                  message:
-                                                      'Gửi cho khách hàng thất bại!');
-                                            }
-                                          }));
-                                } else {
-                                  snackBar(context,
-                                      message:
-                                          'Đơn hàng này chưa thanh toán hoặc đã bị hũy!');
-                                }
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "Gửi mail cho khách hàng",
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: responsiveFont(8),
-                                        color: HexColor("960000")),
-                                  )
-                                ],
-                              )),
-                        ),
-                      )
+                      orderDetail!.orderStatus == "Competed" ||
+                              orderDetail!.orderStatus == "Used"
+                          ? Expanded(
+                              child: Container(
+                                height: 30.h,
+                                margin: EdgeInsets.only(right: 15),
+                                child: OutlinedButton(
+                                    style: OutlinedButton.styleFrom(
+                                        side: BorderSide(
+                                          color: HexColor(
+                                              "960000"), //Color of the border
+                                          //Style of the border
+                                        ),
+                                        alignment: Alignment.center,
+                                        shape: new RoundedRectangleBorder(
+                                            borderRadius:
+                                                new BorderRadius.circular(5))),
+                                    onPressed: () async {
+                                      if (orderDetail!.orderStatus ==
+                                              "Competed" ||
+                                          orderDetail!.orderStatus == "Used") {
+                                        await Provider.of<OrderProvider>(
+                                                context,
+                                                listen: false)
+                                            .sendEmailToCustomer(
+                                                orderDetail!.id!)
+                                            .then((value) => this.setState(() {
+                                                  if (value) {
+                                                    snackBar(context,
+                                                        message:
+                                                            'Gửi cho khách hàng thành công!');
+                                                  } else {
+                                                    snackBar(context,
+                                                        message:
+                                                            'Gửi cho khách hàng thất bại!');
+                                                  }
+                                                }));
+                                      } else {
+                                        snackBar(context,
+                                            message:
+                                                'Đơn hàng này chưa thanh toán hoặc đã bị hũy!');
+                                      }
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Gửi mail cho khách hàng",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: responsiveFont(8),
+                                              color: HexColor("960000")),
+                                        )
+                                      ],
+                                    )),
+                              ),
+                            )
+                          : Container()
                     ],
                   )),
             ),

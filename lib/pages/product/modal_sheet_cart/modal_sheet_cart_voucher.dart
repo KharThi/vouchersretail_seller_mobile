@@ -18,6 +18,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:slugify/slugify.dart';
 
+import '../../order/customer_cart_screen.dart';
 import '../../order/momo_payment.dart';
 import '../../search/search_screen_customer.dart';
 
@@ -62,6 +63,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
   String _selectedDate = 'Bấm vào để chọn ngày';
   String _forCallApiDate = "";
   bool isLoading = false;
+  bool isOpen = true;
 
   OrderProvider? orderProvider;
 
@@ -90,14 +92,27 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
         .addCartVoucher(context, widget.product, _forCallApiDate,
             customers.first, listPrice)
         .then((value) {
-      this.setState(() {
-        print("add to cart return value: " + value.toString());
-        if (value == true) {
-          snackBar(context, message: "Thêm vào giỏ hàng thành công!");
-        } else {
-          snackBar(context, message: "Thêm vào giỏ hàng thất bại!");
-        }
-      });
+      print("add to cart return value: " + value.toString());
+      if (value.toString() != "0") {
+        // Navigator.pop(context);
+        // print("Why you can go to customer cart screen =(");
+        snackBar(context, message: "Thêm vào giỏ hàng thành công!");
+
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (context) => CustomerCartScreen(
+        //               customerId: value!,
+        //             ))).then((value) => this.setState(() {}));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CustomerCartScreen(
+                      customerId: value!,
+                    ))).then((value) => this.setState(() {}));
+      } else {
+        snackBar(context, message: "Thêm vào giỏ hàng thất bại!");
+      }
     });
     Navigator.pop(context);
   }
@@ -548,6 +563,18 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                 ),
                               )),
                     Visibility(
+                      visible: listPrice.length == 0 && !isOpen,
+                      child: Container(
+                        alignment: Alignment.center,
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                        child: Text(
+                          "Vui lòng chọn số lượng sản phẩm!",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    ),
+                    Visibility(
                       visible: quantity == null || quantity == 0,
                       child: Container(
                         alignment: Alignment.center,
@@ -594,8 +621,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                     return Container(
                                       child: Card(
                                         child: ListTile(
-                                          title: Text(personone
-                                              .userInfo!.userName
+                                          title: Text(personone.customerName
                                               .toString()),
                                           subtitle: Text(""),
                                           trailing: ElevatedButton(
@@ -647,6 +673,20 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                     : Container(),
                               ],
                             ))
+                        : Container(),
+                    widget.product!.isRequireProfileInfo != false
+                        ? Visibility(
+                            visible: customers.length == 0 && !isOpen,
+                            child: Container(
+                              alignment: Alignment.center,
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 10),
+                              child: Text(
+                                "Vui lòng chọn Chủ sở hữu!",
+                                style: TextStyle(color: Colors.red),
+                              ),
+                            ),
+                          )
                         : Container(),
                     Container(
                       height: 1,
@@ -703,6 +743,17 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                   ],
                 ),
                 Visibility(
+                  visible: _selectedDate == "Bấm vào để chọn ngày" && !isOpen,
+                  child: Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                    child: Text(
+                      "Vui lòng chọn này!",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  ),
+                ),
+                Visibility(
                   visible: widget.type == 'add',
                   child: Align(
                     alignment: Alignment.bottomCenter,
@@ -741,7 +792,16 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                 //     ? null
                                 //     :
                                 () {
-                              addCart(widget.product!);
+                              if (listPrice.length == 0 ||
+                                  customers.length == 0 ||
+                                  _selectedDate == "Bấm vào để chọn ngày") {
+                                this.setState(() {
+                                  isOpen = false;
+                                });
+                              } else {
+                                addCart(widget.product!);
+                              }
+
                               // if (widget.product!.inventory == 0) {
                               //   addCart(widget.product!);
                               // } else {
@@ -810,17 +870,16 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                         height: 30.h,
                         child: TextButton(
                           onPressed: () {
-                            bool check1 = false;
-                            // ignore: unnecessary_null_comparison
-                            bool check2 = customers != null;
-                            bool check3 =
-                                _selectedDate != "Bấm vào để chọn ngày";
-                            for (var element in widget.product!.prices!) {
-                              if (element.quantity != null) {
-                                check1 = true;
-                              }
+                            if (listPrice.length == 0 ||
+                                customers.length == 0 ||
+                                _selectedDate == "Bấm vào để chọn ngày") {
+                              this.setState(() {
+                                isOpen = false;
+                              });
+                            } else {
+                              buyNow();
                             }
-                            buyNow();
+
                             // if (check1) {
                             //   if (check2) {
                             //     if (check3) {

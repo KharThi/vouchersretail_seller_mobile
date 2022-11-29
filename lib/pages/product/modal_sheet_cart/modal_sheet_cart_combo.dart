@@ -520,8 +520,7 @@ class _ModalSheetCartComboState extends State<ModalSheetCartCombo> {
                           return Container(
                             child: Card(
                               child: ListTile(
-                                title: Text(
-                                    personone.userInfo!.userName.toString()),
+                                title: Text(personone.customerName.toString()),
                                 subtitle: Text(""),
                                 trailing: ElevatedButton(
                                   style: ElevatedButton.styleFrom(

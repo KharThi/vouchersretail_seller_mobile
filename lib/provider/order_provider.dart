@@ -18,6 +18,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../app_localizations.dart';
 import '../models/cart.dart';
+import '../pages/order/customer_cart_screen.dart';
 import 'coupon_provider.dart';
 
 class OrderProvider with ChangeNotifier {
@@ -561,14 +562,21 @@ class OrderProvider with ChangeNotifier {
   //   }
   // }
 
-  Future<bool> addCartVoucher(context, Voucher? product, String date,
+  Future<int?> addCartVoucher(context, Voucher? product, String date,
       Customer customer, List<Price> listPrice) async {
-    bool check = false;
+    int? check = 0;
     if (Session.data.getBool('isLogin')!) {
       print("List Price length" + listPrice.length.toString());
       await OrderAPI().addCartItem(customer, date, listPrice).then((data) {
-        if (data) {
-          check = true;
+        if (data != 0) {
+          check = data;
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CustomerCartScreen(
+                        customerId: check!,
+                      )));
+          // return check;
         }
       });
     } else {

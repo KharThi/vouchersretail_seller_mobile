@@ -122,18 +122,25 @@ class ProductAPI {
     return dataResponse["data"];
   }
 
-  searchCustomer({String search = '', String category = '', int? page}) async {
+  searchCustomer({
+    String search = '',
+    String category = '',
+    int? page,
+  }) async {
     // var response = await baseAPI.getAsync(
     //     '$product?search=$search&category=$category&page=$page&status=publish');
     // return response;
 
     SharedPreferences data = await SharedPreferences.getInstance();
     String? jwt = data.getString("jwt");
+    int? sellerId = data.getInt("id");
 
     var response = await http.get(
         Uri.parse(
-            "https://phuquocvoucher.azurewebsites.net/api/v1/customers?UserName=" +
-                search),
+            "https://phuquocvoucher.azurewebsites.net/api/v1/customers?CustomerName=" +
+                search +
+                "&SellerId=" +
+                sellerId.toString()),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + jwt.toString()

@@ -778,14 +778,17 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
                                       await SharedPreferences.getInstance();
                                   await prefrences
                                       .remove("list_customer_order");
-                                  Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => MoMoWebView(
-                                                    url: order.payUrl,
-                                                    orderId: "",
-                                                  )))
-                                      .then((value) => this.setState(() {}));
+                                  if (order.payUrl != "" &&
+                                      order.payUrl != null) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => MoMoWebView(
+                                                  url: order.payUrl,
+                                                  orderId: "",
+                                                ))).then(
+                                        (value) => this.setState(() {}));
+                                  }
                                 });
                               } else {
                                 snackBar(context,

@@ -92,7 +92,7 @@ class ListItemCustomer extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                customer!.userInfo!.userName.toString(),
+                                customer!.customerName.toString(),
                                 maxLines: 1,
                                 overflow: TextOverflow.clip,
                                 style: TextStyle(

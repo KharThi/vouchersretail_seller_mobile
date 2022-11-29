@@ -48,13 +48,23 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
     // controllerCustomerName.text = widget.userModel!.customerName!;
     // controllerFirstname.text = widget.userModel!.firstname!;
     // controllerLastname.text = widget.userModel!.lastname!;
-    controllerCustomerName.text = widget.userModel!.profiles!.first.name!;
+    controllerCustomerName.text = widget.userModel!.profiles!.first.name != null
+        ? widget.userModel!.profiles!.first.name!
+        : "";
     // controllerEmail.text = "";
-    controllerPhone.text = widget.userModel!.profiles!.first.phoneNumber!;
+    controllerPhone.text = widget.userModel!.profiles!.first.phoneNumber != null
+        ? widget.userModel!.profiles!.first.phoneNumber!
+        : "";
     ;
     // controllerUsername.text = "";
-    controllerDateOfBirth.text = widget.userModel!.profiles!.first.dateOfBirth!;
-    controllerIdentity.text = widget.userModel!.profiles!.first.civilIdentify!;
+    controllerDateOfBirth.text =
+        widget.userModel!.profiles!.first.dateOfBirth != null
+            ? widget.userModel!.profiles!.first.dateOfBirth!
+            : "";
+    controllerIdentity.text =
+        widget.userModel!.profiles!.first.civilIdentify != null
+            ? widget.userModel!.profiles!.first.civilIdentify!
+            : "";
     select = widget.userModel!.profiles!.first.sex! == 1 ? "Nam" : "Nữ";
   }
 
