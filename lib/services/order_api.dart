@@ -199,6 +199,28 @@ class OrderAPI {
     return dataResponse;
   }
 
+  cancelOrder(int orderId) async {
+    SharedPreferences data = await SharedPreferences.getInstance();
+    String? jwt = data.getString("jwt");
+    List<Map<dynamic, dynamic>> customerData = List.empty(growable: true);
+
+    var body = json.encode(customerData);
+
+    var response = await http.put(
+        Uri.parse(
+            "https://phuquocvoucher.azurewebsites.net/api/v1/sellers/customers/orders/" +
+                orderId.toString() +
+                "/cancel"),
+        body: body,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + jwt.toString()
+        });
+    Map<String, dynamic> dataResponse = await json.decode(response.body);
+    print("cancel order in orderApi" + dataResponse.toString());
+    return dataResponse;
+  }
+
   removeCartItem(int customerId, int cartItemId) async {
     SharedPreferences data = await SharedPreferences.getInstance();
     String? jwt = data.getString("jwt");

@@ -319,19 +319,22 @@ class _CartScreenState extends State<CartScreen> {
                     //         itemCount: productCart.length)),
                     // buildBottomBarCart()
                     customer.length != 0
-                        ? Container(
-                            child: ListView.builder(
-                                shrinkWrap: true,
-                                controller: _scrollController,
-                                physics: ScrollPhysics(),
-                                itemCount: customer.length,
-                                itemBuilder: (context, i) {
-                                  return ListItemCustomerCart(
-                                    itemCount: customer.length,
-                                    customer: customer[i],
-                                    i: i,
-                                  );
-                                }),
+                        ? Expanded(
+                            flex: 1,
+                            child: Container(
+                              child: ListView.builder(
+                                  shrinkWrap: true,
+                                  controller: _scrollController,
+                                  physics: ScrollPhysics(),
+                                  itemCount: customer.length,
+                                  itemBuilder: (context, i) {
+                                    return ListItemCustomerCart(
+                                      itemCount: customer.length,
+                                      customer: customer[i],
+                                      i: i,
+                                    );
+                                  }),
+                            ),
                           )
                         : Container(
                             child: Column(

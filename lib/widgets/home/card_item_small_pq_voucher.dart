@@ -56,16 +56,30 @@ class CardItemPqVoucher extends StatelessWidget {
                           ),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
-                  child: Text(
-                    voucher!.voucherName!,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: responsiveFont(10)),
-                    textScaleFactor: 1.0,
+                ListTile(
+                  title: Container(
+                    margin: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+                    child: Text(
+                      voucher!.voucherName!,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: responsiveFont(10)),
+                      textScaleFactor: 1.0,
+                    ),
                   ),
-                ),
+                  subtitle: Text(
+                      voucher!.prices!.isNotEmpty
+                          ? voucher!.prices!.first.price! <
+                                  voucher!.prices!.last.price!
+                              ? "Từ " +
+                                  voucher!.prices!.first.price.toString() +
+                                  " Vnd"
+                              : "Từ " +
+                                  voucher!.prices!.last.price.toString() +
+                                  " Vnd"
+                          : "",
+                      style: TextStyle(fontWeight: FontWeight.w700)),
+                )
               ],
             )),
             Container(

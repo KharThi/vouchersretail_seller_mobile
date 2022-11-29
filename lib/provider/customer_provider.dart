@@ -28,6 +28,27 @@ class CustomerProvider with ChangeNotifier {
     return false;
   }
 
+  Future<bool> updateCustomer(context, Profile profile) async {
+    loading = true;
+    await CustomerAPI().putCustomer(profile).then((data) {
+      if (data != null || data != "") {
+        snackBar(context,
+            message: 'Cập nhật customer thành công!', color: Color(0xFF00FF00));
+        loading = false;
+
+        notifyListeners();
+        return true;
+      } else {
+        snackBar(context,
+            message: 'Cập nhật customer thất bại!', color: Color(0xFFFF0000));
+        loading = false;
+        notifyListeners();
+        return false;
+      }
+    });
+    return false;
+  }
+
   Future<List<Customer>> getListCustomer(context) async {
     loading = true;
     List<Customer> customers = List.empty(growable: true);

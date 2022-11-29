@@ -85,13 +85,13 @@ class _CustomerAddScreenState extends State<CustomerAddScreen> {
           userInfoId: 1,
           cartId: 0);
       Profile profile = new Profile(
-          civilIdentify: controllerIdentity.text,
-          customerId: 1,
-          dateOfBirth: controllerDateOfBirth.text,
-          name: controllerCustomerName.text,
-          phoneNumber: controllerPhone.text,
-          sex: 1,
-          status: "Active");
+        civilIdentify: controllerIdentity.text,
+        customerId: 1,
+        dateOfBirth: controllerDateOfBirth.text,
+        name: controllerCustomerName.text,
+        phoneNumber: controllerPhone.text,
+        sex: genderInt,
+      );
       bool check = await user.addCustomer(context, customer, profile);
       if (check) {
         setState(() {

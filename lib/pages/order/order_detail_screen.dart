@@ -491,7 +491,7 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
                   child: Row(
                     children: [
                       //buy again
-                      // buildBtnBuyAgain(),
+                      buildBtnBuyAgain(),
                       Container(
                         width: 10,
                       ),
@@ -511,20 +511,27 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
                                       borderRadius:
                                           new BorderRadius.circular(5))),
                               onPressed: () async {
-                                await Provider.of<OrderProvider>(context,
-                                        listen: false)
-                                    .sendEmailToCustomer(orderDetail!.id!)
-                                    .then((value) => this.setState(() {
-                                          if (value) {
-                                            snackBar(context,
-                                                message:
-                                                    'Gửi cho khách hàng thành công!');
-                                          } else {
-                                            snackBar(context,
-                                                message:
-                                                    'Gửi cho khách hàng thất bại!');
-                                          }
-                                        }));
+                                if (orderDetail!.orderStatus == "Competed" ||
+                                    orderDetail!.orderStatus == "Used") {
+                                  await Provider.of<OrderProvider>(context,
+                                          listen: false)
+                                      .sendEmailToCustomer(orderDetail!.id!)
+                                      .then((value) => this.setState(() {
+                                            if (value) {
+                                              snackBar(context,
+                                                  message:
+                                                      'Gửi cho khách hàng thành công!');
+                                            } else {
+                                              snackBar(context,
+                                                  message:
+                                                      'Gửi cho khách hàng thất bại!');
+                                            }
+                                          }));
+                                } else {
+                                  snackBar(context,
+                                      message:
+                                          'Đơn hàng này chưa thanh toán hoặc đã bị hũy!');
+                                }
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -648,9 +655,11 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
                   borderRadius: BorderRadius.circular(5), color: Colors.grey),
               height: 30.h,
               child: TextButton(
-                onPressed: null,
+                onPressed: () async {
+                  confirmCancelPopDialog(orderDetail!.id!);
+                },
                 child: Text(
-                  AppLocalizations.of(context)!.translate('buy_again')!,
+                  "Hủy đơn",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: responsiveFont(12),
@@ -672,10 +681,10 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
             height: 30.h,
             child: TextButton(
               onPressed: () {
-                order.actionBuyAgain(context);
+                confirmCancelPopDialog(orderDetail!.id!);
               },
               child: Text(
-                "Mua lại",
+                "Hủy đơn hàng",
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: responsiveFont(10),
@@ -1011,6 +1020,123 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
           ],
         ),
       ),
+    );
+  }
+
+  confirmCancelPopDialog(int orderId) {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+          contentPadding: EdgeInsets.zero,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(15.0))),
+          insetPadding: EdgeInsets.all(0),
+          content: Builder(
+            builder: (context) {
+              return Container(
+                height: 150.h,
+                width: 330.w,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: 15,
+                        ),
+                        Text(
+                          "Đồng ý hủy đơn hàng này?",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: responsiveFont(14),
+                              fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        // Text(
+                        //   "Bạn có muốn đăng xuất khỏi tài khoản?",
+                        //   textAlign: TextAlign.center,
+                        //   style: TextStyle(
+                        //       fontSize: responsiveFont(12),
+                        //       fontWeight: FontWeight.w400),
+                        // ),
+                      ],
+                    ),
+                    Container(
+                        child: Column(
+                      children: [
+                        Container(
+                          color: Colors.black12,
+                          height: 2,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: GestureDetector(
+                                onTap: () => Navigator.of(context).pop(false),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.symmetric(vertical: 12),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                          bottomLeft: Radius.circular(15)),
+                                      color: primaryColor),
+                                  child: Text(
+                                    "Không",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: GestureDetector(
+                                onTap: () async => {
+                                  await Provider.of<OrderProvider>(context,
+                                          listen: false)
+                                      .cancelOrder(orderDetail!.id!)
+                                      .then((value) => this.setState(() {
+                                            if (value) {
+                                              snackBar(context,
+                                                  message:
+                                                      'Hủy đơn hàng thành công!');
+                                            } else {
+                                              snackBar(context,
+                                                  message:
+                                                      'Hủy đơn hàng thất bại!');
+                                            }
+                                          })),
+                                  Navigator.pop(context)
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.symmetric(vertical: 12),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                          bottomRight: Radius.circular(15)),
+                                      color: Colors.white),
+                                  child: Text(
+                                    "Đồng ý",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        color: primaryColor),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    ))
+                  ],
+                ),
+              );
+            },
+          )),
     );
   }
 }

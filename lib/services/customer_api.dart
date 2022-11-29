@@ -81,6 +81,57 @@ class CustomerAPI {
     return "";
   }
 
+  putCustomer(Profile profile) async {
+    // Map data = {
+    //   'cookie': Session.data.getString('cookie'),
+    //   'post': postId,
+    //   'comment': comment
+    // };
+    // var response = await baseAPI.postAsync(
+    //   '$postComment',
+    //   data,
+    //   isCustom: true,
+    // );
+    // return response;
+    Map userInfo = {
+      // "user_email": email,
+      // "user_login": username,
+      "sex": profile.sex,
+      "phoneNumber": profile.phoneNumber,
+      "dateOfBirth": profile.dateOfBirth,
+      "name": profile.name,
+      "civilIdentify": profile.civilIdentify,
+      "customerId": profile.customerId,
+      "status": "Active"
+    };
+
+    SharedPreferences data = await SharedPreferences.getInstance();
+    String? jwt = data.getString("jwt");
+    var body = json.encode(userInfo);
+    print("jwt " + jwt.toString());
+    print("body" + body);
+
+    var response = await http.put(
+        Uri.parse(
+            "https://phuquocvoucher.azurewebsites.net/api/v1/sellers/customers/" +
+                profile.customerId.toString() +
+                "/profiles/" +
+                profile.id.toString()),
+        body: body,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + jwt.toString()
+        });
+    print(response.body);
+    if (response.statusCode == 200) {
+      print(response.body);
+      Map<String, dynamic> dataResponse = await json.decode(response.body);
+      return dataResponse["id"];
+    }
+
+    return "";
+  }
+
   getListCustomer() async {
     SharedPreferences data = await SharedPreferences.getInstance();
     String? jwt = data.getString("jwt");

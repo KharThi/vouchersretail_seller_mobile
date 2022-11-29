@@ -326,9 +326,6 @@ class _BrandProductsVoucherState extends State<BrandProductsVoucher>
       String? image,
       Voucher productDetail) {
     bool isOutOfStock = productDetail.inventory == 0;
-    int? price = productDetail.prices!
-        .firstWhere((currency) => currency.isDefault == false)
-        .price;
     return Container(
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(5)),
@@ -437,7 +434,18 @@ class _BrandProductsVoucherState extends State<BrandProductsVoucher>
                             style: TextStyle(color: Colors.black),
                             children: <TextSpan>[
                               TextSpan(
-                                  text: price.toString() + " Vnd",
+                                  text: productDetail.prices!.isNotEmpty
+                                      ? productDetail.prices!.first.price! <
+                                              productDetail.prices!.last.price!
+                                          ? "Từ " +
+                                              productDetail.prices!.first.price
+                                                  .toString() +
+                                              " Vnd"
+                                          : "Từ " +
+                                              productDetail.prices!.last.price
+                                                  .toString() +
+                                              " Vnd"
+                                      : "",
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: responsiveFont(11),

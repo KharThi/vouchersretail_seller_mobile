@@ -90,6 +90,20 @@ class OrderProvider with ChangeNotifier {
     // return result;
   }
 
+  Future<bool> cancelOrder(int orderId) async {
+    bool check = false;
+    await OrderAPI().cancelOrder(orderId).then((data) {
+      // printLog(data, name: 'Link Order From API');
+      check = data["id"].toString() != "";
+      print("Return data" + check.toString());
+      // if (data["id"] != null) {
+      //   check = true;
+      // }
+    });
+    return check;
+    // return result;
+  }
+
   Future<bool> removeCart(int customerId, int cartItemId) async {
     bool check = false;
     await OrderAPI().removeCartItem(customerId, cartItemId).then((data) {
@@ -391,7 +405,7 @@ class OrderProvider with ChangeNotifier {
           .addCartItem(customer, date, listPrice)
           .then((data) async {
         if (data != null) {
-          await OrderAPI().placeOrder(customer.id).then((data) {
+          await OrderAPI().placeOrder(customer.id!).then((data) {
             // printLog(data, name: 'Link Order From API');
             check = data;
             print("Return data" + data.toString());

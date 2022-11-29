@@ -92,14 +92,14 @@ class _MoMoWebView extends State<MoMoWebView> {
             launchUrlString(url, mode: LaunchMode.externalApplication);
             // MyApp().paymentStatus = "ok";
             flutterWebViewPlugin.close();
-            Navigator.of(context).popUntil((route) => route.isFirst);
+            // Navigator.of(context).popUntil((route) => route.isFirst);
             // Navigator.pop(context);
-            // Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //         builder: (context) => LobbyScreen(
-            //             // orderId: widget.orderId.toString(),
-            //             )));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => LobbyScreen(
+                        // orderId: widget.orderId.toString(),
+                        )));
           }
           if (url.contains("phuquoc")) {
             // MyAppState().setStatus("false");

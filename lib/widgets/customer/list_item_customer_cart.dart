@@ -198,7 +198,7 @@ class ListItemCustomerCart extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => CustomerCartScreen(
-                                        customerId: customer.id,
+                                        customerId: customer.id!,
                                       )));
                         },
                       ),

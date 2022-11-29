@@ -439,7 +439,7 @@ class Price {
 
   int? id;
   String? priceLevelName;
-  int? price;
+  var price;
   int? quantity;
   bool? isDefault;
 

@@ -1354,10 +1354,17 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
                               //     double.parse(productModel!.price.toString()),
                               //     context),
                               text: productModel!.prices!.isNotEmpty
-                                  ? productModel!.prices!.first.price
-                                          .toString() +
-                                      " Vnd"
-                                  : "Null",
+                                  ? productModel!.prices!.first.price! <
+                                          productModel!.prices!.last.price!
+                                      ? "Từ " +
+                                          productModel!.prices!.first.price
+                                              .toString() +
+                                          " Vnd"
+                                      : "Từ " +
+                                          productModel!.prices!.last.price
+                                              .toString() +
+                                          " Vnd"
+                                  : "",
                               style: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontSize: responsiveFont(15),

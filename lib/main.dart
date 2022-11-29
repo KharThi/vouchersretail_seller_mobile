@@ -30,6 +30,7 @@ import 'package:nyoba/provider/notification_provider.dart';
 import 'package:nyoba/provider/order_provider.dart';
 import 'package:nyoba/provider/product_provider.dart';
 import 'package:nyoba/provider/register_provider.dart';
+import 'package:nyoba/provider/revenue_provider.dart';
 import 'package:nyoba/provider/review_provider.dart';
 import 'package:nyoba/provider/search_provider.dart';
 import 'package:nyoba/provider/user_provider.dart';
@@ -147,6 +148,9 @@ void main() async {
       ),
       ChangeNotifierProvider<VoucherProvider>(
         create: (context) => VoucherProvider(),
+      ),
+      ChangeNotifierProvider<RevenueProvider>(
+        create: (context) => RevenueProvider(),
       ),
     ],
     child: MyApp(
