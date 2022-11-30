@@ -316,7 +316,7 @@ class OrderAPI {
             orderStatus +
             "&SellerId=" +
             sellerId.toString() +
-            "&PageSize=1000"),
+            "&PageSize=1000&orderBy=id"),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + jwt.toString()

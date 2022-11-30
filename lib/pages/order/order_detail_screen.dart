@@ -210,7 +210,7 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Thông tin chủ sở hữa",
+                                "Thông tin chủ sở hữu",
                                 style: TextStyle(
                                     fontSize: responsiveFont(12),
                                     fontWeight: FontWeight.w500),
@@ -495,7 +495,7 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
                       Container(
                         width: 10,
                       ),
-                      orderDetail!.orderStatus == "Competed" ||
+                      orderDetail!.orderStatus == "Completed" ||
                               orderDetail!.orderStatus == "Used"
                           ? Expanded(
                               child: Container(
@@ -514,7 +514,7 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
                                                 new BorderRadius.circular(5))),
                                     onPressed: () async {
                                       if (orderDetail!.orderStatus ==
-                                              "Competed" ||
+                                              "Completed" ||
                                           orderDetail!.orderStatus == "Used") {
                                         await Provider.of<OrderProvider>(
                                                 context,
@@ -676,30 +676,33 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
             ),
           );
         }
-        return Expanded(
-          child: Container(
-            margin: EdgeInsets.only(left: 15),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [primaryColor, HexColor("960000")])),
-            height: 30.h,
-            child: TextButton(
-              onPressed: () {
-                confirmCancelPopDialog(orderDetail!.id!);
-              },
-              child: Text(
-                "Hủy đơn hàng",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: responsiveFont(10),
-                    fontWeight: FontWeight.w600),
-              ),
-            ),
-          ),
-        );
+        return !(orderDetail!.orderStatus == "Completed" ||
+                orderDetail!.orderStatus == "Used")
+            ? Expanded(
+                child: Container(
+                  margin: EdgeInsets.only(left: 15),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [primaryColor, HexColor("960000")])),
+                  height: 30.h,
+                  child: TextButton(
+                    onPressed: () {
+                      confirmCancelPopDialog(orderDetail!.id!);
+                    },
+                    child: Text(
+                      "Hủy đơn hàng",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: responsiveFont(10),
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+              )
+            : Container();
       }),
     );
   }

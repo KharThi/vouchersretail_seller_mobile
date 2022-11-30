@@ -202,28 +202,28 @@ class _MyOrderState extends State<MyOrder> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: HexColor("c4c4c4")),
-                    height: 50.h,
-                    width: 50.h,
-                    child:
-                        // orderModel.productItems![0].image == null &&
-                        //         orderModel.productItems![0].image == ''
-                        //     ?
-                        Icon(
-                      Icons.image_not_supported_outlined,
-                    )
-                    // : CachedNetworkImage(
-                    //     imageUrl: orderModel.productItems![0].image!,
-                    //     placeholder: (context, url) => Container(),
-                    //     errorWidget: (context, url, error) =>
-                    //         Icon(Icons.image_not_supported_outlined)),
-                    ),
-                Container(
-                  width: 15,
-                ),
+                // Container(
+                //     decoration: BoxDecoration(
+                //         borderRadius: BorderRadius.circular(5),
+                //         color: HexColor("c4c4c4")),
+                //     height: 50.h,
+                //     width: 50.h,
+                //     child:
+                //         // orderModel.productItems![0].image == null &&
+                //         //         orderModel.productItems![0].image == ''
+                //         //     ?
+                //         Icon(
+                //       Icons.image_not_supported_outlined,
+                //     )
+                //     // : CachedNetworkImage(
+                //     //     imageUrl: orderModel.productItems![0].image!,
+                //     //     placeholder: (context, url) => Container(),
+                //     //     errorWidget: (context, url, error) =>
+                //     //         Icon(Icons.image_not_supported_outlined)),
+                //     ),
+                // Container(
+                //   width: 0,
+                // ),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -433,39 +433,39 @@ class _MyOrderState extends State<MyOrder> {
               ),
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                currType = 1;
-                currentStatus = 'Confirm';
-                isLoading = true;
-              });
-              context.read<OrderProvider>().resetPage();
-              loadListOrder();
-            },
-            child: Container(
-              width: 70.w,
-              height: 60.h,
-              child: Column(
-                children: [
-                  Container(
-                      width: 30.w,
-                      height: 30.h,
-                      child: currType == 1
-                          ? Image.asset("images/order/pending.png")
-                          : Image.asset("images/order/pending_dark.png")),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    "Xác nhận",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: responsiveFont(8)),
-                  )
-                ],
-              ),
-            ),
-          ),
+          // GestureDetector(
+          //   onTap: () {
+          //     setState(() {
+          //       currType = 1;
+          //       currentStatus = 'Confirm';
+          //       isLoading = true;
+          //     });
+          //     context.read<OrderProvider>().resetPage();
+          //     loadListOrder();
+          //   },
+          //   child: Container(
+          //     width: 70.w,
+          //     height: 60.h,
+          //     child: Column(
+          //       children: [
+          //         Container(
+          //             width: 30.w,
+          //             height: 30.h,
+          //             child: currType == 1
+          //                 ? Image.asset("images/order/pending.png")
+          //                 : Image.asset("images/order/pending_dark.png")),
+          //         SizedBox(
+          //           height: 5,
+          //         ),
+          //         Text(
+          //           "Xác nhận",
+          //           textAlign: TextAlign.center,
+          //           style: TextStyle(fontSize: responsiveFont(8)),
+          //         )
+          //       ],
+          //     ),
+          //   ),
+          // ),
           // GestureDetector(
           //   onTap: () {
           //     setState(() {
@@ -597,72 +597,72 @@ class _MyOrderState extends State<MyOrder> {
               ),
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                currType = 6;
-                isLoading = true;
-                currentStatus = 'Used';
-              });
-              context.read<OrderProvider>().resetPage();
-              loadListOrder();
-            },
-            child: Container(
-              width: 70.w,
-              height: 60.h,
-              child: Column(
-                children: [
-                  Container(
-                      width: 30.w,
-                      height: 30.h,
-                      child: currType == 6
-                          ? Image.asset("images/order/hold.png")
-                          : Image.asset("images/order/hold_dark.png")),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    "Đã sử dụng",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: responsiveFont(8)),
-                  )
-                ],
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                currType = 7;
-                isLoading = true;
-                currentStatus = 'Failed';
-              });
-              context.read<OrderProvider>().resetPage();
-              loadListOrder();
-            },
-            child: Container(
-              width: 70.w,
-              height: 60.h,
-              child: Column(
-                children: [
-                  Container(
-                      width: 30.w,
-                      height: 30.h,
-                      child: currType == 7
-                          ? Image.asset("images/order/failed.png")
-                          : Image.asset("images/order/failed_dark.png")),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    "Thất bại",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: responsiveFont(8)),
-                  )
-                ],
-              ),
-            ),
-          ),
+          // GestureDetector(
+          //   onTap: () {
+          //     setState(() {
+          //       currType = 6;
+          //       isLoading = true;
+          //       currentStatus = 'Used';
+          //     });
+          //     context.read<OrderProvider>().resetPage();
+          //     loadListOrder();
+          //   },
+          //   child: Container(
+          //     width: 70.w,
+          //     height: 60.h,
+          //     child: Column(
+          //       children: [
+          //         Container(
+          //             width: 30.w,
+          //             height: 30.h,
+          //             child: currType == 6
+          //                 ? Image.asset("images/order/hold.png")
+          //                 : Image.asset("images/order/hold_dark.png")),
+          //         SizedBox(
+          //           height: 5,
+          //         ),
+          //         Text(
+          //           "Đã sử dụng",
+          //           textAlign: TextAlign.center,
+          //           style: TextStyle(fontSize: responsiveFont(8)),
+          //         )
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          // GestureDetector(
+          //   onTap: () {
+          //     setState(() {
+          //       currType = 7;
+          //       isLoading = true;
+          //       currentStatus = 'Failed';
+          //     });
+          //     context.read<OrderProvider>().resetPage();
+          //     loadListOrder();
+          //   },
+          //   child: Container(
+          //     width: 70.w,
+          //     height: 60.h,
+          //     child: Column(
+          //       children: [
+          //         Container(
+          //             width: 30.w,
+          //             height: 30.h,
+          //             child: currType == 7
+          //                 ? Image.asset("images/order/failed.png")
+          //                 : Image.asset("images/order/failed_dark.png")),
+          //         SizedBox(
+          //           height: 5,
+          //         ),
+          //         Text(
+          //           "Thất bại",
+          //           textAlign: TextAlign.center,
+          //           style: TextStyle(fontSize: responsiveFont(8)),
+          //         )
+          //       ],
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

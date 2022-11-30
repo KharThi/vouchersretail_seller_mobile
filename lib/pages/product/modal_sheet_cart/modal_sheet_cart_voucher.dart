@@ -748,7 +748,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                     alignment: Alignment.center,
                     margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                     child: Text(
-                      "Vui lòng chọn này!",
+                      "Vui lòng chọn ngày!",
                       style: TextStyle(color: Colors.red),
                     ),
                   ),

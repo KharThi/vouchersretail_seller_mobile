@@ -397,7 +397,7 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
         return ColorfulSafeArea(
           color: Colors.white,
           child: Scaffold(
-            floatingActionButton: ContactFAB(),
+            // floatingActionButton: ContactFAB(),
             appBar: appBar(productModel!) as PreferredSizeWidget?,
             body: Stack(
               children: [

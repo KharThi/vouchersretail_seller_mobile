@@ -59,24 +59,24 @@ class ListItemCustomerCart extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    width: 60.h,
-                    height: 60.h,
-                    child: customer.userInfo!.avatarLink.toString().isEmpty
-                        ? Icon(
-                            Icons.image_not_supported,
-                            size: 50,
-                          )
-                        : CachedNetworkImage(
-                            imageUrl: customer.userInfo!.avatarLink.toString(),
-                            placeholder: (context, url) => customLoading(),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
-                          ),
-                  ),
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //     borderRadius: BorderRadius.circular(5),
+                  //   ),
+                  //   width: 60.h,
+                  //   height: 60.h,
+                  //   child: customer.userInfo!.avatarLink.toString().isEmpty
+                  //       ? Icon(
+                  //           Icons.image_not_supported,
+                  //           size: 50,
+                  //         )
+                  //       : CachedNetworkImage(
+                  //           imageUrl: customer.userInfo!.avatarLink.toString(),
+                  //           placeholder: (context, url) => customLoading(),
+                  //           errorWidget: (context, url, error) =>
+                  //               Icon(Icons.error),
+                  //         ),
+                  // ),
                   SizedBox(
                     width: 15,
                   ),
