@@ -81,12 +81,12 @@ class _RevenueScreenState extends State<RevenueScreen> {
             // )
           ],
         ),
-        body: isLoading
-            ? customLoading()
-            : !Session.data.getBool('isLogin')!
-                ? Center(
-                    child: buildNoAuth(context),
-                  )
+        body: !Session.data.getBool('isLogin')!
+            ? Center(
+                child: buildNoAuth(context),
+              )
+            : isLoading
+                ? customLoading()
                 : StaggeredGrid.count(
                     crossAxisCount: 4,
                     crossAxisSpacing: 4,
