@@ -50,66 +50,66 @@ class _ProductDetailShimmerVoucherState
     return ColorfulSafeArea(
         color: Colors.white,
         child: Scaffold(
-            floatingActionButton: ContactFAB(),
+            // floatingActionButton: ContactFAB(),
             body: Stack(
-              children: [
-                SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      appBar(),
-                      Shimmer.fromColors(
-                        baseColor: Colors.grey[300]!,
-                        highlightColor: Colors.grey[100]!,
-                        child: Column(
-                          children: [
-                            AspectRatio(
-                              aspectRatio: 1 / 1,
-                              child: Container(
-                                color: Colors.white,
-                              ),
-                            ),
-                            firstPart(),
-                            Container(
-                              margin: EdgeInsets.symmetric(vertical: 15),
-                              width: double.infinity,
-                              height: 5,
-                              color: HexColor("EEEEEE"),
-                            ),
-                            secondPart(),
-                            Container(
-                              margin: EdgeInsets.symmetric(vertical: 15),
-                              width: double.infinity,
-                              height: 5,
-                              color: HexColor("EEEEEE"),
-                            ),
-                            thirdPart(),
-                            Container(
-                              margin: EdgeInsets.symmetric(vertical: 15),
-                              width: double.infinity,
-                              height: 5,
-                              color: HexColor("EEEEEE"),
-                            ),
-                            fourthPart("You Might Also Like"),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            fourthPart("Featured Products"),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            fourthPart("On Sale Now"),
-                            SizedBox(
-                              height: 70.h,
-                            ),
-                          ],
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  appBar(),
+                  Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Column(
+                      children: [
+                        AspectRatio(
+                          aspectRatio: 1 / 1,
+                          child: Container(
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                    ],
+                        firstPart(),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 15),
+                          width: double.infinity,
+                          height: 5,
+                          color: HexColor("EEEEEE"),
+                        ),
+                        secondPart(),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 15),
+                          width: double.infinity,
+                          height: 5,
+                          color: HexColor("EEEEEE"),
+                        ),
+                        thirdPart(),
+                        Container(
+                          margin: EdgeInsets.symmetric(vertical: 15),
+                          width: double.infinity,
+                          height: 5,
+                          color: HexColor("EEEEEE"),
+                        ),
+                        fourthPart("You Might Also Like"),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        fourthPart("Featured Products"),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        fourthPart("On Sale Now"),
+                        SizedBox(
+                          height: 70.h,
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                appBar(),
-              ],
-            )));
+                ],
+              ),
+            ),
+            appBar(),
+          ],
+        )));
   }
 
   Widget fourthPart(String title) {
