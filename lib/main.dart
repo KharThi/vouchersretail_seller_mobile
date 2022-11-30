@@ -30,6 +30,7 @@ import 'package:nyoba/provider/notification_provider.dart';
 import 'package:nyoba/provider/order_provider.dart';
 import 'package:nyoba/provider/product_provider.dart';
 import 'package:nyoba/provider/register_provider.dart';
+import 'package:nyoba/provider/revenue_provider.dart';
 import 'package:nyoba/provider/review_provider.dart';
 import 'package:nyoba/provider/search_provider.dart';
 import 'package:nyoba/provider/user_provider.dart';
@@ -141,12 +142,15 @@ void main() async {
         create: (context) => WalletProvider(),
       ),
       ChangeNotifierProvider<CustomerProvider>(
-        create: (context) => CustomerProvider(),
+          create: (context) => CustomerProvider()),
       ChangeNotifierProvider<ComboProvider>(
         create: (context) => ComboProvider(),
       ),
       ChangeNotifierProvider<VoucherProvider>(
         create: (context) => VoucherProvider(),
+      ),
+      ChangeNotifierProvider<RevenueProvider>(
+        create: (context) => RevenueProvider(),
       ),
     ],
     child: MyApp(
@@ -235,6 +239,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _configureSelectNotificationSubject() {
+    Uri uri1 = Uri.parse("https://www.phuquocvoucher.vn/home");
+    DeeplinkConfig().pathUrl(uri1, context, false);
     selectNotificationSubject.stream.listen((String? payload) async {
       debugPrint("Payload : $payload");
       var _payload = json.decode(payload!);

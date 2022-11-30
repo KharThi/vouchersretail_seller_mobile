@@ -330,7 +330,7 @@ class _BlogDetailState extends State<BlogDetail> {
                                           child: Container(
                                               child: Icon(
                                             Icons.local_offer,
-                                            color: secondaryColor,
+                                            color: HexColor("960000"),
                                           ))),
                                       SizedBox(
                                         width: 10,
@@ -376,7 +376,7 @@ class _BlogDetailState extends State<BlogDetail> {
                                         .translate('leave_comment')!,
                                     style: TextStyle(
                                         fontSize: responsiveFont(12),
-                                        color: secondaryColor,
+                                        color: HexColor("960000"),
                                         fontWeight: FontWeight.w500),
                                   ),
                                 ),
@@ -447,7 +447,7 @@ class _BlogDetailState extends State<BlogDetail> {
                                               onPressed: postComment,
                                               style: TextButton.styleFrom(
                                                   backgroundColor:
-                                                      secondaryColor,
+                                                      HexColor("960000"),
                                                   padding: EdgeInsets.symmetric(
                                                       horizontal: 18,
                                                       vertical: 6)),
@@ -532,7 +532,7 @@ class _BlogDetailState extends State<BlogDetail> {
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(3),
-          border: Border.all(color: secondaryColor)),
+          border: Border.all(color: HexColor("960000"))),
       child: Text(
         title,
         style: TextStyle(color: primaryColor),

@@ -99,7 +99,7 @@ class GridItemCategory extends StatelessWidget {
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(2),
-                                        color: secondaryColor,
+                                        color: HexColor("960000"),
                                       ),
                                       child: Text(
                                         "${product!.discProduct!.round()}%",
@@ -122,8 +122,8 @@ class GridItemCategory extends StatelessWidget {
                                                       product!.productRegPrice),
                                                   context),
                                               style: TextStyle(
-                                                  decoration:
-                                                  TextDecoration.lineThrough,
+                                                  decoration: TextDecoration
+                                                      .lineThrough,
                                                   fontSize: responsiveFont(9),
                                                   color: HexColor("C4C4C4"))),
                                         ],
@@ -134,48 +134,54 @@ class GridItemCategory extends StatelessWidget {
                               ),
                               product!.type == 'simple'
                                   ? RichText(
-                                text: TextSpan(
-                                  style: TextStyle(color: Colors.black),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: stringToCurrency(
-                                            double.parse(
-                                                product!.productPrice),
-                                            context),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: responsiveFont(11),
-                                            color: secondaryColor)),
-                                  ],
-                                ),
-                              )
+                                      text: TextSpan(
+                                        style: TextStyle(color: Colors.black),
+                                        children: <TextSpan>[
+                                          TextSpan(
+                                              text: stringToCurrency(
+                                                  double.parse(
+                                                      product!.productPrice),
+                                                  context),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: responsiveFont(11),
+                                                  color: HexColor("960000"))),
+                                        ],
+                                      ),
+                                    )
                                   : RichText(
-                                text: TextSpan(
-                                  style: TextStyle(color: Colors.black),
-                                  children: <TextSpan>[
-                                    product!.variationPrices!.isEmpty
-                                        ? TextSpan(
-                                        text: '',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize:
-                                            responsiveFont(11),
-                                            color: secondaryColor))
-                                        : TextSpan(
-                                        text: product!.variationPrices!
-                                            .first ==
-                                            product!.variationPrices!
-                                                .last
-                                            ? '${stringToCurrency(product!.variationPrices!.first!, context)}'
-                                            : '${stringToCurrency(product!.variationPrices!.first!, context)} - ${stringToCurrency(product!.variationPrices!.last!, context)}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize:
-                                            responsiveFont(11),
-                                            color: secondaryColor)),
-                                  ],
-                                ),
-                              ),
+                                      text: TextSpan(
+                                        style: TextStyle(color: Colors.black),
+                                        children: <TextSpan>[
+                                          product!.variationPrices!.isEmpty
+                                              ? TextSpan(
+                                                  text: '',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize:
+                                                          responsiveFont(11),
+                                                      color:
+                                                          HexColor("960000")))
+                                              : TextSpan(
+                                                  text: product!
+                                                              .variationPrices!
+                                                              .first ==
+                                                          product!
+                                                              .variationPrices!
+                                                              .last
+                                                      ? '${stringToCurrency(product!.variationPrices!.first!, context)}'
+                                                      : '${stringToCurrency(product!.variationPrices!.first!, context)} - ${stringToCurrency(product!.variationPrices!.last!, context)}',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize:
+                                                          responsiveFont(11),
+                                                      color:
+                                                          HexColor("960000"))),
+                                        ],
+                                      ),
+                                    ),
                             ],
                           ),
                         ),
@@ -213,7 +219,7 @@ class GridItemCategory extends StatelessWidget {
                   margin: EdgeInsets.only(bottom: 15),
                   child: Icon(
                     Icons.add,
-                    color: secondaryColor,
+                    color: HexColor("960000"),
                     size: 28,
                   ),
                 ),
@@ -221,7 +227,7 @@ class GridItemCategory extends StatelessWidget {
                   child: Text(
                     AppLocalizations.of(context)!.translate('view_more')!,
                     style: TextStyle(
-                        color: secondaryColor,
+                        color: HexColor("960000"),
                         fontSize: responsiveFont(10),
                         fontWeight: FontWeight.w500),
                   ),

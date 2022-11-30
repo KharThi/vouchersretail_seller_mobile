@@ -1,16 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:nyoba/models/order_model.dart';
+import 'package:nyoba/models/order.dart';
 import 'package:nyoba/pages/order/order_detail_screen.dart';
 import 'package:nyoba/provider/home_provider.dart';
 import 'package:nyoba/provider/order_provider.dart';
 import 'package:nyoba/services/session.dart';
-import 'package:nyoba/utils/currency_format.dart';
-import 'package:nyoba/widgets/order/order_list_shimmer.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import '../../app_localizations.dart';
 import '../../utils/utility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -29,6 +26,8 @@ class _MyOrderState extends State<MyOrder> {
   int currType = 0;
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
+  List<Order> orders = List.empty(growable: true);
+  bool isLoading = true;
 
   final ScrollController _scrollController = ScrollController();
 
@@ -51,19 +50,26 @@ class _MyOrderState extends State<MyOrder> {
   }
 
   loadListOrder() {
+    // isLoading = true;
     this.setState(() {});
     if (Session.data.getBool('isLogin')!) {
-      if (isNumeric(search)) {
-        context
-            .read<OrderProvider>()
-            .fetchOrders(status: currentStatus, orderId: search)
-            .then((value) => this.setState(() {}));
-      } else {
-        context
-            .read<OrderProvider>()
-            .fetchOrders(status: currentStatus, search: search)
-            .then((value) => this.setState(() {}));
-      }
+      // if (isNumeric(search)) {
+      //   context
+      //       .read<OrderProvider>()
+      //       .fetchOrders(status: currentStatus, orderId: search)
+      //       .then((value) => this.setState(() {}));
+      // } else {
+      context
+          .read<OrderProvider>()
+          .fetchOrdersV2(context, currentStatus)
+          .then((value) => this.setState(() {
+                orders = value;
+                isLoading = false;
+                // for (var element in orders) {
+                //   print(element.id);
+                // }
+              }));
+      // }
       _refreshController.refreshCompleted();
     }
   }
@@ -80,47 +86,44 @@ class _MyOrderState extends State<MyOrder> {
 
   @override
   Widget build(BuildContext context) {
-    final orders = context.select((OrderProvider n) => n);
+    // final orders = context.select((OrderProvider n) => n);
     Widget buildOrders = SmartRefresher(
       controller: _refreshController,
       scrollController: _scrollController,
       onRefresh: loadListOrder,
       child: Container(
-        child: ListenableProvider.value(
-          value: orders,
-          child: Consumer<OrderProvider>(builder: (context, value, child) {
-            if (value.isLoading && value.orderPage == 1) {
-              return OrderListShimmer();
-            }
-            if (value.listOrder.isEmpty) {
-              return buildTransactionEmpty();
-            }
-            return ListView.builder(
-                itemCount: value.listOrder.length,
-                shrinkWrap: true,
-                physics: ScrollPhysics(),
-                itemBuilder: (context, i) {
-                  return orderItem(value.listOrder[i]);
-                });
-          }),
-        ),
+        child: Consumer<OrderProvider>(builder: (context, value, child) {
+          // if (value.isLoading && value.orderPage == 1) {
+          //   return OrderListShimmer();
+          // }
+          if (orders.length == 0) {
+            return buildTransactionEmpty();
+          }
+          return ListView.builder(
+              itemCount: orders.length,
+              shrinkWrap: true,
+              physics: ScrollPhysics(),
+              itemBuilder: (context, i) {
+                return orderItem(orders[i]);
+              });
+        }),
       ),
     );
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ),
-        ),
+        // leading: IconButton(
+        //   onPressed: () {
+        //     Navigator.pop(context);
+        //   },
+        //   icon: Icon(
+        //     Icons.arrow_back,
+        //     color: Colors.black,
+        //   ),
+        // ),
         title: Text(
-          AppLocalizations.of(context)!.translate('my_order')!,
+          "Đơn hàng của tôi",
           style: TextStyle(color: Colors.black, fontSize: responsiveFont(16)),
         ),
       ),
@@ -128,66 +131,66 @@ class _MyOrderState extends State<MyOrder> {
           ? Center(
               child: buildNoAuth(context),
             )
-          : Container(
-              margin: EdgeInsets.all(15),
-              child: Column(
-                children: [
-                  Container(
-                    height: 30.h,
-                    child: TextField(
-                      controller: searchController,
-                      style: TextStyle(fontSize: 14),
-                      textAlignVertical: TextAlignVertical.center,
-                      onSubmitted: (value) {
-                        setState(() {});
-                        context.read<OrderProvider>().resetPage();
-                        loadListOrder();
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          search = value;
-                        });
-                      },
-                      textInputAction: TextInputAction.search,
-                      decoration: InputDecoration(
-                        isDense: true,
-                        isCollapsed: true,
-                        filled: true,
-                        border: new OutlineInputBorder(
-                          borderRadius: const BorderRadius.all(
-                            const Radius.circular(5),
-                          ),
-                        ),
-                        prefixIcon: Icon(Icons.search),
-                        hintText: AppLocalizations.of(context)!
-                            .translate('search_transaction'),
-                        hintStyle: TextStyle(fontSize: responsiveFont(12)),
+          : isLoading
+              ? customLoading()
+              : Container(
+                  margin: EdgeInsets.all(15),
+                  child: Column(
+                    children: [
+                      // Container(
+                      //   height: 30.h,
+                      //   child: TextField(
+                      //     controller: searchController,
+                      //     style: TextStyle(fontSize: 14),
+                      //     textAlignVertical: TextAlignVertical.center,
+                      //     onSubmitted: (value) {
+                      //       setState(() {});
+                      //       context.read<OrderProvider>().resetPage();
+                      //       loadListOrder();
+                      //     },
+                      //     onChanged: (value) {
+                      //       setState(() {
+                      //         search = value;
+                      //       });
+                      //     },
+                      //     textInputAction: TextInputAction.search,
+                      //     decoration: InputDecoration(
+                      //       isDense: true,
+                      //       isCollapsed: true,
+                      //       filled: true,
+                      //       border: new OutlineInputBorder(
+                      //         borderRadius: const BorderRadius.all(
+                      //           const Radius.circular(5),
+                      //         ),
+                      //       ),
+                      //       prefixIcon: Icon(Icons.search),
+                      //       hintText: AppLocalizations.of(context)!
+                      //           .translate('search_transaction'),
+                      //       hintStyle: TextStyle(fontSize: responsiveFont(12)),
+                      //     ),
+                      //   ),
+                      // ),
+                      Container(
+                        height: 15,
                       ),
-                    ),
+                      buildTabStatus(),
+                      Container(
+                        height: 10,
+                      ),
+                      Expanded(
+                        child: buildOrders,
+                      ),
+                      // if (orders.length == 0)
+                      //   Center(
+                      //     child: customLoading(),
+                      //   ),
+                    ],
                   ),
-                  Container(
-                    height: 15,
-                  ),
-                  buildTabStatus(),
-                  Container(
-                    height: 10,
-                  ),
-                  Expanded(
-                    child: buildOrders,
-                  ),
-                  if (orders.orderPage != 1 &&
-                      orders.tempOrder.length % 10 == 0 &&
-                      orders.isLoading)
-                    Center(
-                      child: customLoading(),
-                    ),
-                ],
-              ),
-            ),
+                ),
     );
   }
 
-  Widget orderItem(OrderModel orderModel) {
+  Widget orderItem(Order orderModel) {
     return Container(
       margin: EdgeInsets.only(bottom: 15),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
@@ -199,26 +202,28 @@ class _MyOrderState extends State<MyOrder> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: HexColor("c4c4c4")),
-                  height: 50.h,
-                  width: 50.h,
-                  child: orderModel.productItems![0].image == null &&
-                          orderModel.productItems![0].image == ''
-                      ? Icon(
-                          Icons.image_not_supported_outlined,
-                        )
-                      : CachedNetworkImage(
-                          imageUrl: orderModel.productItems![0].image!,
-                          placeholder: (context, url) => Container(),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.image_not_supported_outlined)),
-                ),
-                Container(
-                  width: 15,
-                ),
+                // Container(
+                //     decoration: BoxDecoration(
+                //         borderRadius: BorderRadius.circular(5),
+                //         color: HexColor("c4c4c4")),
+                //     height: 50.h,
+                //     width: 50.h,
+                //     child:
+                //         // orderModel.productItems![0].image == null &&
+                //         //         orderModel.productItems![0].image == ''
+                //         //     ?
+                //         Icon(
+                //       Icons.image_not_supported_outlined,
+                //     )
+                //     // : CachedNetworkImage(
+                //     //     imageUrl: orderModel.productItems![0].image!,
+                //     //     placeholder: (context, url) => Container(),
+                //     //     errorWidget: (context, url, error) =>
+                //     //         Icon(Icons.image_not_supported_outlined)),
+                //     ),
+                // Container(
+                //   width: 0,
+                // ),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -226,13 +231,13 @@ class _MyOrderState extends State<MyOrder> {
                     children: [
                       Text(
                         convertHtmlUnescape(
-                            orderModel.productItems![0].productName!),
+                            "Order số " + orderModel.id.toString()),
                         style: TextStyle(
                             fontSize: responsiveFont(12),
                             fontWeight: FontWeight.w600),
                       ),
                       Text(
-                        "${orderModel.productItems![0].quantity} item",
+                        "${orderModel.totalPrice} vnd",
                         style: TextStyle(fontSize: responsiveFont(10)),
                       )
                     ],
@@ -242,11 +247,11 @@ class _MyOrderState extends State<MyOrder> {
             ),
           ),
           Visibility(
-            visible: orderModel.productItems!.length > 1,
+            visible: orderModel.orderItems!.length > 1,
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 10),
               child: Text(
-                "+${orderModel.productItems!.length - 1} ${AppLocalizations.of(context)!.translate('other_product')}",
+                "+${orderModel.orderItems!.length - 1} Sản phẩm khác}",
                 style: TextStyle(fontSize: responsiveFont(10)),
               ),
             ),
@@ -263,12 +268,11 @@ class _MyOrderState extends State<MyOrder> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      AppLocalizations.of(context)!.translate('total_cost')!,
+                      "Tổng tiền",
                       style: TextStyle(fontSize: responsiveFont(9)),
                     ),
                     Text(
-                      stringToCurrency(
-                          double.parse(orderModel.total!), context),
+                      orderModel.totalPrice.toString() + " vnd",
                       style: TextStyle(
                           fontSize: responsiveFont(10),
                           fontWeight: FontWeight.w500),
@@ -281,7 +285,7 @@ class _MyOrderState extends State<MyOrder> {
                       gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
-                          colors: [primaryColor, secondaryColor])),
+                          colors: [primaryColor, HexColor("960000")])),
                   height: 30.h,
                   child: TextButton(
                     onPressed: () async {
@@ -295,7 +299,7 @@ class _MyOrderState extends State<MyOrder> {
                       });
                     },
                     child: Text(
-                      AppLocalizations.of(context)!.translate('more_detail')!,
+                      "Xem thêm",
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: responsiveFont(10),
@@ -315,21 +319,20 @@ class _MyOrderState extends State<MyOrder> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Order ID : ${orderModel.id}",
+                      "ID của order : ${orderModel.id}",
                       style: TextStyle(
                         fontSize: responsiveFont(10),
                       ),
                     ),
-                    Text(
-                      convertDateFormatShortMonth(
-                          DateTime.parse(orderModel.dateCreated!)),
-                      style: TextStyle(
-                          fontSize: responsiveFont(8),
-                          fontWeight: FontWeight.w500),
-                    )
+                    // Text(
+                    //   orderModel.orderStatus.toString(),
+                    //   style: TextStyle(
+                    //       fontSize: responsiveFont(8),
+                    //       fontWeight: FontWeight.w500),
+                    // )
                   ],
                 ),
-                buildStatusOrder(orderModel.status)
+                buildStatusOrder(orderModel.orderStatus)
               ],
             ),
           ),
@@ -402,6 +405,7 @@ class _MyOrderState extends State<MyOrder> {
               setState(() {
                 currType = 0;
                 currentStatus = '';
+                isLoading = true;
               });
               context.read<OrderProvider>().resetPage();
               loadListOrder();
@@ -421,7 +425,7 @@ class _MyOrderState extends State<MyOrder> {
                     height: 5,
                   ),
                   Text(
-                    AppLocalizations.of(context)!.translate('all_transaction')!,
+                    "Tất cả đơn hàng",
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: responsiveFont(8)),
                   )
@@ -429,75 +433,77 @@ class _MyOrderState extends State<MyOrder> {
               ),
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                currType = 1;
-                currentStatus = 'pending';
-              });
-              context.read<OrderProvider>().resetPage();
-              loadListOrder();
-            },
-            child: Container(
-              width: 70.w,
-              height: 60.h,
-              child: Column(
-                children: [
-                  Container(
-                      width: 30.w,
-                      height: 30.h,
-                      child: currType == 1
-                          ? Image.asset("images/order/pending.png")
-                          : Image.asset("images/order/pending_dark.png")),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    AppLocalizations.of(context)!.translate('pending')!,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: responsiveFont(8)),
-                  )
-                ],
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                currType = 2;
-                currentStatus = 'on-hold';
-              });
-              context.read<OrderProvider>().resetPage();
-              loadListOrder();
-            },
-            child: Container(
-              width: 70.w,
-              height: 60.h,
-              child: Column(
-                children: [
-                  Container(
-                      width: 30.w,
-                      height: 30.h,
-                      child: currType == 2
-                          ? Image.asset("images/order/hold.png")
-                          : Image.asset("images/order/hold_dark.png")),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    AppLocalizations.of(context)!.translate('on_hold')!,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: responsiveFont(8)),
-                  )
-                ],
-              ),
-            ),
-          ),
+          // GestureDetector(
+          //   onTap: () {
+          //     setState(() {
+          //       currType = 1;
+          //       currentStatus = 'Confirm';
+          //       isLoading = true;
+          //     });
+          //     context.read<OrderProvider>().resetPage();
+          //     loadListOrder();
+          //   },
+          //   child: Container(
+          //     width: 70.w,
+          //     height: 60.h,
+          //     child: Column(
+          //       children: [
+          //         Container(
+          //             width: 30.w,
+          //             height: 30.h,
+          //             child: currType == 1
+          //                 ? Image.asset("images/order/pending.png")
+          //                 : Image.asset("images/order/pending_dark.png")),
+          //         SizedBox(
+          //           height: 5,
+          //         ),
+          //         Text(
+          //           "Xác nhận",
+          //           textAlign: TextAlign.center,
+          //           style: TextStyle(fontSize: responsiveFont(8)),
+          //         )
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          // GestureDetector(
+          //   onTap: () {
+          //     setState(() {
+          //       currType = 2;
+          //       currentStatus = 'on-hold';
+          //     });
+          //     context.read<OrderProvider>().resetPage();
+          //     loadListOrder();
+          //   },
+          //   child: Container(
+          //     width: 70.w,
+          //     height: 60.h,
+          //     child: Column(
+          //       children: [
+          //         Container(
+          //             width: 30.w,
+          //             height: 30.h,
+          //             child: currType == 2
+          //                 ? Image.asset("images/order/hold.png")
+          //                 : Image.asset("images/order/hold_dark.png")),
+          //         SizedBox(
+          //           height: 5,
+          //         ),
+          //         Text(
+          //           AppLocalizations.of(context)!.translate('on_hold')!,
+          //           textAlign: TextAlign.center,
+          //           style: TextStyle(fontSize: responsiveFont(8)),
+          //         )
+          //       ],
+          //     ),
+          //   ),
+          // ),
           GestureDetector(
             onTap: () {
               setState(() {
                 currType = 3;
-                currentStatus = 'processing';
+                isLoading = true;
+                currentStatus = 'Processing';
               });
               context.read<OrderProvider>().resetPage();
               loadListOrder();
@@ -517,7 +523,7 @@ class _MyOrderState extends State<MyOrder> {
                     height: 5,
                   ),
                   Text(
-                    AppLocalizations.of(context)!.translate('processing')!,
+                    "Đang thực hiện",
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: responsiveFont(8)),
                   )
@@ -529,7 +535,8 @@ class _MyOrderState extends State<MyOrder> {
             onTap: () {
               setState(() {
                 currType = 4;
-                currentStatus = 'completed';
+                isLoading = true;
+                currentStatus = 'Completed';
               });
               context.read<OrderProvider>().resetPage();
               loadListOrder();
@@ -549,7 +556,7 @@ class _MyOrderState extends State<MyOrder> {
                     height: 5,
                   ),
                   Text(
-                    AppLocalizations.of(context)!.translate('completed')!,
+                    "Hoàn thành",
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: responsiveFont(8)),
                   )
@@ -561,7 +568,8 @@ class _MyOrderState extends State<MyOrder> {
             onTap: () {
               setState(() {
                 currType = 5;
-                currentStatus = 'cancelled';
+                isLoading = true;
+                currentStatus = 'Canceled';
               });
               context.read<OrderProvider>().resetPage();
               loadListOrder();
@@ -581,7 +589,7 @@ class _MyOrderState extends State<MyOrder> {
                     height: 5,
                   ),
                   Text(
-                    AppLocalizations.of(context)!.translate('cancel')!,
+                    "Hủy",
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: responsiveFont(8)),
                   )
@@ -589,70 +597,72 @@ class _MyOrderState extends State<MyOrder> {
               ),
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                currType = 6;
-                currentStatus = 'refunded';
-              });
-              context.read<OrderProvider>().resetPage();
-              loadListOrder();
-            },
-            child: Container(
-              width: 70.w,
-              height: 60.h,
-              child: Column(
-                children: [
-                  Container(
-                      width: 30.w,
-                      height: 30.h,
-                      child: currType == 6
-                          ? Image.asset("images/order/refund.png")
-                          : Image.asset("images/order/refund_dark.png")),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    AppLocalizations.of(context)!.translate('refunded')!,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: responsiveFont(8)),
-                  )
-                ],
-              ),
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                currType = 7;
-                currentStatus = 'failed';
-              });
-              context.read<OrderProvider>().resetPage();
-              loadListOrder();
-            },
-            child: Container(
-              width: 70.w,
-              height: 60.h,
-              child: Column(
-                children: [
-                  Container(
-                      width: 30.w,
-                      height: 30.h,
-                      child: currType == 7
-                          ? Image.asset("images/order/failed.png")
-                          : Image.asset("images/order/failed_dark.png")),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    AppLocalizations.of(context)!.translate('failed')!,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: responsiveFont(8)),
-                  )
-                ],
-              ),
-            ),
-          ),
+          // GestureDetector(
+          //   onTap: () {
+          //     setState(() {
+          //       currType = 6;
+          //       isLoading = true;
+          //       currentStatus = 'Used';
+          //     });
+          //     context.read<OrderProvider>().resetPage();
+          //     loadListOrder();
+          //   },
+          //   child: Container(
+          //     width: 70.w,
+          //     height: 60.h,
+          //     child: Column(
+          //       children: [
+          //         Container(
+          //             width: 30.w,
+          //             height: 30.h,
+          //             child: currType == 6
+          //                 ? Image.asset("images/order/hold.png")
+          //                 : Image.asset("images/order/hold_dark.png")),
+          //         SizedBox(
+          //           height: 5,
+          //         ),
+          //         Text(
+          //           "Đã sử dụng",
+          //           textAlign: TextAlign.center,
+          //           style: TextStyle(fontSize: responsiveFont(8)),
+          //         )
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          // GestureDetector(
+          //   onTap: () {
+          //     setState(() {
+          //       currType = 7;
+          //       isLoading = true;
+          //       currentStatus = 'Failed';
+          //     });
+          //     context.read<OrderProvider>().resetPage();
+          //     loadListOrder();
+          //   },
+          //   child: Container(
+          //     width: 70.w,
+          //     height: 60.h,
+          //     child: Column(
+          //       children: [
+          //         Container(
+          //             width: 30.w,
+          //             height: 30.h,
+          //             child: currType == 7
+          //                 ? Image.asset("images/order/failed.png")
+          //                 : Image.asset("images/order/failed_dark.png")),
+          //         SizedBox(
+          //           height: 5,
+          //         ),
+          //         Text(
+          //           "Thất bại",
+          //           textAlign: TextAlign.center,
+          //           style: TextStyle(fontSize: responsiveFont(8)),
+          //         )
+          //       ],
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
@@ -682,7 +692,7 @@ class _MyOrderState extends State<MyOrder> {
           Container(
             margin: EdgeInsets.symmetric(vertical: 15),
             child: Text(
-              AppLocalizations.of(context)!.translate('no_transaction')!,
+              "Không có đơn hàng nào",
               style: TextStyle(
                   fontSize: responsiveFont(14), fontWeight: FontWeight.w500),
             ),

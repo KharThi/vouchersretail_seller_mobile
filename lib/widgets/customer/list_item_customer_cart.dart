@@ -59,24 +59,24 @@ class ListItemCustomerCart extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    width: 60.h,
-                    height: 60.h,
-                    child: customer.userInfo!.avatarLink.toString().isEmpty
-                        ? Icon(
-                            Icons.image_not_supported,
-                            size: 50,
-                          )
-                        : CachedNetworkImage(
-                            imageUrl: customer.userInfo!.avatarLink.toString(),
-                            placeholder: (context, url) => customLoading(),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
-                          ),
-                  ),
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //     borderRadius: BorderRadius.circular(5),
+                  //   ),
+                  //   width: 60.h,
+                  //   height: 60.h,
+                  //   child: customer.userInfo!.avatarLink.toString().isEmpty
+                  //       ? Icon(
+                  //           Icons.image_not_supported,
+                  //           size: 50,
+                  //         )
+                  //       : CachedNetworkImage(
+                  //           imageUrl: customer.userInfo!.avatarLink.toString(),
+                  //           placeholder: (context, url) => customLoading(),
+                  //           errorWidget: (context, url, error) =>
+                  //               Icon(Icons.error),
+                  //         ),
+                  // ),
                   SizedBox(
                     width: 15,
                   ),
@@ -85,30 +85,33 @@ class ListItemCustomerCart extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              customer.userInfo!.userName.toString(),
-                              style: TextStyle(
-                                  fontSize: responsiveFont(10),
-                                  fontWeight: FontWeight.w500),
-                              maxLines: 2,
-                              overflow: TextOverflow.clip,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            HtmlWidget(
-                              // product!.description!.length > 100
-                              //     ? '${product!.description!.substring(0, 100)} ...'
-                              //     :
-                              customer.userInfo!.phoneNumber.toString(),
-                              textStyle: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: responsiveFont(9)),
-                            ),
-                          ],
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                customer.customerName.toString(),
+                                style: TextStyle(
+                                    fontSize: responsiveFont(10),
+                                    fontWeight: FontWeight.w500),
+                                maxLines: 2,
+                                overflow: TextOverflow.clip,
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              HtmlWidget(
+                                // product!.description!.length > 100
+                                //     ? '${product!.description!.substring(0, 100)} ...'
+                                //     :
+                                customer.userInfo!.phoneNumber.toString(),
+                                textStyle: TextStyle(
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: responsiveFont(9)),
+                              ),
+                            ],
+                          ),
                         ),
                         SizedBox(
                           height: 10.h,
@@ -151,7 +154,7 @@ class ListItemCustomerCart extends StatelessWidget {
                             //                 style: TextStyle(
                             //                     fontWeight: FontWeight.w600,
                             //                     fontSize: responsiveFont(11),
-                            //                     color: secondaryColor)),
+                            //                     color: HexColor("960000"))),
                             //           ],
                             //         ),
                             //       )
@@ -165,7 +168,7 @@ class ListItemCustomerCart extends StatelessWidget {
                             //                     style: TextStyle(
                             //                         fontWeight: FontWeight.w600,
                             //                         fontSize: responsiveFont(11),
-                            //                         color: secondaryColor))
+                            //                         color: HexColor("960000")))
                             //                 : TextSpan(
                             //                     text: product!.price.toString() ==
                             //                             product!.price.toString()
@@ -177,7 +180,7 @@ class ListItemCustomerCart extends StatelessWidget {
                             //                     style: TextStyle(
                             //                         fontWeight: FontWeight.w600,
                             //                         fontSize: responsiveFont(11),
-                            //                         color: secondaryColor)),
+                            //                         color: HexColor("960000"))),
                             //           ],
                             //         ),
                             //       ),
@@ -195,7 +198,7 @@ class ListItemCustomerCart extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => CustomerCartScreen(
-                                        customerId: customer.id,
+                                        customerId: customer.id!,
                                       )));
                         },
                       ),

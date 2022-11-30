@@ -1,6 +1,7 @@
+// ignore_for_file: dead_code
+
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:nyoba/pages/intro/intro_screen.dart';
@@ -23,8 +24,6 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   bool loadHomeSuccess = true;
-
-  String? _versionName;
 
   bool isVideo = false;
   late VideoPlayerController _controller;
@@ -64,7 +63,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     return Timer(duration, () {
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
-        if (home.introStatus == 'show') {
+        if (false) {
           return IntroScreen(
             intro: home.intro,
           );
@@ -73,7 +72,7 @@ class _SplashScreenState extends State<SplashScreen> {
             Session.data.setBool('isLogin', false);
             Session.data.setBool('isIntro', false);
           }
-          return Session.data.getBool('isIntro') != false
+          return true
               ? HomeScreen()
               : IntroScreen(
                   intro: home.intro,
@@ -151,9 +150,7 @@ class _SplashScreenState extends State<SplashScreen> {
         body: home.loading
             ? Container()
             : loadHomeSuccess
-                ? isVideo
-                    ? videoSplashScreen()
-                    : imageSplashScreen()
+                ? imageSplashScreen()
                 : buildError(context));
   }
 
@@ -164,7 +161,9 @@ class _SplashScreenState extends State<SplashScreen> {
         decoration: BoxDecoration(
             image: DecorationImage(
                 fit: BoxFit.cover,
-                image: CachedNetworkImageProvider(home.splashscreen.image!))),
+                image: new AssetImage("images/splashscreen.png")
+                // CachedNetworkImageProvider(home.splashscreen.image!)
+                )),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: Column(
@@ -189,9 +188,8 @@ class _SplashScreenState extends State<SplashScreen> {
               future: _init(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  _versionName = snapshot.data as String?;
                   return Text(
-                    'Version ' + _versionName!,
+                    'Phiên bản ' + "1.0.0",
                   );
                 } else {
                   return Container();

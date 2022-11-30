@@ -8,7 +8,10 @@ import 'package:nyoba/models/review_model.dart';
 import 'package:nyoba/models/variation_model.dart';
 import 'package:nyoba/services/product_api.dart';
 import 'package:nyoba/services/review_api.dart';
+import 'package:nyoba/services/voucher_api.dart';
 import 'package:nyoba/utils/utility.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class ProductProvider with ChangeNotifier {
   bool loadingFeatured = false;
@@ -70,36 +73,40 @@ class ProductProvider with ChangeNotifier {
 
   Future<bool> fetchFeaturedProducts({int page = 1}) async {
     loadingFeatured = true;
-    await ProductAPI().fetchProduct(featured: true, page: page).then((data) {
-      if (data.statusCode == 200) {
-        final responseJson = json.decode(data.body);
 
-        listTempProduct.clear();
-        if (page == 1) {
-          listFeaturedProduct.clear();
-          listMoreFeaturedProduct.clear();
-        }
-        for (Map item in responseJson) {
-          if (page == 1) {
-            listTempProduct.add(ProductModel.fromJson(item));
-          } else {
-            listTempProduct.add(ProductModel.fromJson(item));
-          }
-        }
+    await VoucherAPI().fetchVoucher("", "3").then((data) {
+      listFeaturedProduct = data;
+      loadingFeatured = false;
+      notifyListeners();
+      // if (data.statusCode == 200) {
+      //   final responseJson = json.decode(data.body);
 
-        loadVariationData(listProduct: listTempProduct, load: loadingFeatured)
-            .then((value) {
-          listTempProduct.forEach((element) {
-            listFeaturedProduct.add(element);
-            listMoreFeaturedProduct.add(element);
-          });
-          loadingFeatured = false;
-          notifyListeners();
-        });
-      } else {
-        loadingFeatured = false;
-        notifyListeners();
-      }
+      //   listTempProduct.clear();
+      //   if (page == 1) {
+      //     listFeaturedProduct.clear();
+      //     listMoreFeaturedProduct.clear();
+      //   }
+      //   for (Map item in responseJson) {
+      //     if (page == 1) {
+      //       listTempProduct.add(ProductModel.fromJson(item));
+      //     } else {
+      //       listTempProduct.add(ProductModel.fromJson(item));
+      //     }
+      //   }
+
+      //   loadVariationData(listProduct: listTempProduct, load: loadingFeatured)
+      //       .then((value) {
+      //     listTempProduct.forEach((element) {
+      //       listFeaturedProduct.add(element);
+      //       listMoreFeaturedProduct.add(element);
+      //     });
+      //     loadingFeatured = false;
+      //     notifyListeners();
+      //   });
+      // } else {
+      //   loadingFeatured = false;
+      //   notifyListeners();
+      // }
     });
     return true;
   }
@@ -240,12 +247,12 @@ class ProductProvider with ChangeNotifier {
     return true;
   }
 
-  Future<bool> hitViewProducts(productId) async {
-    await ProductAPI().hitViewProductsAPI(productId).then((data) {
-      notifyListeners();
-    });
-    return true;
-  }
+  // Future<bool> hitViewProducts(productId) async {
+  //   await ProductAPI().hitViewProductsAPI(productId).then((data) {
+  //     notifyListeners();
+  //   });
+  //   return true;
+  // }
 
   Future<bool> fetchRecommendationProducts(String productId) async {
     await ProductAPI().fetchProduct(include: productId).then((data) {
@@ -267,23 +274,21 @@ class ProductProvider with ChangeNotifier {
     return true;
   }
 
-  Future<ProductModel?> fetchProductDetail(String? productId) async {
-    loadingDetail = true;
-    await ProductAPI().fetchDetailProduct(productId).then((data) {
-      if (data.statusCode == 200) {
-        final responseJson = json.decode(data.body);
+  Future<Voucher?> fetchProductDetail(String? productId) async {
+    SharedPreferences data = await SharedPreferences.getInstance();
+    String? jwt = data.getString("jwt");
 
-        productDetail = ProductModel.fromJson(responseJson);
-
-        loadingDetail = false;
-        notifyListeners();
-      } else {
-        print("Load Failed");
-        loadingDetail = false;
-        notifyListeners();
-      }
-    });
-    return productDetail;
+    var response = await http.get(
+        Uri.parse(
+            "https://phuquocvoucher.azurewebsites.net/api/v1/vouchers?Id=" +
+                productId.toString()),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + jwt.toString()
+        });
+    print(response.body);
+    Map<String, dynamic> dataResponse = await json.decode(response.body);
+    return dataResponse["data"];
   }
 
   Future<Voucher?> fetchProductDetailVoucher(String? productId) async {

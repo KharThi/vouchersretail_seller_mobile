@@ -127,8 +127,8 @@ class _LoginState extends State<Login> {
               : null,
           title: AutoSizeText(
             "Đăng nhập",
-            style:
-                TextStyle(fontSize: responsiveFont(16), color: secondaryColor),
+            style: TextStyle(
+                fontSize: responsiveFont(16), color: HexColor("960000")),
           ),
           backgroundColor: Colors.white),
       body: Container(
@@ -218,24 +218,24 @@ class _LoginState extends State<Login> {
               Container(
                 height: 10,
               ),
-              InkWell(
-                onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ForgotPasswordScreen()))
-                    .then((value) => this.setState(() {})),
-                child: Container(
-                  alignment: Alignment.centerRight,
-                  width: double.infinity,
-                  child: Text(
-                    "Quên mật khẩu?",
-                    style: TextStyle(
-                      color: HexColor("FD490C"),
-                      fontSize: responsiveFont(10),
-                    ),
-                  ),
-                ),
-              ),
+              // InkWell(
+              //   onTap: () => Navigator.push(
+              //           context,
+              //           MaterialPageRoute(
+              //               builder: (context) => ForgotPasswordScreen()))
+              //       .then((value) => this.setState(() {})),
+              //   child: Container(
+              //     alignment: Alignment.centerRight,
+              //     width: double.infinity,
+              //     child: Text(
+              //       "Quên mật khẩu?",
+              //       style: TextStyle(
+              //         color: HexColor("FD490C"),
+              //         fontSize: responsiveFont(10),
+              //       ),
+              //     ),
+              //   ),
+              // ),
               Container(
                 height: 15,
               ),
@@ -245,7 +245,7 @@ class _LoginState extends State<Login> {
                   style: TextButton.styleFrom(
                       padding: EdgeInsets.symmetric(vertical: 10),
                       backgroundColor:
-                          auth.loading ? Colors.grey : secondaryColor),
+                          auth.loading ? Colors.grey : HexColor("960000")),
                   onPressed: loginByDefault,
                   child: auth.loading
                       ? customLoading()
@@ -287,7 +287,7 @@ class _LoginState extends State<Login> {
               //                 .translate('sign_up'),
               //             style: TextStyle(
               //                 fontWeight: FontWeight.bold,
-              //                 color: secondaryColor)),
+              //                 color: HexColor("960000"))),
               //       ],
               //     ),
               //   ),

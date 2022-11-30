@@ -120,8 +120,8 @@ class _SignUpState extends State<SignUp> {
           backgroundColor: Colors.white,
           title: Text(
             AppLocalizations.of(context)!.translate('sign_up')!,
-            style:
-                TextStyle(fontSize: responsiveFont(16), color: secondaryColor),
+            style: TextStyle(
+                fontSize: responsiveFont(16), color: HexColor("960000")),
           ),
         ),
         body: Container(
@@ -282,8 +282,9 @@ class _SignUpState extends State<SignUp> {
                   child: TextButton(
                     style: TextButton.styleFrom(
                         padding: EdgeInsets.symmetric(vertical: 10),
-                        backgroundColor:
-                            register.loading ? Colors.grey : secondaryColor),
+                        backgroundColor: register.loading
+                            ? Colors.grey
+                            : HexColor("960000")),
                     onPressed: register.loading ? null : signUp,
                     child: register.loading
                         ? customLoading()
@@ -318,7 +319,7 @@ class _SignUpState extends State<SignUp> {
                                 .translate('login'),
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: secondaryColor)),
+                                color: HexColor("960000"))),
                       ],
                     ),
                   ),

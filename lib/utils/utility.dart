@@ -21,6 +21,7 @@ import '../app_localizations.dart';
 
 Color primaryColor = HexColor("ED1D1D");
 Color secondaryColor = HexColor("960000");
+// Color HexColor("960000") = HexColor("960000");
 
 double responsiveFont(double designFont) {
   return ScreenUtil().setSp(designFont + 2);
@@ -28,7 +29,7 @@ double responsiveFont(double designFont) {
 
 Widget customLoading({Color? color}) {
   return LoadingFlipping.circle(
-    borderColor: color != null ? color : secondaryColor,
+    borderColor: color != null ? color : HexColor("960000"),
     borderSize: 3.0,
     size: 30.0,
     duration: Duration(milliseconds: 500),
@@ -117,7 +118,7 @@ buildNoAuth(context) {
         height: 10,
       ),
       Text(
-        "Oops, please login first to use this feature",
+        "Bạn cần đăng nhập để sử dụng tính năng này!",
         style: TextStyle(
             color: Colors.black, fontWeight: FontWeight.w500, fontSize: 14),
         textAlign: TextAlign.center,
@@ -131,7 +132,7 @@ buildNoAuth(context) {
             gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [primaryColor, secondaryColor])),
+                colors: [primaryColor, HexColor("960000")])),
         height: 30.h,
         width: MediaQuery.of(context).size.width * 0.5,
         child: TextButton(
@@ -140,7 +141,7 @@ buildNoAuth(context) {
                 context, MaterialPageRoute(builder: (context) => Login()));
           },
           child: Text(
-            "Login",
+            "Đăng nhập",
             style: TextStyle(
                 color: Colors.white,
                 fontSize: responsiveFont(10),
@@ -233,15 +234,13 @@ buildButtonCart(context, product) {
     },
     child: Icon(
       Icons.add_shopping_cart,
-      color: secondaryColor,
+      color: HexColor("960000"),
       size: 20.h,
     ),
   );
 }
 
 buildButtonCartPq(context) {
-  final loadCount =
-      Provider.of<OrderProvider>(context, listen: false).loadCartCount;
   return GestureDetector(
     onTap: () {
       // if (product.stockStatus != 'outofstock' && product.productStock >= 1) {
@@ -259,7 +258,7 @@ buildButtonCartPq(context) {
     },
     child: Icon(
       Icons.add_shopping_cart,
-      color: secondaryColor,
+      color: HexColor("960000"),
       size: 20.h,
     ),
   );

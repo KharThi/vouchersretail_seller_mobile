@@ -1,6 +1,9 @@
+// ignore_for_file: unused_element
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:nyoba/pages/order/momo_payment.dart';
 import 'package:nyoba/provider/coupon_provider.dart';
 import 'package:nyoba/provider/order_provider.dart';
 import 'package:nyoba/utils/currency_format.dart';
@@ -200,25 +203,36 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
 
   /*Checkout*/
   checkOut() async {
-    await Provider.of<OrderProvider>(context, listen: false)
-        .placeOrder(widget.customerId)
-        .then((value) {
-      this.setState(() {
-        if (value == true) {
-          snackBar(context, message: "Tạo đơn hàng thành công!");
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    CustomerCartScreen(customerId: widget.customerId)),
-            (Route<dynamic> route) => false,
-          ); // pop current page
+    if (updateCart) {
+      snackBar(context, message: "Vui lòng bấm Cập nhật trước khi thanh toán!");
+    } else {
+      await Provider.of<OrderProvider>(context, listen: false)
+          .placeOrder(widget.customerId)
+          .then((value) {
+        this.setState(() {
+          if (value != null) {
+            snackBar(context, message: "Tạo đơn hàng thành công!");
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MoMoWebView(
+                          url: value[1],
+                          orderId: value[0],
+                        ))).then((value) => this.setState(() {}));
+            // Navigator.pushAndRemoveUntil(
+            //   context,
+            //   MaterialPageRoute(
+            //       builder: (context) =>
+            //           CustomerCartScreen(customerId: widget.customerId)),
+            //   (Route<dynamic> route) => false,
+            // ); // pop current page
 
-        } else {
-          snackBar(context, message: "Tạo đơn hàng thất bại!");
-        }
+          } else {
+            snackBar(context, message: "Tạo đơn hàng thất bại!");
+          }
+        });
       });
-    });
+    }
   }
 
   update() async {
@@ -228,13 +242,15 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
       if (check) {
         updateCart = false;
         snackBar(context, message: "Cập nhật giỏ hàng thành công!");
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  CustomerCartScreen(customerId: widget.customerId)),
-          (Route<dynamic> route) => false,
-        ); // pop current page
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (BuildContext context) => super.widget));
+        // Navigator.pushAndRemoveUntil(
+        //   context,
+        //   MaterialPageRoute(
+        //       builder: (context) =>
+        //           CustomerCartScreen(customerId: widget.customerId)),
+        //   (Route<dynamic> route) => false,
+        // ); // pop current page
 
       } else {
         updateCart = false;
@@ -250,14 +266,17 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
       this.setState(() {
         if (value == true) {
           snackBar(context, message: "Xóa sản phẩm thành công!");
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    CustomerCartScreen(customerId: widget.customerId)),
-            (Route<dynamic> route) => false,
-          ); // pop current page
-
+          // Navigator.pushAndRemoveUntil(
+          //   context,
+          //   MaterialPageRoute(
+          //       builder: (context) =>
+          //           CustomerCartScreen(customerId: widget.customerId)),
+          //   (Route<dynamic> route) => false,
+          // ); // pop current page
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => super.widget));
         } else {
           Navigator.pop(context);
           snackBar(context, message: "Xóa sản phẩm thất bại!");
@@ -417,24 +436,24 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
             //     ),
             //   ),
             // ),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-              ),
-              alignment: Alignment.center,
-              margin: EdgeInsets.symmetric(horizontal: 10),
-              height: 80.h,
-              width: 80.w,
-              child: CachedNetworkImage(
-                imageUrl:
-                    "https://jobsgo.vn/blog/wp-content/uploads/2021/11/du-lich-la-gi-1.jpg",
-                placeholder: (context, url) => customLoading(),
-                errorWidget: (context, url, error) => Icon(
-                  Icons.image_not_supported_rounded,
-                  size: 25,
-                ),
-              ),
-            ),
+            // Container(
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(5),
+            //   ),
+            //   alignment: Alignment.center,
+            //   margin: EdgeInsets.symmetric(horizontal: 10),
+            //   height: 80.h,
+            //   width: 80.w,
+            //   child: CachedNetworkImage(
+            //     imageUrl:
+            //         "https://jobsgo.vn/blog/wp-content/uploads/2021/11/du-lich-la-gi-1.jpg",
+            //     placeholder: (context, url) => customLoading(),
+            //     errorWidget: (context, url, error) => Icon(
+            //       Icons.image_not_supported_rounded,
+            //       size: 25,
+            //     ),
+            //   ),
+            // ),
             Expanded(
               flex: 7,
               child: Container(
@@ -445,10 +464,10 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      cart!.cartItems![index].product!.summary.toString(),
+                      cart!.cartItems![index].voucher!.voucherName.toString(),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: responsiveFont(9)),
+                      style: TextStyle(fontSize: responsiveFont(14.5)),
                     ),
                     // Visibility(
                     //     visible: productCart[index].variantId != null,
@@ -479,7 +498,7 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                     //         Container(
                     //           decoration: BoxDecoration(
                     //             borderRadius: BorderRadius.circular(5),
-                    //             color: secondaryColor,
+                    //             color: HexColor("960000"),
                     //           ),
                     //           padding: EdgeInsets.symmetric(
                     //               vertical: 3, horizontal: 7),
@@ -515,10 +534,10 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                             // stringToCurrency(
                             //     double.parse(cart!.cartItems![index].price),
                             //     context),
-                            cart!.cartItems![index].price.toString() + " Vnd",
+                            (cart!.cartItems![index].price).toString() + " Vnd",
                             style: TextStyle(
                                 fontSize: responsiveFont(10),
-                                color: secondaryColor,
+                                color: HexColor("960000"),
                                 fontWeight: FontWeight.w600),
                           ),
                           Row(
@@ -578,10 +597,10 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                                 width: 16.w,
                                 height: 16.h,
                                 child: InkWell(
-                                    onTap: cart!.cartItems![index].product!
+                                    onTap: cart!.cartItems![index].voucher!
                                                     .inventory !=
                                                 null &&
-                                            cart!.cartItems![index].product!
+                                            cart!.cartItems![index].voucher!
                                                     .inventory! <=
                                                 cart!
                                                     .cartItems![index].quantity!
@@ -608,10 +627,10 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                                             });
                                             increaseQuantity(index);
                                           },
-                                    child: cart!.cartItems![index].product!
+                                    child: cart!.cartItems![index].voucher!
                                                     .inventory !=
                                                 null &&
-                                            cart!.cartItems![index].product!
+                                            cart!.cartItems![index].voucher!
                                                     .inventory! >
                                                 cart!
                                                     .cartItems![index].quantity!
@@ -744,14 +763,22 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                       Visibility(
                         visible: updateCart,
                         child: Container(
-                          margin: EdgeInsets.only(left: 15, right: 10),
+                          height: 50,
+                          // margin: EdgeInsets.only(left: 15, right: 10),
                           alignment: Alignment.center,
                           child: ElevatedButton.icon(
                             onPressed: () {
                               update();
                             },
+                            style: ElevatedButton.styleFrom(
+                              primary: primaryColor,
+                              padding: EdgeInsets.all(15),
+                            ),
                             icon: Icon(Icons.update),
-                            label: Text("Cập nhật"),
+                            label: Text(
+                              "Cập nhật",
+                              style: new TextStyle(fontSize: 12),
+                            ),
                           ),
                         ),
                       ),
@@ -803,7 +830,7 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                                 : Colors.grey),
                         child: Text(
                           "${"Thanh toán"}($totalSelected)",
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(color: Colors.white, fontSize: 12),
                         ),
                       )
                     ],

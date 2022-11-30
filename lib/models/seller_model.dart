@@ -4,11 +4,11 @@
 
 import 'dart:convert';
 
-List<Seller> sellerFromJson(String str) =>
-    List<Seller>.from(json.decode(str).map((x) => Seller.fromJson(x)));
+import 'package:nyoba/models/order.dart';
 
-String sellerToJson(List<Seller> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+Seller sellerFromJson(String str) => Seller.fromJson(json.decode(str));
+
+String sellerToJson(Seller data) => json.encode(data.toJson());
 
 class Seller {
   Seller({
@@ -26,9 +26,9 @@ class Seller {
   String? sellerName;
   int? userInfoId;
   UserInfo? userInfo;
-  int? commissionRate;
+  double? commissionRate;
   int? profit;
-  String? orders;
+  Order? orders;
   String? busyLevel;
 
   factory Seller.fromJson(Map<String, dynamic> json) => Seller(
@@ -36,7 +36,7 @@ class Seller {
         sellerName: json["sellerName"],
         userInfoId: json["userInfoId"],
         userInfo: UserInfo.fromJson(json["userInfo"]),
-        commissionRate: json["commissionRate"],
+        commissionRate: json["commissionRate"].toDouble(),
         profit: json["profit"],
         orders: json["orders"],
         busyLevel: json["busyLevel"],
@@ -46,7 +46,7 @@ class Seller {
         "id": id,
         "sellerName": sellerName,
         "userInfoId": userInfoId,
-        "userInfo": userInfo!.toJson(),
+        "userInfo": userInfo,
         "commissionRate": commissionRate,
         "profit": profit,
         "orders": orders,

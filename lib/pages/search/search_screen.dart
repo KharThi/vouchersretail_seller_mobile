@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:nyoba/models/product_model.dart';
 import 'package:nyoba/pages/search/qr_scanner_screen.dart';
 import 'package:nyoba/provider/home_provider.dart';
 import 'package:nyoba/provider/search_provider.dart';
+import 'package:nyoba/provider/voucher_provider.dart';
 import 'package:nyoba/utils/utility.dart';
 import 'package:provider/provider.dart';
 
-import '../../app_localizations.dart';
 import '../../widgets/product/list_item_product2.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -20,26 +21,33 @@ class _SearchScreenState extends State<SearchScreen> {
   ScrollController _scrollController = new ScrollController();
 
   int page = 1;
+  List<Voucher> searchList = List.empty(growable: true);
+  bool isLoading = true;
 
   Future search() async {
-    await Provider.of<SearchProvider>(context, listen: false)
-        .searchProducts2(searchController.text, page)
-        .then((value) => this.setState(() {}));
+    await Provider.of<VoucherProvider>(context, listen: false)
+        .fetchVouchers(searchController.text, "")
+        .then((value) => this.setState(() {
+              searchList = value!;
+              isLoading = false;
+            }));
   }
 
   @override
   void initState() {
-    final productSearch =
-        Provider.of<SearchProvider>(context, listen: false).listSearchProducts2;
+    // final productSearch =
+    //     Provider.of<SearchProvider>(context, listen: false).listSearchProducts2;
     super.initState();
-    productSearch.clear();
+    // productSearch.clear();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
-        if (productSearch.length % 10 == 0) {
+        if (searchList.length % 10 == 0) {
           setState(() {
+            isLoading = true;
             page++;
           });
+
           search();
         }
       }
@@ -55,17 +63,17 @@ class _SearchScreenState extends State<SearchScreen> {
       child: ListenableProvider.value(
         value: searchProvider,
         child: Consumer<SearchProvider>(builder: (context, value, child) {
-          if (value.loadingSearch && page == 1) {
+          if (isLoading && page == 1) {
             return Center(
               child: customLoading(),
             );
           }
-          if (value.listSearchProducts2.isEmpty) {
+          if (searchList.isEmpty) {
             return buildSearchEmpty(
               context,
               searchController.text.isEmpty
-                  ? AppLocalizations.of(context)!.translate('search_here')
-                  : AppLocalizations.of(context)!.translate('cant_find_prod'),
+                  ? "Tiềm kiếm ở đây"
+                  : "Không tiềm thấy sản phẩm",
             );
           }
           return Container(
@@ -73,12 +81,17 @@ class _SearchScreenState extends State<SearchScreen> {
                 shrinkWrap: true,
                 controller: _scrollController,
                 physics: ScrollPhysics(),
-                itemCount: value.listSearchProducts2.length,
+                itemCount: searchList.length,
                 itemBuilder: (context, i) {
+                  int? price = searchList[i]
+                      .prices!
+                      .firstWhere((currency) => currency.isDefault == false)
+                      .price;
                   return ListItemProduct2(
-                    itemCount: value.listSearchProducts2.length,
-                    product: value.listSearchProducts2[i],
+                    itemCount: searchList.length,
+                    product: searchList[i],
                     i: i,
+                    price: price.toString(),
                   );
                 }),
           );
@@ -96,26 +109,26 @@ class _SearchScreenState extends State<SearchScreen> {
           },
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50), color: primaryColor),
+            // decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(50), color: primaryColor),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: Colors.white),
-                    child: Container(
-                        height: 30,
-                        padding: EdgeInsets.all(5),
-                        child: Image.asset("images/search/barcode_icon.png"))),
-                SizedBox(
-                  width: 5,
-                ),
-                Text(
-                  "SCAN BARCODE",
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                )
+                // Container(
+                //     decoration: BoxDecoration(
+                //         shape: BoxShape.circle, color: Colors.white),
+                //     child: Container(
+                //         height: 30,
+                //         padding: EdgeInsets.all(5),
+                //         child: Image.asset("images/search/barcode_icon.png"))),
+                // SizedBox(
+                //   width: 5,
+                // ),
+                // Text(
+                //   "SCAN BARCODE",
+                //   style: TextStyle(
+                //       color: Colors.white, fontWeight: FontWeight.bold),
+                // )
               ],
             ),
           ),
@@ -146,6 +159,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           Future.delayed(Duration(milliseconds: 600), () {
                             this.setState(() {
                               page = 1;
+                              isLoading = true;
                             });
                             search();
                           });
@@ -162,8 +176,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             ),
                           ),
                           prefixIcon: Icon(Icons.search),
-                          hintText:
-                              AppLocalizations.of(context)!.translate('search'),
+                          hintText: "Tiềm kiếm",
                           hintStyle: TextStyle(fontSize: responsiveFont(10)),
                         ),
                       ),
@@ -173,10 +186,12 @@ class _SearchScreenState extends State<SearchScreen> {
                       child: IconButton(
                         onPressed: () {
                           setState(() {
+                            isLoading = true;
                             searchController.clear();
                             page = 1;
                             searchProvider.listSearchProducts.clear();
                           });
+
                           search();
                         },
                         icon: Icon(Icons.cancel),

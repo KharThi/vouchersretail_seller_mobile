@@ -51,7 +51,7 @@ class ShimmerWishlist extends StatelessWidget {
                               Container(
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5),
-                                  color: secondaryColor,
+                                  color: HexColor("960000"),
                                 ),
                                 padding: EdgeInsets.symmetric(
                                     vertical: 3, horizontal: 7),
@@ -91,7 +91,7 @@ class ShimmerWishlist extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   border: Border.all(
-                                    color: secondaryColor,
+                                    color: HexColor("960000"),
                                   ),
                                 ),
                                 child: Image.asset("images/account/trash.png"),
@@ -99,14 +99,14 @@ class ShimmerWishlist extends StatelessWidget {
                               OutlinedButton(
                                 style: OutlinedButton.styleFrom(
                                   side: BorderSide(
-                                    color: secondaryColor,
+                                    color: HexColor("960000"),
                                   ),
                                 ),
                                 onPressed: () {},
                                 child: Text(
                                   "+ Add to Cart",
                                   style: TextStyle(
-                                      color: secondaryColor,
+                                      color: HexColor("960000"),
                                       fontSize: responsiveFont(9)),
                                 ),
                               )

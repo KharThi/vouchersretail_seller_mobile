@@ -130,7 +130,7 @@ class _ProductDetailShimmerState extends State<ProductDetailShimmer>
                 style: TextStyle(
                     fontSize: responsiveFont(12),
                     fontWeight: FontWeight.w600,
-                    color: secondaryColor),
+                    color: HexColor("960000")),
               ),
             ],
           ),
@@ -341,7 +341,7 @@ class _ProductDetailShimmerState extends State<ProductDetailShimmer>
                 padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(3),
-                    color: secondaryColor),
+                    color: HexColor("960000")),
                 child: Row(
                   children: [
                     Text(
@@ -518,7 +518,7 @@ class _ProductDetailShimmerState extends State<ProductDetailShimmer>
                               price,
                               style: TextStyle(
                                   fontSize: responsiveFont(10),
-                                  color: secondaryColor,
+                                  color: HexColor("960000"),
                                   fontWeight: FontWeight.w600),
                             ),
                           ),
@@ -751,7 +751,7 @@ class _ModalSheetAddCartState extends State<ModalSheetAddCart> {
                 child: OutlinedButton(
                     style: OutlinedButton.styleFrom(
                         side: BorderSide(
-                          color: secondaryColor, //Color of the border
+                          color: HexColor("960000"), //Color of the border
                           //Style of the border
                         ),
                         alignment: Alignment.center,
@@ -769,14 +769,14 @@ class _ModalSheetAddCartState extends State<ModalSheetAddCart> {
                         Icon(
                           Icons.add,
                           size: responsiveFont(9),
-                          color: secondaryColor,
+                          color: HexColor("960000"),
                         ),
                         Text(
                           "Add to Cart",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: responsiveFont(9),
-                              color: secondaryColor),
+                              color: HexColor("960000")),
                         )
                       ],
                     )),
@@ -792,7 +792,9 @@ class _ModalSheetAddCartState extends State<ModalSheetAddCart> {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
-            color: indexColor == indexes ? Colors.transparent : secondaryColor),
+            color: indexColor == indexes
+                ? Colors.transparent
+                : HexColor("960000")),
         borderRadius: BorderRadius.circular(5),
         color: indexColor == indexes ? primaryColor : Colors.white,
       ),
@@ -809,7 +811,7 @@ class _ModalSheetAddCartState extends State<ModalSheetAddCart> {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
-            color: indexes == index ? Colors.transparent : secondaryColor),
+            color: indexes == index ? Colors.transparent : HexColor("960000")),
         borderRadius: BorderRadius.circular(5),
         color: indexes == index ? primaryColor : Colors.white,
       ),
@@ -1036,7 +1038,7 @@ class _ModalSheetBuyState extends State<ModalSheetBuy> {
                     gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: [primaryColor, secondaryColor])),
+                        colors: [primaryColor, HexColor("960000")])),
                 width: double.infinity,
                 height: 30.h,
                 child: TextButton(
@@ -1059,7 +1061,9 @@ class _ModalSheetBuyState extends State<ModalSheetBuy> {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
-            color: indexColor == indexes ? Colors.transparent : secondaryColor),
+            color: indexColor == indexes
+                ? Colors.transparent
+                : HexColor("960000")),
         borderRadius: BorderRadius.circular(5),
         color: indexColor == indexes ? primaryColor : Colors.white,
       ),
@@ -1076,7 +1080,7 @@ class _ModalSheetBuyState extends State<ModalSheetBuy> {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
-            color: indexes == index ? Colors.transparent : secondaryColor),
+            color: indexes == index ? Colors.transparent : HexColor("960000")),
         borderRadius: BorderRadius.circular(5),
         color: indexes == index ? primaryColor : Colors.white,
       ),

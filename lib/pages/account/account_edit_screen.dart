@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:nyoba/models/seller_model.dart';
 import 'package:nyoba/provider/user_provider.dart';
 import 'package:nyoba/services/session.dart';
@@ -88,8 +89,8 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
           backgroundColor: Colors.white,
           title: Text(
             AppLocalizations.of(context)!.translate('edit_account')!,
-            style:
-                TextStyle(fontSize: responsiveFont(16), color: secondaryColor),
+            style: TextStyle(
+                fontSize: responsiveFont(16), color: HexColor("960000")),
           ),
         ),
         body: Container(
@@ -167,7 +168,7 @@ class _AccountEditScreenState extends State<AccountEditScreen> {
                     style: TextButton.styleFrom(
                         padding: EdgeInsets.symmetric(vertical: 10),
                         backgroundColor:
-                            user.loading ? Colors.grey : secondaryColor),
+                            user.loading ? Colors.grey : HexColor("960000")),
                     onPressed: user.loading ? null : save,
                     child: user.loading
                         ? customLoading()

@@ -86,28 +86,33 @@ class ListItemCustomer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              customer!.userInfo!.userName.toString(),
-                              style: TextStyle(
-                                  fontSize: responsiveFont(10),
-                                  fontWeight: FontWeight.w500),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            HtmlWidget(
-                              // product!.description!.length > 100
-                              //     ? '${product!.description!.substring(0, 100)} ...'
-                              //     :
-                              customer!.userInfo!.phoneNumber.toString(),
-                              textStyle: TextStyle(
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: responsiveFont(9)),
-                            ),
-                          ],
+                        Expanded(
+                          flex: 1,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                customer!.customerName.toString(),
+                                maxLines: 1,
+                                overflow: TextOverflow.clip,
+                                style: TextStyle(
+                                    fontSize: responsiveFont(10),
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              HtmlWidget(
+                                // product!.description!.length > 100
+                                //     ? '${product!.description!.substring(0, 100)} ...'
+                                //     :
+                                customer!.userInfo!.phoneNumber.toString(),
+                                textStyle: TextStyle(
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: responsiveFont(9)),
+                              ),
+                            ],
+                          ),
                         ),
                         SizedBox(
                           height: 10.h,
@@ -150,7 +155,7 @@ class ListItemCustomer extends StatelessWidget {
                             //                 style: TextStyle(
                             //                     fontWeight: FontWeight.w600,
                             //                     fontSize: responsiveFont(11),
-                            //                     color: secondaryColor)),
+                            //                     color: HexColor("960000"))),
                             //           ],
                             //         ),
                             //       )
@@ -164,7 +169,7 @@ class ListItemCustomer extends StatelessWidget {
                             //                     style: TextStyle(
                             //                         fontWeight: FontWeight.w600,
                             //                         fontSize: responsiveFont(11),
-                            //                         color: secondaryColor))
+                            //                         color: HexColor("960000")))
                             //                 : TextSpan(
                             //                     text: product!.price.toString() ==
                             //                             product!.price.toString()
@@ -176,7 +181,7 @@ class ListItemCustomer extends StatelessWidget {
                             //                     style: TextStyle(
                             //                         fontWeight: FontWeight.w600,
                             //                         fontSize: responsiveFont(11),
-                            //                         color: secondaryColor)),
+                            //                         color: HexColor("960000"))),
                             //           ],
                             //         ),
                             //       ),

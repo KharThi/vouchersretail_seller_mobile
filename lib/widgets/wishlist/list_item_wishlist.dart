@@ -78,7 +78,7 @@ class ListItemWishlist extends StatelessWidget {
                             Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
-                                color: secondaryColor,
+                                color: HexColor("960000"),
                               ),
                               padding: EdgeInsets.symmetric(
                                   vertical: 3, horizontal: 7),
@@ -110,7 +110,7 @@ class ListItemWishlist extends StatelessWidget {
                         style: TextStyle(
                             fontSize: responsiveFont(10),
                             fontWeight: FontWeight.w600,
-                            color: secondaryColor),
+                            color: HexColor("960000")),
                       ),
                       Row(
                         mainAxisSize: MainAxisSize.max,
@@ -125,7 +125,7 @@ class ListItemWishlist extends StatelessWidget {
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: secondaryColor,
+                                  color: HexColor("960000"),
                                 ),
                               ),
                               child: Image.asset("images/account/trash.png"),
@@ -134,7 +134,7 @@ class ListItemWishlist extends StatelessWidget {
                           OutlinedButton(
                             style: OutlinedButton.styleFrom(
                               side: BorderSide(
-                                color: secondaryColor,
+                                color: HexColor("960000"),
                               ),
                             ),
                             onPressed: () {
@@ -150,7 +150,7 @@ class ListItemWishlist extends StatelessWidget {
                             child: Text(
                               "+ ${AppLocalizations.of(context)!.translate('add_to_cart')}",
                               style: TextStyle(
-                                  color: secondaryColor,
+                                  color: HexColor("960000"),
                                   fontSize: responsiveFont(9)),
                             ),
                           )

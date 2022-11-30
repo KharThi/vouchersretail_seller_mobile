@@ -249,7 +249,7 @@ class _CouponScreenState extends State<CouponScreen> {
                   end: Alignment
                       .bottomCenter, // 10% of the width, so there are ten blinds.
                   colors: <HexColor>[
-                    secondaryColor as HexColor,
+                    HexColor("960000") as HexColor,
                     primaryColor as HexColor,
                   ], // red to yellow
                   tileMode:
@@ -349,7 +349,7 @@ class _CouponScreenState extends State<CouponScreen> {
                     end: Alignment
                         .bottomCenter, // 10% of the width, so there are ten blinds.
                     colors: <HexColor>[
-                      secondaryColor as HexColor,
+                      HexColor("960000") as HexColor,
                       primaryColor as HexColor,
                     ], // red to yellow
                     tileMode: TileMode
@@ -433,7 +433,7 @@ class _CouponScreenState extends State<CouponScreen> {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
-                    color: secondaryColor,
+                    color: HexColor("960000"),
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   child: Column(
@@ -587,7 +587,7 @@ class _CouponScreenState extends State<CouponScreen> {
                           end: Alignment
                               .bottomCenter, // 10% of the width, so there are ten blinds.
                           colors: <HexColor>[
-                            secondaryColor as HexColor,
+                            HexColor("960000") as HexColor,
                             primaryColor as HexColor,
                           ], // red to yellow
                           tileMode: TileMode

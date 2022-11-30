@@ -98,7 +98,7 @@ class _BlogGridItemState extends State<BlogGridItem> {
                               Container(
                                   padding: EdgeInsets.all(5),
                                   decoration: BoxDecoration(
-                                      color: secondaryColor,
+                                      color: HexColor("960000"),
                                       borderRadius: BorderRadius.circular(2)),
                                   child: Text(
                                     "By : ${widget.blog!.author}",

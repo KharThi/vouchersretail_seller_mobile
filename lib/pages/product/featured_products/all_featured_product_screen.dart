@@ -48,8 +48,8 @@ class _AllFeaturedProductsState extends State<AllFeaturedProducts> {
     await Provider.of<OrderProvider>(context, listen: false)
         .loadCartCount()
         .then((value) => setState(() {
-      cartCount = value;
-    }));
+              cartCount = value;
+            }));
   }
 
   fetchNewProduct() async {
@@ -276,7 +276,7 @@ class _AllFeaturedProductsState extends State<AllFeaturedProducts> {
                                   Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(5),
-                                      color: secondaryColor,
+                                      color: HexColor("960000"),
                                     ),
                                     padding: EdgeInsets.symmetric(
                                         vertical: 3, horizontal: 7),
@@ -324,7 +324,7 @@ class _AllFeaturedProductsState extends State<AllFeaturedProducts> {
                                           style: TextStyle(
                                               fontWeight: FontWeight.w600,
                                               fontSize: responsiveFont(11),
-                                              color: secondaryColor)),
+                                              color: HexColor("960000"))),
                                     ],
                                   ),
                                 )
@@ -338,7 +338,7 @@ class _AllFeaturedProductsState extends State<AllFeaturedProducts> {
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: responsiveFont(11),
-                                                  color: secondaryColor))
+                                                  color: HexColor("960000")))
                                           : TextSpan(
                                               text: productDetail
                                                           .variationPrices!
@@ -350,7 +350,7 @@ class _AllFeaturedProductsState extends State<AllFeaturedProducts> {
                                               style: TextStyle(
                                                   fontWeight: FontWeight.w600,
                                                   fontSize: responsiveFont(11),
-                                                  color: secondaryColor)),
+                                                  color: HexColor("960000"))),
                                     ],
                                   ),
                                 ),
@@ -376,7 +376,7 @@ class _AllFeaturedProductsState extends State<AllFeaturedProducts> {
                   child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
                           side: BorderSide(
-                            color: secondaryColor, //Color of the border
+                            color: HexColor("960000"), //Color of the border
                             //Style of the border
                           ),
                           alignment: Alignment.center,
@@ -398,14 +398,14 @@ class _AllFeaturedProductsState extends State<AllFeaturedProducts> {
                           Icon(
                             Icons.add,
                             size: responsiveFont(9),
-                            color: secondaryColor,
+                            color: HexColor("960000"),
                           ),
                           Text(
                             "Add to Cart",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: responsiveFont(9),
-                                color: secondaryColor),
+                                color: HexColor("960000")),
                           )
                         ],
                       )),

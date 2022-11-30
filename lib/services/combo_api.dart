@@ -1,8 +1,11 @@
 //PQ voucher
-import 'package:nyoba/models/combo_model.dart';
+// ignore_for_file: await_only_futures
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import '../models/product_model.dart';
 
 class ComboAPI {
   fetchCombo() async {
@@ -10,8 +13,7 @@ class ComboAPI {
     String? jwt = data.getString("jwt");
 
     var response = await http.get(
-        Uri.parse(
-            "https://webapp-220831200534.azurewebsites.net/api/v1/combos"),
+        Uri.parse("https://phuquocvoucher.azurewebsites.net/api/v1/combos"),
         headers: {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + jwt.toString()

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:nyoba/utils/utility.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -51,7 +52,7 @@ class GridItemShimmer extends StatelessWidget {
                                 Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(5),
-                                    color: secondaryColor,
+                                    color: HexColor("960000"),
                                   ),
                                   padding: EdgeInsets.symmetric(
                                       vertical: 3, horizontal: 7),
@@ -95,7 +96,7 @@ class GridItemShimmer extends StatelessWidget {
                   child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
                           side: BorderSide(
-                            color: secondaryColor, //Color of the border
+                            color: HexColor("960000"), //Color of the border
                             //Style of the border
                           ),
                           alignment: Alignment.center,
@@ -108,14 +109,14 @@ class GridItemShimmer extends StatelessWidget {
                           Icon(
                             Icons.add,
                             size: responsiveFont(9),
-                            color: secondaryColor,
+                            color: HexColor("960000"),
                           ),
                           Text(
                             "Add to Cart",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: responsiveFont(9),
-                                color: secondaryColor),
+                                color: HexColor("960000")),
                           )
                         ],
                       )),

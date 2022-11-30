@@ -302,7 +302,7 @@ class BlogWebViewState extends State<BlogWebView> {
                           );
                         },
                         style: TextButton.styleFrom(
-                            backgroundColor: secondaryColor,
+                            backgroundColor: HexColor("960000"),
                             minimumSize:
                                 Size(MediaQuery.of(context).size.width, 40.0),
                             padding: EdgeInsets.symmetric(
@@ -345,7 +345,7 @@ class BlogWebViewState extends State<BlogWebView> {
             AppLocalizations.of(context)!.translate('leave_comment')!,
             style: TextStyle(
                 fontSize: responsiveFont(12),
-                color: secondaryColor,
+                color: HexColor("960000"),
                 fontWeight: FontWeight.w500),
           ),
         ),
@@ -399,7 +399,7 @@ class BlogWebViewState extends State<BlogWebView> {
                     child: TextButton(
                       onPressed: postComment,
                       style: TextButton.styleFrom(
-                          backgroundColor: secondaryColor,
+                          backgroundColor: HexColor("960000"),
                           padding: EdgeInsets.symmetric(
                               horizontal: 18, vertical: 6)),
                       child: Text(
@@ -476,7 +476,7 @@ class BlogWebViewState extends State<BlogWebView> {
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(3),
-          border: Border.all(color: secondaryColor)),
+          border: Border.all(color: HexColor("960000"))),
       child: Text(
         title,
         style: TextStyle(color: primaryColor),

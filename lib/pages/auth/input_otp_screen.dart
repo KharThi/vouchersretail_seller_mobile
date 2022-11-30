@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:nyoba/utils/utility.dart';
 import 'package:pinput/pinput.dart';
 
@@ -46,7 +47,7 @@ class _InputOTPState extends State<InputOTP> {
           ),
         ),
         iconTheme: IconThemeData(
-          color: secondaryColor,
+          color: HexColor("960000"),
         ),
         leading: GestureDetector(
           onTap: () {
@@ -82,7 +83,7 @@ class _InputOTPState extends State<InputOTP> {
                     height: 40.h,
                     padding: EdgeInsets.all(8.0),
                     decoration: BoxDecoration(
-                      color: secondaryColor,
+                      color: HexColor("960000"),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Center(

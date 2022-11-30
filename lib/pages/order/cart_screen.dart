@@ -14,6 +14,7 @@ import 'package:nyoba/widgets/customer/list_item_customer_cart.dart';
 import 'package:provider/provider.dart';
 import '../../app_localizations.dart';
 import '../../provider/customer_provider.dart';
+import '../../provider/home_provider.dart';
 import 'coupon_screen.dart';
 import '../../utils/utility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,6 +37,7 @@ class _CartScreenState extends State<CartScreen> {
   int totalSelected = 0;
   bool isCouponUsed = false;
   bool isSelectedAll = false;
+  bool isLoading = true;
 
   CustomerProvider? customerProvider;
 
@@ -230,6 +232,7 @@ class _CartScreenState extends State<CartScreen> {
         .then((value) {
       this.setState(() {
         customer = value;
+        isLoading = false;
         for (var element in customer) {
           print(element.userInfoId);
         }
@@ -242,11 +245,14 @@ class _CartScreenState extends State<CartScreen> {
     super.initState();
     customerProvider = Provider.of<CustomerProvider>(context, listen: false);
     getListCustomer();
+
     // loadData();
   }
 
   @override
   Widget build(BuildContext context) {
+    final noTransaction =
+        Provider.of<HomeProvider>(context, listen: false).imageNoTransaction;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -262,7 +268,7 @@ class _CartScreenState extends State<CartScreen> {
               )
             : null,
         title: Text(
-          "Danh sách khách hàng",
+          "Giỏ hàng của khách hàng",
           style: TextStyle(color: Colors.black),
         ),
         actions: [
@@ -288,43 +294,76 @@ class _CartScreenState extends State<CartScreen> {
           )
         ],
       ),
-      body: customer.length != 0
-          ? Column(
-              children: [
-                // Expanded(
-                //     child: ListView.separated(
-                //         itemBuilder: (context, i) {
-                //           return Dismissible(
-                //               key: UniqueKey(),
-                //               onDismissed: (direction) {
-                //                 removeItem(i);
-                //               },
-                //               child: itemList(i));
-                //         },
-                //         separatorBuilder: (BuildContext context, int index) {
-                //           return SizedBox(
-                //             height: 15,
-                //           );
-                //         },
-                //         itemCount: productCart.length)),
-                // buildBottomBarCart()
-                Container(
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      controller: _scrollController,
-                      physics: ScrollPhysics(),
-                      itemCount: customer.length,
-                      itemBuilder: (context, i) {
-                        return ListItemCustomerCart(
-                          itemCount: customer.length,
-                          customer: customer[i],
-                          i: i,
-                        );
-                      }),
-                )
-              ],
+      body: !Session.data.getBool('isLogin')!
+          ? Center(
+              child: buildNoAuth(context),
             )
-          : customLoading(),
+          : !isLoading
+              ? Column(
+                  children: [
+                    // Expanded(
+                    //     child: ListView.separated(
+                    //         itemBuilder: (context, i) {
+                    //           return Dismissible(
+                    //               key: UniqueKey(),
+                    //               onDismissed: (direction) {
+                    //                 removeItem(i);
+                    //               },
+                    //               child: itemList(i));
+                    //         },
+                    //         separatorBuilder: (BuildContext context, int index) {
+                    //           return SizedBox(
+                    //             height: 15,
+                    //           );
+                    //         },
+                    //         itemCount: productCart.length)),
+                    // buildBottomBarCart()
+                    customer.length != 0
+                        ? Expanded(
+                            flex: 1,
+                            child: Container(
+                              child: ListView.builder(
+                                  shrinkWrap: true,
+                                  controller: _scrollController,
+                                  physics: ScrollPhysics(),
+                                  itemCount: customer.length,
+                                  itemBuilder: (context, i) {
+                                    return ListItemCustomerCart(
+                                      itemCount: customer.length,
+                                      customer: customer[i],
+                                      i: i,
+                                    );
+                                  }),
+                            ),
+                          )
+                        : Container(
+                            child: Column(
+                              children: [
+                                CachedNetworkImage(
+                                    imageUrl: noTransaction.image!,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.4,
+                                    placeholder: (context, url) => Container(),
+                                    errorWidget: (context, url, error) => Icon(
+                                          Icons.shopping_cart,
+                                          color: primaryColor,
+                                          size: 75,
+                                        )),
+                                Container(
+                                  margin: EdgeInsets.symmetric(vertical: 15),
+                                  child: Text(
+                                    "Không có giỏ hàng nào",
+                                    style: TextStyle(
+                                        fontSize: responsiveFont(14),
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                  ],
+                )
+              : customLoading(),
     );
   }
 
@@ -432,7 +471,7 @@ class _CartScreenState extends State<CartScreen> {
                             Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(5),
-                                color: secondaryColor,
+                                color: HexColor("960000"),
                               ),
                               padding: EdgeInsets.symmetric(
                                   vertical: 3, horizontal: 7),
@@ -470,7 +509,7 @@ class _CartScreenState extends State<CartScreen> {
                                 context),
                             style: TextStyle(
                                 fontSize: responsiveFont(10),
-                                color: secondaryColor,
+                                color: HexColor("960000"),
                                 fontWeight: FontWeight.w600),
                           ),
                           Row(

@@ -91,7 +91,7 @@ class GridItem extends StatelessWidget {
                                         decoration: BoxDecoration(
                                           borderRadius:
                                               BorderRadius.circular(2),
-                                          color: secondaryColor,
+                                          color: HexColor("960000"),
                                         ),
                                         padding:
                                             EdgeInsets.symmetric(horizontal: 5),
@@ -139,7 +139,7 @@ class GridItem extends StatelessWidget {
                                                     fontWeight: FontWeight.w600,
                                                     fontSize:
                                                         responsiveFont(11),
-                                                    color: secondaryColor)),
+                                                    color: HexColor("960000"))),
                                           ],
                                         ),
                                       )
@@ -155,7 +155,8 @@ class GridItem extends StatelessWidget {
                                                             FontWeight.w600,
                                                         fontSize:
                                                             responsiveFont(11),
-                                                        color: secondaryColor))
+                                                        color:
+                                                            HexColor("960000")))
                                                 : TextSpan(
                                                     text: product!
                                                                 .variationPrices!
@@ -170,7 +171,8 @@ class GridItem extends StatelessWidget {
                                                             FontWeight.w600,
                                                         fontSize:
                                                             responsiveFont(11),
-                                                        color: secondaryColor)),
+                                                        color: HexColor(
+                                                            "960000"))),
                                           ],
                                         ),
                                       ),

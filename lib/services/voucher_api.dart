@@ -1,21 +1,30 @@
 //PQ voucher
-import 'package:nyoba/models/voucher_model.dart';
+// ignore_for_file: await_only_futures
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import '../models/product_model.dart';
+
 class VoucherAPI {
-  fetchVoucher() async {
+  fetchVoucher(String search, String pageSize) async {
     SharedPreferences data = await SharedPreferences.getInstance();
     String? jwt = data.getString("jwt");
+    String url =
+        "https://phuquocvoucher.azurewebsites.net/api/v1/vouchers?VoucherName=" +
+            search;
+    // if (search != "") {
+    //   url = url + "VoucherName=" + pageSize;
+    // }
+    if (pageSize != "") {
+      url = url + "&PageSize=" + pageSize;
+    }
 
-    var response = await http.get(
-        Uri.parse(
-            "https://webapp-220831200534.azurewebsites.net/api/v1/vouchers"),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer " + jwt.toString()
-        });
+    var response = await http.get(Uri.parse(url), headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + jwt.toString()
+    });
     var dataResponse = await json.decode(response.body);
 
     Iterable list = dataResponse['data'];

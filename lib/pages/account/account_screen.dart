@@ -1,15 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:nyoba/app_localizations.dart';
-import 'package:nyoba/pages/account/account_detail_screen.dart';
 import 'package:nyoba/pages/home/home_screen.dart';
 import 'package:nyoba/pages/point/my_point_screen.dart';
 import 'package:nyoba/provider/app_provider.dart';
 import 'package:nyoba/provider/home_provider.dart';
 import 'package:nyoba/provider/user_provider.dart';
 import 'package:nyoba/services/session.dart';
-import 'package:nyoba/widgets/webview/webview.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -24,7 +23,6 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  String? _versionName;
   @override
   void initState() {
     super.initState();
@@ -103,14 +101,14 @@ class _AccountScreenState extends State<AccountScreen> {
                       ? Text(
                           "Xin chào",
                           style: TextStyle(
-                              color: secondaryColor,
+                              color: HexColor("960000"),
                               fontSize: responsiveFont(14),
                               fontWeight: FontWeight.w500),
                         )
                       : Text(
                           "Xin chào, ${Session.data.getString('sellerName')} !",
                           style: TextStyle(
-                              color: secondaryColor,
+                              color: HexColor("960000"),
                               fontSize: responsiveFont(14),
                               fontWeight: FontWeight.w500),
                         ),
@@ -132,24 +130,24 @@ class _AccountScreenState extends State<AccountScreen> {
                     visible: point.point != null,
                     child: buildPointCard(),
                   ),
-            Container(
-              alignment: Alignment.centerLeft,
-              margin: EdgeInsets.only(top: 15, left: 15, bottom: 5),
-              child: Text(
-                "Tài khoản",
-                style: TextStyle(
-                    fontSize: responsiveFont(10),
-                    fontWeight: FontWeight.w600,
-                    color: secondaryColor),
-              ),
-            ),
-            accountButton("akun", "Thông tin tài khoản", func: () {
-              Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => AccountDetailScreen()))
-                  .then((value) => this.setState(() {}));
-            }),
+            // Container(
+            //   alignment: Alignment.centerLeft,
+            //   margin: EdgeInsets.only(top: 15, left: 15, bottom: 5),
+            //   child: Text(
+            //     "Tài khoản",
+            //     style: TextStyle(
+            //         fontSize: responsiveFont(10),
+            //         fontWeight: FontWeight.w600,
+            //         color: HexColor("960000")),
+            //   ),
+            // ),
+            // accountButton("akun", "Thông tin tài khoản", func: () {
+            //   Navigator.push(
+            //           context,
+            //           MaterialPageRoute(
+            //               builder: (context) => AccountDetailScreen()))
+            //       .then((value) => this.setState(() {}));
+            // }),
             point.loading
                 ? Container()
                 : Visibility(
@@ -175,7 +173,7 @@ class _AccountScreenState extends State<AccountScreen> {
             //     style: TextStyle(
             //         fontSize: responsiveFont(10),
             //         fontWeight: FontWeight.w600,
-            //         color: secondaryColor),
+            //         color: HexColor("960000")),
             //   ),
             // ),
             // accountButton(
@@ -206,7 +204,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 style: TextStyle(
                     fontSize: responsiveFont(10),
                     fontWeight: FontWeight.w600,
-                    color: secondaryColor),
+                    color: HexColor("960000")),
               ),
             ),
             Column(
@@ -275,37 +273,37 @@ class _AccountScreenState extends State<AccountScreen> {
             //         androidAppId: generalSettings.packageInfo!.packageName);
             //   }
             // }),
-            accountButton("aboutus", "Về chúng tôi", func: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => WebViewScreen(
-                            url: generalSettings.about.description,
-                            title: AppLocalizations.of(context)!
-                                .translate('about_us'),
-                          )));
-            }),
-            accountButton("privacy", "Điều khoản bảo mật", func: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => WebViewScreen(
-                            url: generalSettings.privacy.description,
-                            title: AppLocalizations.of(context)!
-                                .translate('privacy'),
-                          )));
-            }),
-            accountButton("terms_conditions", "Điều khoản và điều kiện",
-                func: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => WebViewScreen(
-                            url: generalSettings.terms.description,
-                            title: AppLocalizations.of(context)!
-                                .translate('terms_conditions'),
-                          )));
-            }),
+            // accountButton("aboutus", "Về chúng tôi", func: () {
+            //   Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //           builder: (context) => WebViewScreen(
+            //                 url: generalSettings.about.description,
+            //                 title: AppLocalizations.of(context)!
+            //                     .translate('about_us'),
+            //               )));
+            // }),
+            // accountButton("privacy", "Điều khoản bảo mật", func: () {
+            //   Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //           builder: (context) => WebViewScreen(
+            //                 url: generalSettings.privacy.description,
+            //                 title: AppLocalizations.of(context)!
+            //                     .translate('privacy'),
+            //               )));
+            // }),
+            // accountButton("terms_conditions", "Điều khoản và điều kiện",
+            //     func: () {
+            //   Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //           builder: (context) => WebViewScreen(
+            //                 url: generalSettings.terms.description,
+            //                 title: AppLocalizations.of(context)!
+            //                     .translate('terms_conditions'),
+            //               )));
+            // }),
             accountButton("contact", "Liên hệ", func: () {
               _launchPhoneURL(generalSettings.phone.description!);
             }),
@@ -317,10 +315,8 @@ class _AccountScreenState extends State<AccountScreen> {
                 future: _init(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    _versionName = snapshot.data as String?;
                     return Text(
-                      '${AppLocalizations.of(context)!.translate('version')} ' +
-                          _versionName!,
+                      'Phiên bản ' + "1.0.0",
                       style: TextStyle(
                           fontWeight: FontWeight.w300,
                           fontSize: responsiveFont(10)),
@@ -407,7 +403,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       .toUpperCase(),
                   style: TextStyle(
                       fontSize: responsiveFont(12),
-                      color: secondaryColor,
+                      color: HexColor("960000"),
                       fontWeight: FontWeight.w600),
                 ),
               ),
@@ -429,7 +425,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         : fullName,
                     style: TextStyle(
                         fontSize: responsiveFont(18),
-                        color: secondaryColor,
+                        color: HexColor("960000"),
                         fontWeight: FontWeight.w600),
                   )
                 ],
@@ -451,14 +447,14 @@ class _AccountScreenState extends State<AccountScreen> {
                           '-',
                           style: TextStyle(
                               fontSize: responsiveFont(18),
-                              color: secondaryColor,
+                              color: HexColor("960000"),
                               fontWeight: FontWeight.w600),
                         )
                       : Text(
                           '${point.point!.pointsBalance} ${point.point!.pointsLabel}',
                           style: TextStyle(
                               fontSize: responsiveFont(18),
-                              color: secondaryColor,
+                              color: HexColor("960000"),
                               fontWeight: FontWeight.w600),
                         )
                 ],

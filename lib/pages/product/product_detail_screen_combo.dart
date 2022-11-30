@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/current_remaining_time.dart';
@@ -8,7 +10,6 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:nyoba/pages/category/brand_product_screen.dart';
 import 'package:nyoba/pages/order/cart_screen.dart';
 import 'package:nyoba/pages/product/modal_sheet_cart/modal_sheet_cart_combo.dart';
-import 'package:nyoba/pages/product/product_detail_screen_voucher.dart';
 import 'package:nyoba/pages/product/product_more_screen.dart';
 import 'package:nyoba/pages/wishlist/wishlist_screen.dart';
 import 'package:nyoba/provider/flash_sale_provider.dart';
@@ -52,6 +53,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
     with TickerProviderStateMixin {
   late AnimationController _colorAnimationController;
   late AnimationController _textAnimationController;
+  int? price;
 
   int itemCount = 10;
 
@@ -109,23 +111,20 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
     final productProvider =
         Provider.of<ProductProvider>(context, listen: false);
 
-    loadCartCount();
+    // loadCartCount();
     if (widget.slug == null) {
       await Provider.of<ProductProvider>(context, listen: false)
           .fetchProductDetailCombo(widget.productId)
           .then((value) async {
         setState(() {
           productModel = value;
-          printLog(productModel.toString(), name: 'Product Model');
+
+          price = productModel!.prices!
+              .firstWhere((currency) => currency.isDefault == false)
+              .price;
+          // printLog(productModel.toString(), name: 'Product Model');
           // productModel!.isSelected = false;
         });
-        // loadVariationData().then((value) {
-        //   printLog('Load Stop', name: 'Load Stop');
-        //   productProvider.loadingDetail = false;
-        // });
-        if (Session.data.getBool('isLogin')!)
-          await productProvider.hitViewProducts(widget.productId).then(
-              (value) async => await productProvider.fetchRecentProducts());
       });
     }
     // else {
@@ -144,7 +143,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
     //     });
     //   });
     // }
-    if (mounted) secondLoad();
+    // if (mounted) secondLoad();
   }
 
   secondLoad() {
@@ -283,10 +282,10 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
     Widget buildWishlistBtn = LikeButton(
       size: 25,
       onTap: setWishlist,
-      circleColor: CircleColor(start: primaryColor, end: secondaryColor),
+      circleColor: CircleColor(start: primaryColor, end: HexColor("960000")),
       bubblesColor: BubblesColor(
         dotPrimaryColor: primaryColor,
-        dotSecondaryColor: secondaryColor,
+        dotSecondaryColor: HexColor("960000"),
       ),
       isLiked: isWishlist,
       likeBuilder: (bool isLiked) {
@@ -658,7 +657,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                                   side: BorderSide(
                                     color: productModel!.vouchers != null
                                         // productModel!.inventory! >= 1
-                                        ? secondaryColor
+                                        ? HexColor("960000")
                                         : Colors.grey, //Color of the border
                                     //Style of the border
                                   ),
@@ -696,7 +695,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                                     Icons.add,
                                     size: responsiveFont(9),
                                     color: productModel!.vouchers != null
-                                        ? secondaryColor
+                                        ? HexColor("960000")
                                         : Colors.grey,
                                   ),
                                   Text(
@@ -705,7 +704,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                                     style: TextStyle(
                                       fontSize: responsiveFont(9),
                                       color: productModel!.vouchers != null
-                                          ? secondaryColor
+                                          ? HexColor("960000")
                                           : Colors.grey,
                                     ),
                                   )
@@ -719,7 +718,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                                   begin: Alignment.topCenter,
                                   end: Alignment.bottomCenter,
                                   colors: productModel!.vouchers != null
-                                      ? [primaryColor, secondaryColor]
+                                      ? [primaryColor, HexColor("960000")]
                                       : [Colors.grey, Colors.grey])),
                           width: 132.w,
                           height: 30.h,
@@ -826,7 +825,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                             style: TextStyle(
                                 fontSize: responsiveFont(12),
                                 fontWeight: FontWeight.w600,
-                                color: secondaryColor),
+                                color: HexColor("960000")),
                           ),
                         )
                       ],
@@ -889,7 +888,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                         style: TextStyle(
                             fontSize: responsiveFont(12),
                             fontWeight: FontWeight.w600,
-                            color: secondaryColor),
+                            color: HexColor("960000")),
                       ),
                     )
                   ],
@@ -953,7 +952,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                         style: TextStyle(
                             fontSize: responsiveFont(12),
                             fontWeight: FontWeight.w600,
-                            color: secondaryColor),
+                            color: HexColor("960000")),
                       ),
                     )
                   ],
@@ -1170,7 +1169,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(3),
                   color: rating != 0 && reviewController.text.isNotEmpty
-                      ? secondaryColor
+                      ? HexColor("960000")
                       : Colors.grey),
               alignment: Alignment.center,
               child: Text(
@@ -1301,17 +1300,18 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     for (var item in productModel!.vouchers!)
-                      ListTile(
-                        onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProductDetailVoucher(
-                                      productId: item.productId.toString(),
-                                    ))),
-                        title: Text(item.voucherName.toString()),
-                        subtitle: Text(item.price.toString() + " Vnd"),
-                        // leading: {};
-                      ),
+                      ListTile(onTap: () => null
+                          //   Navigator.push(
+                          //       context,
+                          //       MaterialPageRoute(
+                          //           builder: (context) => ProductDetailVoucher(
+                          //                 productId: item.productId.toString(),
+                          //               ))),
+                          //   title: Text(item.voucherName.toString()),
+                          //   // subtitle: Text(item.price.toString() + " Vnd"),
+                          //   // leading: {};
+                          // )
+                          ),
                   ],
                 )
               : Container(),
@@ -1338,13 +1338,8 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                               // text: stringToCurrency(
                               //     double.parse(productModel!.price.toString()),
                               //     context),
-                              text: productModel!.prices!.isNotEmpty
-                                  ? productModel!.prices!.first.price
-                                          .toString() +
-                                      "to" +
-                                      productModel!.prices!.last.price
-                                          .toString() +
-                                      " Vnd"
+                              text: price != 0
+                                  ? price.toString() + " Vnd"
                                   : "null",
                               style: TextStyle(
                                   fontWeight: FontWeight.w600,
@@ -1363,7 +1358,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: responsiveFont(11),
-                                      color: secondaryColor))
+                                      color: HexColor("960000")))
                               : TextSpan(
                                   text: variantPrices.first ==
                                           variantPrices.last
@@ -1391,7 +1386,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                   padding: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(3),
-                      color: secondaryColor),
+                      color: HexColor("960000")),
                   child: Row(
                     children: [
                       Text(
@@ -1640,7 +1635,7 @@ class _ProductDetailStateCombo extends State<ProductDetailCombo>
                               price,
                               style: TextStyle(
                                   fontSize: responsiveFont(10),
-                                  color: secondaryColor,
+                                  color: HexColor("960000"),
                                   fontWeight: FontWeight.w600),
                             ),
                           ),

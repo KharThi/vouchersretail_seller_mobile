@@ -178,7 +178,7 @@ class _BlogDetailShimmerState extends State<BlogDetailShimmer> {
                                 child: Container(
                                     child: Icon(
                                   Icons.local_offer,
-                                  color: secondaryColor,
+                                  color: HexColor("960000"),
                                 ))),
                             SizedBox(
                               width: 10,
@@ -265,7 +265,7 @@ class _BlogDetailShimmerState extends State<BlogDetailShimmer> {
       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 3),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(3),
-          border: Border.all(color: secondaryColor)),
+          border: Border.all(color: HexColor("960000"))),
       child: Text(
         title,
         style: TextStyle(color: primaryColor),
