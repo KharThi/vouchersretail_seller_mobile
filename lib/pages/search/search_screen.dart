@@ -83,15 +83,15 @@ class _SearchScreenState extends State<SearchScreen> {
                 physics: ScrollPhysics(),
                 itemCount: searchList.length,
                 itemBuilder: (context, i) {
-                  int? price = searchList[i]
-                      .prices!
-                      .firstWhere((currency) => currency.isDefault == false)
-                      .price;
+                  // int? price = searchList[i]
+                  //     .prices!
+                  //     .firstWhere((currency) => currency.isDefault == false)
+                  //     .price;
                   return ListItemProduct2(
                     itemCount: searchList.length,
                     product: searchList[i],
                     i: i,
-                    price: price.toString(),
+                    price: "",
                   );
                 }),
           );
