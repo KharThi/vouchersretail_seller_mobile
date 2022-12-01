@@ -72,7 +72,7 @@ class _SearchScreenState extends State<SearchScreen> {
             return buildSearchEmpty(
               context,
               searchController.text.isEmpty
-                  ? "Tiềm kiếm ở đây"
+                  ? "Tìm kiếm ở đây"
                   : "Không tiềm thấy sản phẩm",
             );
           }
@@ -176,7 +176,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             ),
                           ),
                           prefixIcon: Icon(Icons.search),
-                          hintText: "Tiềm kiếm",
+                          hintText: "Tìm kiếm",
                           hintStyle: TextStyle(fontSize: responsiveFont(10)),
                         ),
                       ),
