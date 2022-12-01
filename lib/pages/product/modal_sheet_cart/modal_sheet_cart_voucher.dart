@@ -68,12 +68,13 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
   OrderProvider? orderProvider;
 
   Future<void> _selectDate(BuildContext context) async {
+    print(widget.product!.startDate.toString());
     final DateTime? d = await showDatePicker(
       locale: const Locale("vi", "VN"),
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2050),
+      initialDate: DateTime.parse(widget.product!.startDate.toString()),
+      firstDate: DateTime.parse(widget.product!.startDate.toString()),
+      lastDate: DateTime.parse(widget.product!.endDate.toString()),
     );
     if (d != null)
       setState(() {
