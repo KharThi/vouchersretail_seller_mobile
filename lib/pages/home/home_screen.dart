@@ -262,7 +262,7 @@ class _HomeScreenState extends State<HomeScreen>
                             2,
                             "images/order/processing_dark.png",
                             "images/order/processing_dark.png",
-                            "Order của tôi",
+                            "Đơn hàng",
                             28,
                             14)),
                   )),
@@ -357,7 +357,7 @@ class _HomeScreenState extends State<HomeScreen>
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
-          height: 5,
+          height: 1,
         ),
         Stack(
           children: [
@@ -407,15 +407,18 @@ class _HomeScreenState extends State<HomeScreen>
         ),
         Container(
           alignment: Alignment.topCenter,
-          child: Text(
-            title,
-            style: TextStyle(
-                fontWeight: _selectedIndex == index
-                    ? FontWeight.w600
-                    : FontWeight.normal,
-                fontSize: responsiveFont(8),
-                fontFamily: 'Poppins',
-                color: _selectedIndex == index ? primaryColor : Colors.black),
+          child: Expanded(
+            flex: 1,
+            child: Text(
+              title,
+              style: TextStyle(
+                  fontWeight: _selectedIndex == index
+                      ? FontWeight.w600
+                      : FontWeight.normal,
+                  fontSize: responsiveFont(8),
+                  fontFamily: 'Poppins',
+                  color: _selectedIndex == index ? primaryColor : Colors.black),
+            ),
           ),
         ),
       ],

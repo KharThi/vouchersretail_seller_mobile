@@ -21,6 +21,7 @@ class RevenueApi {
           "Content-Type": "application/json",
           "Authorization": "Bearer " + jwt.toString()
         });
+    print(response.body);
     var dataResponse = await json.decode(response.body);
 
     Iterable list = dataResponse;

@@ -207,56 +207,56 @@ class _AccountScreenState extends State<AccountScreen> {
                     color: HexColor("960000")),
               ),
             ),
-            Column(
-              children: [
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                              width: 25.w,
-                              height: 25.h,
-                              child:
-                                  Image.asset("images/account/darktheme.png")),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "Chế độ tối",
-                            style: TextStyle(fontSize: responsiveFont(11)),
-                          )
-                        ],
-                      ),
-                      Consumer<AppNotifier>(
-                          builder: (context, theme, _) => Switch(
-                                value: theme.isDarkMode,
-                                onChanged: (value) {
-                                  setState(() {
-                                    theme.isDarkMode = !theme.isDarkMode;
-                                  });
-                                  if (theme.isDarkMode) {
-                                    theme.setDarkMode();
-                                  } else {
-                                    theme.setLightMode();
-                                  }
-                                },
-                                activeTrackColor: Colors.lightGreenAccent,
-                                activeColor: Colors.green,
-                              )),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 15),
-                  width: double.infinity,
-                  height: 2,
-                  color: Colors.black12,
-                )
-              ],
-            ),
+            // Column(
+            //   children: [
+            //     Container(
+            //       margin: EdgeInsets.symmetric(horizontal: 10),
+            //       child: Row(
+            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //         children: [
+            //           Row(
+            //             children: [
+            //               Container(
+            //                   width: 25.w,
+            //                   height: 25.h,
+            //                   child:
+            //                       Image.asset("images/account/darktheme.png")),
+            //               SizedBox(
+            //                 width: 10,
+            //               ),
+            //               Text(
+            //                 "Chế độ tối",
+            //                 style: TextStyle(fontSize: responsiveFont(11)),
+            //               )
+            //             ],
+            //           ),
+            //           Consumer<AppNotifier>(
+            //               builder: (context, theme, _) => Switch(
+            //                     value: theme.isDarkMode,
+            //                     onChanged: (value) {
+            //                       setState(() {
+            //                         theme.isDarkMode = !theme.isDarkMode;
+            //                       });
+            //                       if (theme.isDarkMode) {
+            //                         theme.setDarkMode();
+            //                       } else {
+            //                         theme.setLightMode();
+            //                       }
+            //                     },
+            //                     activeTrackColor: Colors.lightGreenAccent,
+            //                     activeColor: Colors.green,
+            //                   )),
+            //         ],
+            //       ),
+            //     ),
+            //     Container(
+            //       margin: EdgeInsets.symmetric(horizontal: 15),
+            //       width: double.infinity,
+            //       height: 2,
+            //       color: Colors.black12,
+            //     )
+            //   ],
+            // ),
             // accountButton("languange",
             //     AppLocalizations.of(context)!.translate('title_language')!,
             //     func: () {
@@ -304,9 +304,9 @@ class _AccountScreenState extends State<AccountScreen> {
             //                     .translate('terms_conditions'),
             //               )));
             // }),
-            accountButton("contact", "Liên hệ", func: () {
-              _launchPhoneURL(generalSettings.phone.description!);
-            }),
+            // accountButton("contact", "Liên hệ", func: () {
+            //   _launchPhoneURL(generalSettings.phone.description!);
+            // }),
             accountButton("logout", "Đăng xuất", func: logoutPopDialog),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),

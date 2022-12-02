@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 
 import '../../app_localizations.dart';
 import '../../provider/voucher_provider.dart';
+import '../product/product_detail_screen_voucher.dart';
 
 class BrandProductsVoucher extends StatefulWidget {
   final String? categoryId;
@@ -334,9 +335,12 @@ class _BrandProductsVoucherState extends State<BrandProductsVoucher>
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ProductDetail(
+                  builder: (context) => new ProductDetailVoucher(
                         productId: productDetail.id.toString(),
-                      )));
+                      ))).then((value) => setState(() {
+                isLoading = true;
+                loadProductByBrand();
+              }));
         },
         child: Card(
           elevation: 5,

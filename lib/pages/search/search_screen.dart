@@ -72,7 +72,7 @@ class _SearchScreenState extends State<SearchScreen> {
             return buildSearchEmpty(
               context,
               searchController.text.isEmpty
-                  ? "Tiềm kiếm ở đây"
+                  ? "Tìm kiếm ở đây"
                   : "Không tiềm thấy sản phẩm",
             );
           }
@@ -83,15 +83,15 @@ class _SearchScreenState extends State<SearchScreen> {
                 physics: ScrollPhysics(),
                 itemCount: searchList.length,
                 itemBuilder: (context, i) {
-                  int? price = searchList[i]
-                      .prices!
-                      .firstWhere((currency) => currency.isDefault == false)
-                      .price;
+                  // int? price = searchList[i]
+                  //     .prices!
+                  //     .firstWhere((currency) => currency.isDefault == false)
+                  //     .price;
                   return ListItemProduct2(
                     itemCount: searchList.length,
                     product: searchList[i],
                     i: i,
-                    price: price.toString(),
+                    price: "",
                   );
                 }),
           );
@@ -176,7 +176,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             ),
                           ),
                           prefixIcon: Icon(Icons.search),
-                          hintText: "Tiềm kiếm",
+                          hintText: "Tìm kiếm",
                           hintStyle: TextStyle(fontSize: responsiveFont(10)),
                         ),
                       ),

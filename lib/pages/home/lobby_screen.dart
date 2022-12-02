@@ -1747,7 +1747,7 @@ class _LobbyScreenState extends State<LobbyScreen>
                                 isRepeatingAnimation: true,
                                 repeatForever: true,
                                 animatedTexts: [
-                                  TyperAnimatedText("Tiềm kiếm",
+                                  TyperAnimatedText("Tìm kiếm",
                                       speed: Duration(milliseconds: 80)),
                                   if (true) TyperAnimatedText("Ăn uống"),
                                   if (true) TyperAnimatedText("Vui chơi"),

@@ -19,7 +19,7 @@ class RevenueScreen extends StatefulWidget {
 
 class _RevenueScreenState extends State<RevenueScreen> {
   int orderNumber = 0;
-  double? totalRevenue = 0;
+  double totalRevenue = 0.0;
   List<List<double>>? revenues;
   String year = "";
   bool isLoading = true;
@@ -36,10 +36,13 @@ class _RevenueScreenState extends State<RevenueScreen> {
         .getListRevenue(year)
         .then((value) {
       setState(() {
+        charts.clear();
+        totalRevenue = 0.0;
+        orderNumber = 0;
         List<Revenue> list = value;
         for (var element in list) {
           charts.add(double.parse(element.revenues.toString()));
-          totalRevenue != element.revenues!;
+          totalRevenue = totalRevenue + element.revenues!;
           orderNumber = orderNumber + element.order!;
         }
         isLoading = false;
@@ -95,7 +98,7 @@ class _RevenueScreenState extends State<RevenueScreen> {
                     children: <Widget>[
                       StaggeredGridTile.count(
                         crossAxisCellCount: 4,
-                        mainAxisCellCount: 1.5,
+                        mainAxisCellCount: 1.75,
                         child: _buildTile(
                           Padding(
                             padding: const EdgeInsets.all(24.0),
@@ -106,7 +109,7 @@ class _RevenueScreenState extends State<RevenueScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     SizedBox(
-                                      height: 10,
+                                      height: 13,
                                     ),
                                     Expanded(
                                       child: Column(
@@ -118,11 +121,16 @@ class _RevenueScreenState extends State<RevenueScreen> {
                                           Text('Tổng thu nhập',
                                               style: TextStyle(
                                                   color: Colors.blueAccent)),
-                                          Text(totalRevenue.toString() + " Vnd",
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w700,
-                                                  fontSize: 34.0))
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text(
+                                                totalRevenue.toString() +
+                                                    " Vnd",
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 34.0)),
+                                          )
                                         ],
                                       ),
                                     ),
@@ -243,8 +251,9 @@ class _RevenueScreenState extends State<RevenueScreen> {
                                                     value.toString();
                                                 actualChart = chartDropdownItems
                                                     .indexOf(value.toString());
-                                                year =
-                                                    actualDropdown; // Refresh the chart
+                                                year = actualDropdown;
+                                                isLoading = true;
+                                                loadRevenues(); // Refresh the chart
                                               }),
                                           items: chartDropdownItems
                                               .map((String title) {
