@@ -6,12 +6,12 @@ import 'package:nyoba/utils/utility.dart';
 
 import '../../pages/product/product_detail_screen_voucher.dart';
 
-class CardItemPqVoucher extends StatelessWidget {
+class CardItemPqCombo extends StatelessWidget {
   final Voucher? voucher;
 
   final int? i, itemCount;
 
-  CardItemPqVoucher({this.voucher, this.i, this.itemCount});
+  CardItemPqCombo({this.voucher, this.i, this.itemCount});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,6 @@ class CardItemPqVoucher extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) => ProductDetailVoucher(
-                      isCombo: voucher!.isCombo.toString(),
                       productId: voucher!.id.toString(),
                     )));
         // } else {

@@ -805,28 +805,28 @@ class _ProductDetailState extends State<ProductDetail>
                               fontSize: responsiveFont(14),
                               fontWeight: FontWeight.w600),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => BrandProducts(
-                                          categoryId: product
-                                              .productDetail!.categories![0].id
-                                              .toString(),
-                                          brandName:
-                                              AppLocalizations.of(context)!
-                                                  .translate('you_might_also'),
-                                        )));
-                          },
-                          child: Text(
-                            AppLocalizations.of(context)!.translate('more')!,
-                            style: TextStyle(
-                                fontSize: responsiveFont(12),
-                                fontWeight: FontWeight.w600,
-                                color: HexColor("960000")),
-                          ),
-                        )
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     Navigator.push(
+                        //         context,
+                        //         MaterialPageRoute(
+                        //             builder: (context) => BrandProducts(
+                        //                   categoryId: product
+                        //                       .productDetail!.categories![0].id
+                        //                       .toString(),
+                        //                   brandName:
+                        //                       AppLocalizations.of(context)!
+                        //                           .translate('you_might_also'),
+                        //                 )));
+                        //   },
+                        //   child: Text(
+                        //     AppLocalizations.of(context)!.translate('more')!,
+                        //     style: TextStyle(
+                        //         fontSize: responsiveFont(12),
+                        //         fontWeight: FontWeight.w600,
+                        //         color: HexColor("960000")),
+                        //   ),
+                        // )
                       ],
                     ),
                   ),
@@ -900,11 +900,7 @@ class _ProductDetailState extends State<ProductDetail>
                   itemCount: value.listFeaturedProduct.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, i) {
-                    return CardItem(
-                      product: value.listFeaturedProduct[i],
-                      i: i,
-                      itemCount: value.listFeaturedProduct.length,
-                    );
+                    return Container();
                   },
                   separatorBuilder: (BuildContext context, int index) {
                     return SizedBox(

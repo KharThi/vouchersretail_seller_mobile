@@ -203,13 +203,13 @@ class GridItemCategory extends StatelessWidget {
           margin: EdgeInsets.only(bottom: 1),
           child: GestureDetector(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => BrandProducts(
-                            categoryId: categoryId.toString(),
-                            brandName: categoryName,
-                          )));
+              // Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //         builder: (context) => BrandProducts(
+              //               categoryId: categoryId.toString(),
+              //               brandName: categoryName,
+              //             )));
             },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,

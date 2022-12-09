@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 
 import '../../app_localizations.dart';
 import '../../provider/voucher_provider.dart';
+import '../../services/session.dart';
 import '../product/product_detail_screen_voucher.dart';
 
 class BrandProductsVoucher extends StatefulWidget {
@@ -71,16 +72,16 @@ class _BrandProductsVoucherState extends State<BrandProductsVoucher>
 
   loadProductByBrand() async {
     await Provider.of<VoucherProvider>(context, listen: false)
-        .fetchVouchers("", "")
+        .fetchVouchers("", "", "")
         .then((value) {
       this.setState(() {
         listVoucher = value!;
         isLoading = false;
       });
-      Future.delayed(Duration(milliseconds: 3500), () {
-        print('Delayed Done');
-        this.setState(() {});
-      });
+      // Future.delayed(Duration(milliseconds: 3500), () {
+      //   print('Delayed Done');
+      //   this.setState(() {});
+      // });
     });
   }
 
@@ -121,7 +122,7 @@ class _BrandProductsVoucherState extends State<BrandProductsVoucher>
     final product = Provider.of<ProductProvider>(context, listen: false);
     Widget buildItems = ListenableProvider.value(
       value: product,
-      child: Consumer<ComboProvider>(builder: (context, value, child) {
+      child: Consumer<VoucherProvider>(builder: (context, value, child) {
         if (value.loading && page == 1) {
           return Expanded(
             child: GridView.builder(
@@ -182,7 +183,7 @@ class _BrandProductsVoucherState extends State<BrandProductsVoucher>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  convertHtmlUnescape(widget.brandName!),
+                  convertHtmlUnescape("Các sản phẩm khác"),
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: responsiveFont(16),
@@ -337,6 +338,7 @@ class _BrandProductsVoucherState extends State<BrandProductsVoucher>
               MaterialPageRoute(
                   builder: (context) => new ProductDetailVoucher(
                         productId: productDetail.id.toString(),
+                        isCombo: productDetail.isCombo.toString(),
                       ))).then((value) => setState(() {
                 isLoading = true;
                 loadProductByBrand();
@@ -438,18 +440,8 @@ class _BrandProductsVoucherState extends State<BrandProductsVoucher>
                             style: TextStyle(color: Colors.black),
                             children: <TextSpan>[
                               TextSpan(
-                                  text: productDetail.prices!.isNotEmpty
-                                      ? productDetail.prices!.first.price! <
-                                              productDetail.prices!.last.price!
-                                          ? "Từ " +
-                                              productDetail.prices!.first.price
-                                                  .toString() +
-                                              " Vnd"
-                                          : "Từ " +
-                                              productDetail.prices!.last.price
-                                                  .toString() +
-                                              " Vnd"
-                                      : "",
+                                  text: productDetail.soldPrice.toString() +
+                                      " Vnd",
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: responsiveFont(11),
@@ -480,14 +472,20 @@ class _BrandProductsVoucherState extends State<BrandProductsVoucher>
                             borderRadius: new BorderRadius.circular(5))),
                     onPressed: () {
                       if (!isOutOfStock && productDetail.inventory! >= 1) {
-                        showMaterialModalBottomSheet(
-                          context: context,
-                          builder: (context) => ModalSheetCartVoucher(
-                            product: productDetail,
-                            type: 'add',
-                            // loadCount: loadCartCount,
-                          ),
-                        );
+                        if (Session.data.getBool('isLogin')!) {
+                          showMaterialModalBottomSheet(
+                            context: context,
+                            builder: (context) => ModalSheetCartVoucher(
+                              product: productDetail,
+                              type: 'add',
+                              // loadCount: loadCartCount,
+                            ),
+                          );
+                        } else {
+                          snackBar(context,
+                              message:
+                                  "Bạn cần đăng nhập để thực hiện chức năng này!");
+                        }
                       } else {
                         snackBar(context, message: "Sản phẩm đã hết hàng");
                       }

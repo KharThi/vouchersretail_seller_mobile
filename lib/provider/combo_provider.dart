@@ -1,23 +1,25 @@
 // ignore_for_file: unused_local_variable
 
 import 'package:flutter/material.dart';
-import 'package:nyoba/services/combo_api.dart';
+import 'package:nyoba/services/voucher_api.dart';
 
 import '../models/product_model.dart';
 
 class ComboProvider with ChangeNotifier {
   bool loading = false;
-  List<Combo> listCombo = [];
-  Future<List<Combo>?> fetchCombos() async {
+  List<Voucher> listVoucher = [];
+  Future<List<Voucher>?> fetchVouchersCombo(
+      String search, String pageSize, String isCombo) async {
     loading = true;
     var result;
-    List<Combo> list = List.empty(growable: true);
-    await ComboAPI().fetchCombo().then((data) {
+    List<Voucher> list = List.empty(growable: true);
+    await VoucherAPI().fetchVoucher(search, pageSize, isCombo).then((data) {
       result = data;
-      list = data.cast<Combo>();
+      // print("result" + data.toString());
+      list = data.cast<Voucher>();
     });
-    listCombo.clear();
-    listCombo = list;
+    listVoucher.clear();
+    listVoucher = list;
     loading = false;
     notifyListeners();
     return list;

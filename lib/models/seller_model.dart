@@ -4,8 +4,6 @@
 
 import 'dart:convert';
 
-import 'package:nyoba/models/order.dart';
-
 Seller sellerFromJson(String str) => Seller.fromJson(json.decode(str));
 
 String sellerToJson(Seller data) => json.encode(data.toJson());
@@ -13,44 +11,56 @@ String sellerToJson(Seller data) => json.encode(data.toJson());
 class Seller {
   Seller({
     this.id,
+    this.createAt,
     this.sellerName,
     this.userInfoId,
     this.userInfo,
     this.commissionRate,
     this.profit,
     this.orders,
-    this.busyLevel,
+    this.updateAt,
+    this.deleteAt,
+    this.status,
   });
 
   int? id;
+  String? createAt;
   String? sellerName;
   int? userInfoId;
   UserInfo? userInfo;
   double? commissionRate;
   int? profit;
-  Order? orders;
-  String? busyLevel;
+  dynamic orders;
+  dynamic updateAt;
+  dynamic deleteAt;
+  String? status;
 
   factory Seller.fromJson(Map<String, dynamic> json) => Seller(
         id: json["id"],
+        createAt: json["createAt"],
         sellerName: json["sellerName"],
         userInfoId: json["userInfoId"],
         userInfo: UserInfo.fromJson(json["userInfo"]),
         commissionRate: json["commissionRate"].toDouble(),
         profit: json["profit"],
         orders: json["orders"],
-        busyLevel: json["busyLevel"],
+        updateAt: json["updateAt"],
+        deleteAt: json["deleteAt"],
+        status: json["status"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "createAt": createAt,
         "sellerName": sellerName,
         "userInfoId": userInfoId,
-        "userInfo": userInfo,
+        "userInfo": userInfo!.toJson(),
         "commissionRate": commissionRate,
         "profit": profit,
         "orders": orders,
-        "busyLevel": busyLevel,
+        "updateAt": updateAt,
+        "deleteAt": deleteAt,
+        "status": status,
       };
 }
 
@@ -62,6 +72,7 @@ class UserInfo {
     this.userName,
     this.role,
     this.phoneNumber,
+    this.providerId,
     this.createAt,
     this.updateAt,
     this.deleteAt,
@@ -74,9 +85,10 @@ class UserInfo {
   String? userName;
   String? role;
   String? phoneNumber;
-  String? createAt;
-  String? updateAt;
-  String? deleteAt;
+  int? providerId;
+  dynamic createAt;
+  dynamic updateAt;
+  dynamic deleteAt;
   String? status;
 
   factory UserInfo.fromJson(Map<String, dynamic> json) => UserInfo(
@@ -86,6 +98,7 @@ class UserInfo {
         userName: json["userName"],
         role: json["role"],
         phoneNumber: json["phoneNumber"],
+        providerId: json["providerId"],
         createAt: json["createAt"],
         updateAt: json["updateAt"],
         deleteAt: json["deleteAt"],
@@ -99,6 +112,7 @@ class UserInfo {
         "userName": userName,
         "role": role,
         "phoneNumber": phoneNumber,
+        "providerId": providerId,
         "createAt": createAt,
         "updateAt": updateAt,
         "deleteAt": deleteAt,

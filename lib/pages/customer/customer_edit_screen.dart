@@ -48,24 +48,24 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
     // controllerCustomerName.text = widget.userModel!.customerName!;
     // controllerFirstname.text = widget.userModel!.firstname!;
     // controllerLastname.text = widget.userModel!.lastname!;
-    controllerCustomerName.text = widget.userModel!.profiles!.first.name != null
-        ? widget.userModel!.profiles!.first.name!
-        : "";
-    // controllerEmail.text = "";
-    controllerPhone.text = widget.userModel!.profiles!.first.phoneNumber != null
-        ? widget.userModel!.profiles!.first.phoneNumber!
-        : "";
-    ;
-    // controllerUsername.text = "";
-    controllerDateOfBirth.text =
-        widget.userModel!.profiles!.first.dateOfBirth != null
-            ? widget.userModel!.profiles!.first.dateOfBirth!
-            : "";
-    controllerIdentity.text =
-        widget.userModel!.profiles!.first.civilIdentify != null
-            ? widget.userModel!.profiles!.first.civilIdentify!
-            : "";
-    select = widget.userModel!.profiles!.first.sex! == 1 ? "Nam" : "Nữ";
+    // controllerCustomerName.text = widget.userModel!.profiles!.first.name != null
+    //     ? widget.userModel!.profiles!.first.name!
+    //     : "";
+    // // controllerEmail.text = "";
+    // controllerPhone.text = widget.userModel!.profiles!.first.phoneNumber != null
+    //     ? widget.userModel!.profiles!.first.phoneNumber!
+    //     : "";
+    // ;
+    // // controllerUsername.text = "";
+    // controllerDateOfBirth.text =
+    //     widget.userModel!.profiles!.first.dateOfBirth != null
+    //         ? widget.userModel!.profiles!.first.dateOfBirth!
+    //         : "";
+    // controllerIdentity.text =
+    //     widget.userModel!.profiles!.first.civilIdentify != null
+    //         ? widget.userModel!.profiles!.first.civilIdentify!
+    //         : "";
+    // select = widget.userModel!.profiles!.first.sex! == 1 ? "Nam" : "Nữ";
   }
 
   @override
@@ -85,19 +85,19 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
       //       message: 'Your password and confirmation password does not match.');
       // } else {
       user.loading = true;
-      Profile profile = new Profile(
-          civilIdentify: controllerIdentity.text,
-          customerId: widget.userModel!.id,
-          dateOfBirth: controllerDateOfBirth.text,
-          name: controllerCustomerName.text,
-          phoneNumber: controllerPhone.text,
-          sex: genderInt,
-          id: widget.userModel!.profiles!.first.id);
-      bool check = await user.updateCustomer(context, profile);
-      if (check) {
-        setState(() {});
-      }
-      user.loading = false;
+      // Profile profile = new Profile(
+      //     civilIdentify: controllerIdentity.text,
+      //     customerId: widget.userModel!.id,
+      //     dateOfBirth: controllerDateOfBirth.text,
+      //     name: controllerCustomerName.text,
+      //     phoneNumber: controllerPhone.text,
+      //     sex: genderInt,
+      //     id: widget.userModel!.profiles!.first.id);
+      // bool check = await user.updateCustomer(context);
+      // if (check) {
+      //   setState(() {});
+      // }
+      // user.loading = false;
 
       // authResponse.then((value) {
       //   if (value!['is_success'] == true) {

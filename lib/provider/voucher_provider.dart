@@ -8,11 +8,12 @@ import '../models/product_model.dart';
 class VoucherProvider with ChangeNotifier {
   bool loading = false;
   List<Voucher> listVoucher = [];
-  Future<List<Voucher>?> fetchVouchers(String search, String pageSize) async {
+  Future<List<Voucher>?> fetchVouchers(
+      String search, String pageSize, String isCombo) async {
     loading = true;
     var result;
     List<Voucher> list = List.empty(growable: true);
-    await VoucherAPI().fetchVoucher(search, pageSize).then((data) {
+    await VoucherAPI().fetchVoucher(search, pageSize, isCombo).then((data) {
       result = data;
       // print("result" + data.toString());
       list = data.cast<Voucher>();

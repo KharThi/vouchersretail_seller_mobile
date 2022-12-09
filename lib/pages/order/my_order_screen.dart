@@ -246,16 +246,16 @@ class _MyOrderState extends State<MyOrder> {
               ],
             ),
           ),
-          Visibility(
-            visible: orderModel.orderItems!.length > 1,
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 10),
-              child: Text(
-                "+${orderModel.orderItems!.length - 1} Sản phẩm khác}",
-                style: TextStyle(fontSize: responsiveFont(10)),
-              ),
-            ),
-          ),
+          // Visibility(
+          //   visible: orderModel.orderItems!.length > 1,
+          //   child: Container(
+          //     margin: EdgeInsets.symmetric(horizontal: 10),
+          //     child: Text(
+          //       "+${orderModel.orderItems!.length - 1} Sản phẩm khác}",
+          //       style: TextStyle(fontSize: responsiveFont(10)),
+          //     ),
+          //   ),
+          // ),
           Container(
             height: 5,
           ),

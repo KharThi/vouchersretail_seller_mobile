@@ -26,7 +26,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Future search() async {
     await Provider.of<VoucherProvider>(context, listen: false)
-        .fetchVouchers(searchController.text, "")
+        .fetchVouchers(searchController.text, "", "")
         .then((value) => this.setState(() {
               searchList = value!;
               isLoading = false;

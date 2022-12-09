@@ -181,7 +181,7 @@ class Session {
     data.setString("commissionRate", seller.commissionRate.toString());
     data.setString("profit", seller.profit.toString());
     data.setString("orders", seller.orders.toString());
-    data.setString("busyLevel", seller.busyLevel!);
+    // data.setString("busyLevel", seller.busyLevel!);
 
     // data.setString("email", user.email!);
     // data.setString("cookie", cookie);
@@ -206,7 +206,7 @@ class Session {
     data.remove("commissionRate");
     data.remove("profit");
     data.remove("orders");
-    data.remove("busyLevel");
+    // data.remove("busyLevel");
 
     data.remove("id");
     data.remove("username");

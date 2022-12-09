@@ -18,8 +18,11 @@ class Customer {
     this.userInfoId,
     this.assignSellerId,
     this.assignSeller,
-    this.profiles,
     this.cartId,
+    this.createAt,
+    this.updateAt,
+    this.deleteAt,
+    this.status,
   });
 
   int? id;
@@ -28,32 +31,41 @@ class Customer {
   int? userInfoId;
   int? assignSellerId;
   AssignSeller? assignSeller;
-  List<Profile>? profiles;
   int? cartId;
+  String? createAt;
+  dynamic updateAt;
+  dynamic deleteAt;
+  String? status;
 
   factory Customer.fromJson(Map<String, dynamic> json) => Customer(
         id: json["id"],
         customerName: json["customerName"],
         userInfo: UserInfo.fromJson(json["userInfo"]),
         userInfoId: json["userInfoId"],
-        assignSellerId: json["assignSellerId"],
-        assignSeller: json["assignSeller"] != null
-            ? AssignSeller.fromJson(json["assignSeller"])
-            : null,
-        profiles: List<Profile>.from(
-            json["profiles"].map((x) => Profile.fromJson(x))),
+        assignSellerId:
+            json["assignSellerId"] == null ? null : json["assignSellerId"],
+        assignSeller: json["assignSeller"] == null
+            ? null
+            : AssignSeller.fromJson(json["assignSeller"]),
         cartId: json["cartId"],
+        createAt: json["createAt"],
+        updateAt: json["updateAt"],
+        deleteAt: json["deleteAt"],
+        status: json["status"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "customerName": customerName,
-        "userInfo": userInfo,
+        "userInfo": userInfo!.toJson(),
         "userInfoId": userInfoId,
         "assignSellerId": assignSellerId,
-        "assignSeller": assignSeller,
-        "profiles": List<dynamic>.from(profiles!.map((x) => x.toJson())),
+        "assignSeller": assignSeller!.toJson(),
         "cartId": cartId,
+        "createAt": createAt,
+        "updateAt": updateAt,
+        "deleteAt": deleteAt,
+        "status": status,
       };
 }
 
@@ -64,7 +76,9 @@ class AssignSeller {
     this.userInfoId,
     this.commissionRate,
     this.profit,
-    this.busyLevel,
+    this.createAt,
+    this.updateAt,
+    this.deleteAt,
     this.status,
   });
 
@@ -73,7 +87,9 @@ class AssignSeller {
   int? userInfoId;
   double? commissionRate;
   int? profit;
-  String? busyLevel;
+  String? createAt;
+  String? updateAt;
+  dynamic deleteAt;
   String? status;
 
   factory AssignSeller.fromJson(Map<String, dynamic> json) => AssignSeller(
@@ -82,7 +98,9 @@ class AssignSeller {
         userInfoId: json["userInfoId"],
         commissionRate: json["commissionRate"].toDouble(),
         profit: json["profit"],
-        busyLevel: json["busyLevel"],
+        createAt: json["createAt"],
+        updateAt: json["updateAt"],
+        deleteAt: json["deleteAt"],
         status: json["status"],
       );
 
@@ -92,7 +110,9 @@ class AssignSeller {
         "userInfoId": userInfoId,
         "commissionRate": commissionRate,
         "profit": profit,
-        "busyLevel": busyLevel,
+        "createAt": createAt,
+        "updateAt": updateAt,
+        "deleteAt": deleteAt,
         "status": status,
       };
 }
@@ -105,6 +125,7 @@ class UserInfo {
     this.userName,
     this.role,
     this.phoneNumber,
+    this.providerId,
     this.createAt,
     this.updateAt,
     this.deleteAt,
@@ -117,9 +138,10 @@ class UserInfo {
   String? userName;
   String? role;
   String? phoneNumber;
+  int? providerId;
   String? createAt;
-  String? updateAt;
-  String? deleteAt;
+  dynamic updateAt;
+  dynamic deleteAt;
   String? status;
 
   factory UserInfo.fromJson(Map<String, dynamic> json) => UserInfo(
@@ -128,7 +150,8 @@ class UserInfo {
         avatarLink: json["avatarLink"],
         userName: json["userName"],
         role: json["role"],
-        phoneNumber: json["phoneNumber"] != null ? json["phoneNumber"] : "",
+        phoneNumber: json["phoneNumber"],
+        providerId: json["providerId"],
         createAt: json["createAt"],
         updateAt: json["updateAt"],
         deleteAt: json["deleteAt"],
@@ -136,59 +159,16 @@ class UserInfo {
       );
 
   Map<String, dynamic> toJson() => {
-        // "id": id,
+        "id": id,
         "email": email,
         "avatarLink": avatarLink,
         "userName": userName,
         "role": role,
         "phoneNumber": phoneNumber,
-        // "createAt": createAt,
-        // "updateAt": updateAt,
-        // "deleteAt": deleteAt,
+        "providerId": providerId,
+        "createAt": createAt,
+        "updateAt": updateAt,
+        "deleteAt": deleteAt,
         "status": status,
-      };
-}
-
-Profile profileFromJson(String str) => Profile.fromJson(json.decode(str));
-
-String profileToJson(Profile data) => json.encode(data.toJson());
-
-class Profile {
-  Profile({
-    this.id,
-    this.sex,
-    this.phoneNumber,
-    this.dateOfBirth,
-    this.name,
-    this.civilIdentify,
-    this.customerId,
-  });
-
-  int? id;
-  int? sex;
-  String? phoneNumber;
-  String? dateOfBirth;
-  String? name;
-  String? civilIdentify;
-  int? customerId;
-
-  factory Profile.fromJson(Map<String, dynamic> json) => Profile(
-        id: json["id"],
-        sex: json["sex"],
-        phoneNumber: json["phoneNumber"],
-        dateOfBirth: json["dateOfBirth"],
-        name: json["name"],
-        civilIdentify: json["civilIdentify"],
-        customerId: json["customerId"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "sex": sex,
-        "phoneNumber": phoneNumber,
-        "dateOfBirth": dateOfBirth,
-        "name": name,
-        "civilIdentify": civilIdentify,
-        "customerId": customerId,
       };
 }
