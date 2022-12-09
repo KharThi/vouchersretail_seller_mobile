@@ -192,24 +192,24 @@ class ListItemCustomer extends StatelessWidget {
                   ),
                   Column(
                     children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            primary: Colors.redAccent,
-                            minimumSize: Size(20, 30)),
-                        child: Icon(Icons.edit),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CustomerEditScreen(
-                                        userModel: customer,
-                                      )));
-                          // .then((result) => setState(() {
-                          //       customers = [];
-                          //       getListCustomerOrder();
-                          //     }));
-                        },
-                      ),
+                      // ElevatedButton(
+                      //   style: ElevatedButton.styleFrom(
+                      //       primary: Colors.redAccent,
+                      //       minimumSize: fSize(20, 30)),
+                      //   child: Icon(Icons.edit),
+                      //   onPressed: () {
+                      //     Navigator.push(
+                      //         context,
+                      //         MaterialPageRoute(
+                      //             builder: (context) => CustomerEditScreen(
+                      //                   userModel: customer,
+                      //                 )));
+                      //     // .then((result) => setState(() {
+                      //     //       customers = [];
+                      //     //       getListCustomerOrder();
+                      //     //     }));
+                      //   },
+                      // ),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             primary: Colors.redAccent,
