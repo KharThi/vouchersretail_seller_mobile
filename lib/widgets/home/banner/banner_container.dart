@@ -38,24 +38,24 @@ class _BannerContainerState extends State<BannerContainer> {
 
               return InkWell(
                 onTap: () {
-                  if (product != null) {
-                    if (slide.linkTo == 'product') {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProductDetail(
-                                    productId: slide.product.toString(),
-                                  )));
-                    } else {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => BrandProducts(
-                                    categoryId: slide.product.toString(),
-                                    brandName: slide.name,
-                                  )));
-                    }
-                  }
+                  // if (product != null) {
+                  //   if (slide.linkTo == 'product') {
+                  //     Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //             builder: (context) => ProductDetail(
+                  //                   productId: slide.product.toString(),
+                  //                 )));
+                  //   } else {
+                  //     Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //             builder: (context) => BrandProducts(
+                  //                   categoryId: slide.product.toString(),
+                  //                   brandName: slide.name,
+                  //                 )));
+                  //   }
+                  // }
                 },
                 child: CachedNetworkImage(
                   imageUrl: imageSlider,

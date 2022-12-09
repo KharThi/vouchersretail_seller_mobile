@@ -33,23 +33,24 @@ class BadgeCategory extends StatelessWidget {
                 width: MediaQuery.of(context).size.width / 6,
                 child: InkWell(
                   onTap: () {
-                    if (titleCategories == AppLocalizations.of(context)!
-                        .translate('view_more')) {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => CategoryScreen(
-                                    isFromHome: false,
-                                  )));
+                    if (titleCategories ==
+                        AppLocalizations.of(context)!.translate('view_more')) {
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => CategoryScreen(
+                      //               isFromHome: false,
+                      //             )));
                     } else {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => BrandProducts(
-                                    categoryId: dataCategories[i].categories.toString(),
-                                    brandName:
-                                        dataCategories[i].titleCategories,
-                                  )));
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => BrandProducts(
+                      //               categoryId:
+                      //                   dataCategories[i].categories.toString(),
+                      //               brandName:
+                      //                   dataCategories[i].titleCategories,
+                      //             )));
                     }
                   },
                   child: Column(
@@ -58,8 +59,9 @@ class BadgeCategory extends StatelessWidget {
                       Flexible(
                           flex: 3,
                           child: itemCategory(imageCategories, i,
-                              type: titleCategories == AppLocalizations.of(context)!
-                                  .translate('view_more')
+                              type: titleCategories ==
+                                      AppLocalizations.of(context)!
+                                          .translate('view_more')
                                   ? 'asset'
                                   : 'url')),
                       Container(

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:nyoba/models/order.dart';
@@ -38,6 +39,7 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
 
   List<Voucher> listOrderItem = List.empty(growable: true);
   Order? orderDetail;
+  DetailOrder? detailOrder;
   bool isLoading = true;
 
   @override
@@ -45,19 +47,38 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     super.initState();
     loadOrder();
+    loadOrder2();
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     this.setState(() {
       loadOrder();
+      loadOrder2();
     });
   }
 
   loadOrder() async {
     await Provider.of<OrderProvider>(context, listen: false)
         .fetchDetailOrder(widget.orderId)
-        .then((value) => {orderDetail = value, loadOrderedItems()});
+        .then((value) => {orderDetail = value});
+  }
+
+  loadOrder2() async {
+    await Provider.of<OrderProvider>(context, listen: false)
+        .fetchDetailOrderById(widget.orderId)
+        .then((value) => {detailOrder = value, loadOrderedItems()});
+  }
+
+  Future<void> share(String payUrl) async {
+    RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
+
+    // htmlText.replaceAll(exp, '');
+    await FlutterShare.share(
+        title: "Link thanh toán",
+        text: "Quý khách vui lòng bấm vào đây để thanh toán hóa đơn của mình",
+        linkUrl: payUrl,
+        chooserTitle: '');
   }
 
   loadOrderedItems() async {
@@ -83,16 +104,21 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
     if (orderDetail!.orderStatus == "Used") {
       status = "Đã sử dụng";
     }
-    for (var element in orderDetail!.orderItems!) {
-      await Provider.of<ProductProvider>(context, listen: false)
-          .fetchProductDetailVoucher(element.voucherId.toString())
-          .then((value) {
-        listOrderItem.add(value!);
+    listOrderItem.clear();
+    if (detailOrder!.qrCodes != null) {
+      for (var element in detailOrder!.qrCodes!) {
+        await Provider.of<ProductProvider>(context, listen: false)
+            .fetchProductDetailVoucher(element.voucherId.toString())
+            .then((value) {
+          listOrderItem.add(value!);
+        });
+      }
+      this.setState(() {
+        isLoading = false;
       });
+    } else {
+      print("Null");
     }
-    this.setState(() {
-      isLoading = false;
-    });
   }
 
   @override
@@ -452,8 +478,7 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
                                 style: TextStyle(
                                     fontSize: responsiveFont(12),
                                     fontWeight: FontWeight.w600)),
-                            orderDetail!.totalPrice != "0" ||
-                                    orderDetail!.totalPrice != null
+                            orderDetail!.totalPrice != null
                                 ? Text(
                                     orderDetail!.totalPrice.toString() + " Vnd",
                                     style: TextStyle(
@@ -553,7 +578,70 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
                                     )),
                               ),
                             )
-                          : Container()
+                          : Container(),
+                      orderDetail!.orderStatus == "Processing"
+                          ? Expanded(
+                              child: Container(
+                                height: 30.h,
+                                margin: EdgeInsets.only(right: 15),
+                                child: OutlinedButton(
+                                    style: OutlinedButton.styleFrom(
+                                        side: BorderSide(
+                                          color: HexColor(
+                                              "960000"), //Color of the border
+                                          //Style of the border
+                                        ),
+                                        alignment: Alignment.center,
+                                        shape: new RoundedRectangleBorder(
+                                            borderRadius:
+                                                new BorderRadius.circular(5))),
+                                    onPressed: () async {
+                                      if (orderDetail!.orderStatus ==
+                                          "Processing") {
+                                        await Provider.of<OrderProvider>(
+                                                context,
+                                                listen: false)
+                                            .getPayUrl(orderDetail!.id!)
+                                            .then((value) => {
+                                                  if (value != "")
+                                                    {
+                                                      snackBar(context,
+                                                          message:
+                                                              'Lấy link thanh toán thành công!'),
+                                                      share(value.toString()),
+                                                    }
+                                                  else
+                                                    {
+                                                      snackBar(context,
+                                                          message:
+                                                              'Lấy link thanh toán thất bại!'),
+                                                    }
+                                                });
+                                      } else {
+                                        snackBar(context,
+                                            message:
+                                                'Đơn hàng này chưa thanh toán hoặc đã bị hũy!');
+                                      }
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          flex: 1,
+                                          child: Text(
+                                            "Gửi link thanh toán cho khách hàng",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: responsiveFont(8),
+                                                color: HexColor("960000")),
+                                          ),
+                                        )
+                                      ],
+                                    )),
+                              ),
+                            )
+                          : Container(),
                     ],
                   )),
             ),
@@ -755,18 +843,6 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
   Widget itemList(Voucher voucher, int index) {
     String? price;
     String? priceName;
-    for (var element in voucher.prices!) {
-      if (orderDetail!.orderItems![index].priceId == element.id) {
-        price = element.price.toString();
-        if (element.priceLevelName == "AdultCustomer") {
-          priceName = "Người lớn";
-        } else if (element.priceLevelName == "ChildrenCustomer") {
-          priceName = "Trẻ em";
-        } else {
-          priceName = element.priceLevelName;
-        }
-      }
-    }
     return Material(
       elevation: 5,
       child: Container(
@@ -845,7 +921,7 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(fontSize: responsiveFont(14.5)),
                         ),
-                        subtitle: Text(priceName.toString()),
+                        // subtitle: Text(priceName.toString()),
                       ),
                     ),
                     // Visibility(
@@ -914,7 +990,7 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
                             // stringToCurrency(
                             //     double.parse(cart!.cartItems![index].price),
                             //     context),
-                            price.toString() + " Vnd",
+                            voucher.soldPrice.toString() + " Vnd",
                             style: TextStyle(
                                 fontSize: responsiveFont(10),
                                 color: HexColor("960000"),

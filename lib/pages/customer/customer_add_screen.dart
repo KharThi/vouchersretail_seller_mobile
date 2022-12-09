@@ -84,15 +84,7 @@ class _CustomerAddScreenState extends State<CustomerAddScreen> {
               status: "Active"),
           userInfoId: 1,
           cartId: 0);
-      Profile profile = new Profile(
-        civilIdentify: controllerIdentity.text,
-        customerId: 1,
-        dateOfBirth: controllerDateOfBirth.text,
-        name: controllerCustomerName.text,
-        phoneNumber: controllerPhone.text,
-        sex: genderInt,
-      );
-      bool check = await user.addCustomer(context, customer, profile);
+      bool check = await user.addCustomer(context, customer);
       if (check) {
         setState(() {
           controllerCustomerName.text = "";
@@ -170,37 +162,37 @@ class _CustomerAddScreenState extends State<CustomerAddScreen> {
                   Container(
                     height: 15,
                   ),
-                  form(
-                      "Nhập ngày sinh của khách hàng",
-                      "Ngày sinh (Ví dụ: 2022-12-01)",
-                      true,
-                      controllerDateOfBirth,
-                      icon: "date-of-birth",
-                      enable: true),
-                  Container(
-                    height: 15,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Container(
-                          padding: EdgeInsets.only(right: 5),
-                          width: 50,
-                          height: 50,
-                          child: Image.asset("images/account/gender.png")),
-                      addRadioButton(0, 'Nam'),
-                      addRadioButton(1, 'Nữ'),
-                    ],
-                  ),
-                  Container(
-                    height: 15,
-                  ),
-                  form("Nhập số CCCD/CMNN của khách hàng", "CCCD/CMNN", true,
-                      controllerIdentity,
-                      icon: "id-card", enable: true),
-                  Container(
-                    height: 15,
-                  ),
+                  // form(
+                  //     "Nhập ngày sinh của khách hàng",
+                  //     "Ngày sinh (Ví dụ: 2022-12-01)",
+                  //     true,
+                  //     controllerDateOfBirth,
+                  //     icon: "date-of-birth",
+                  //     enable: true),
+                  // Container(
+                  //   height: 15,
+                  // ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.start,
+                  //   children: <Widget>[
+                  //     Container(
+                  //         padding: EdgeInsets.only(right: 5),
+                  //         width: 50,
+                  //         height: 50,
+                  //         child: Image.asset("images/account/gender.png")),
+                  //     addRadioButton(0, 'Nam'),
+                  //     addRadioButton(1, 'Nữ'),
+                  //   ],
+                  // ),
+                  // Container(
+                  //   height: 15,
+                  // ),
+                  // form("Nhập số CCCD/CMNN của khách hàng", "CCCD/CMNN", true,
+                  //     controllerIdentity,
+                  //     icon: "id-card", enable: true),
+                  // Container(
+                  //   height: 15,
+                  // ),
                   // Visibility(
                   //     visible: Session.data.getString('login_type') == 'default',
                   //     child: Column(
@@ -338,6 +330,8 @@ class _CustomerAddScreenState extends State<CustomerAddScreen> {
               return "Số điện thoại phải toàn bộ là số";
             } else if (text[0] != "0") {
               return "Số điện thoại phải bắt đầu bằng 0";
+            } else if (text.length != 10) {
+              return "Số điện thoại sai định dạng";
             }
             return null;
           }

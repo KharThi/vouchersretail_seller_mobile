@@ -60,7 +60,8 @@ class _LobbyScreenState extends State<LobbyScreen>
   String? selectedCategory;
   ScrollController _scrollController = new ScrollController();
   List<Product> listProduct = List.empty(growable: true);
-  List<Combo> listCombo = List.empty(growable: true);
+  List<Voucher> all = List.empty(growable: true);
+  List<Voucher> listCombo = List.empty(growable: true);
   List<Voucher> listVoucher = List.empty(growable: true);
   List<String> listImage = [
     './images/pq/pq1.png',
@@ -185,6 +186,7 @@ class _LobbyScreenState extends State<LobbyScreen>
   }
 
   refreshHome() async {
+    isLoading = true;
     if (mounted) {
       context.read<WalletProvider>().changeWalletStatus();
       // loadWallet();
@@ -247,11 +249,26 @@ class _LobbyScreenState extends State<LobbyScreen>
 
   loadVoucher() async {
     await Provider.of<VoucherProvider>(context, listen: false)
-        .fetchVouchers("", "5")
+        .fetchVouchers("", "5", "false")
         .then((value) {
       this.setState(() {
         listVoucher = value!;
+        loadCombo();
         isLoading = false;
+      });
+      Future.delayed(Duration(milliseconds: 3500), () {
+        print('Delayed Done');
+        this.setState(() {});
+      });
+    });
+  }
+
+  loadCombo() async {
+    await Provider.of<ComboProvider>(context, listen: false)
+        .fetchVouchersCombo("", "5", "true")
+        .then((value) {
+      this.setState(() {
+        listCombo = value!;
       });
       Future.delayed(Duration(milliseconds: 3500), () {
         print('Delayed Done');
@@ -281,7 +298,7 @@ class _LobbyScreenState extends State<LobbyScreen>
 
     // PQ voucher combo
 
-    final combos = Provider.of<ComboProvider>(context, listen: false);
+    // final combos = Provider.of<ComboProvider>(context, listen: false);
 
     // Widget buildNewProducts = Container(
     //   child: ListenableProvider.value(
@@ -359,7 +376,7 @@ class _LobbyScreenState extends State<LobbyScreen>
     Widget buildVoucher = Container(
       child: ListenableProvider.value(
         value: products,
-        child: Consumer<VoucherProvider>(builder: (context, value, child) {
+        child: Consumer<Null>(builder: (context, value, child) {
           // if (value.loadingNew) {
           //   return Container(
           //       height: MediaQuery.of(context).size.height / 3.0,
@@ -383,15 +400,18 @@ class _LobbyScreenState extends State<LobbyScreen>
               itemCount: listVoucher.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, i) {
-                return new InkWell(
+                return new GestureDetector(
                   onTap: () {
+                    print("IsCombo send" + listVoucher[i].isCombo.toString());
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => new ProductDetailVoucher(
                                   productId: listVoucher[i].id.toString(),
+                                  isCombo: listVoucher[i].isCombo.toString(),
                                 ))).then((value) => setState(() {
-                          isLoading = true;
+                          print("Hello");
+                          this.isLoading = true;
                           loadVoucher();
                         }));
                   },
@@ -400,6 +420,67 @@ class _LobbyScreenState extends State<LobbyScreen>
                       voucher: listVoucher[i],
                       i: i,
                       itemCount: listVoucher.length,
+                    ),
+                  ),
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return SizedBox(
+                  width: 5,
+                );
+              },
+            ),
+          );
+        }),
+      ),
+    );
+
+    Widget buildCombo = Container(
+      child: ListenableProvider.value(
+        value: products,
+        child: Consumer<ComboProvider>(builder: (context, value, child) {
+          // if (value.loadingNew) {
+          //   return Container(
+          //       height: MediaQuery.of(context).size.height / 3.0,
+          //       child: shimmerProductItemSmall());
+          // }
+          if (isLoading) {
+            return customLoading();
+          }
+          return AspectRatio(
+            aspectRatio: 3 / 2,
+            child: ListView.separated(
+              // itemCount: value.listCombo.length,
+              // scrollDirection: Axis.horizontal,
+              // itemBuilder: (context, i) {
+              //   return CardItemPq(
+              //     comboPq: value.listCombo[i],
+              //     i: i,
+              //     itemCount: value.listCombo.length,
+              //   );
+              // },
+              itemCount: listCombo.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, i) {
+                return new GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => new ProductDetailVoucher(
+                                  productId: listCombo[i].id.toString(),
+                                  isCombo: listCombo[i].isCombo.toString(),
+                                ))).then((value) => setState(() {
+                          print("Hello");
+                          this.isLoading = true;
+                          loadVoucher();
+                        }));
+                  },
+                  child: Container(
+                    child: CardItemPqVoucher(
+                      voucher: listCombo[i],
+                      i: i,
+                      itemCount: listCombo.length,
                     ),
                   ),
                 );
@@ -949,6 +1030,53 @@ class _LobbyScreenState extends State<LobbyScreen>
                             height: 10,
                           ),
                           buildVoucher,
+                          Container(
+                            width: double.infinity,
+                            margin: EdgeInsets.only(
+                                left: 15, bottom: 10, right: 15, top: 15),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Combo",
+                                  style: TextStyle(
+                                    fontSize: responsiveFont(14),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                BrandProductsVoucher(
+                                                  categoryId: clickIndex == 0
+                                                      ? ''
+                                                      : clickIndex.toString(),
+                                                  brandName: "Voucher",
+                                                  sortIndex: 1,
+                                                ))).then(
+                                        (value) => setState(() {
+                                              isLoading = true;
+                                              loadVoucher();
+                                            }));
+                                  },
+                                  child: Text(
+                                    "Xem thêm",
+                                    style: TextStyle(
+                                        fontSize: responsiveFont(12),
+                                        fontWeight: FontWeight.w600,
+                                        color: HexColor("960000")),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            height: 10,
+                          ),
+                          buildCombo,
                           //End build combo
                           Container(
                             height: 15,

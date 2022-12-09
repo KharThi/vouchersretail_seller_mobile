@@ -3,7 +3,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:nyoba/pages/order/momo_payment.dart';
+import 'package:nyoba/pages/order/order_detail_screen.dart';
 import 'package:nyoba/provider/coupon_provider.dart';
 import 'package:nyoba/provider/order_provider.dart';
 import 'package:nyoba/utils/currency_format.dart';
@@ -102,7 +102,7 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
         setState(() {
           totalSelected++;
           element.isSelected = true;
-          totalPriceCart += element.price! * element.quantity!;
+          totalPriceCart += element.voucher!.soldPrice! * element.quantity!;
         });
       });
     } else {
@@ -110,7 +110,7 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
         setState(() {
           totalSelected--;
           element.isSelected = false;
-          totalPriceCart -= element.price! * element.quantity!;
+          totalPriceCart -= element.voucher!.soldPrice! * element.quantity!;
         });
       });
     }
@@ -153,7 +153,7 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
     cart!.cartItems!.forEach((element) {
       if (element.isSelected!) {
         setState(() {
-          totalPriceCart += element.price! * element.quantity!;
+          totalPriceCart += element.voucher!.soldPrice! * element.quantity!;
           totalSelected++;
         });
       }
@@ -215,9 +215,8 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => MoMoWebView(
-                          url: value[1],
-                          orderId: value[0],
+                    builder: (context) => OrderDetail(
+                          orderId: value,
                         ))).then((value) => this.setState(() {}));
             // Navigator.pushAndRemoveUntil(
             //   context,
@@ -305,7 +304,7 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
             element.isSelected = true;
             element.isChange = false;
             element.oldQuantity = element.quantity;
-            totalPriceCart += element.price! * element.quantity!;
+            totalPriceCart += element.voucher!.soldPrice! * element.quantity!;
           });
         });
         print("CustomerID" + cart!.customerId.toString());
@@ -436,24 +435,23 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
             //     ),
             //   ),
             // ),
-            // Container(
-            //   decoration: BoxDecoration(
-            //     borderRadius: BorderRadius.circular(5),
-            //   ),
-            //   alignment: Alignment.center,
-            //   margin: EdgeInsets.symmetric(horizontal: 10),
-            //   height: 80.h,
-            //   width: 80.w,
-            //   child: CachedNetworkImage(
-            //     imageUrl:
-            //         "https://jobsgo.vn/blog/wp-content/uploads/2021/11/du-lich-la-gi-1.jpg",
-            //     placeholder: (context, url) => customLoading(),
-            //     errorWidget: (context, url, error) => Icon(
-            //       Icons.image_not_supported_rounded,
-            //       size: 25,
-            //     ),
-            //   ),
-            // ),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              alignment: Alignment.center,
+              margin: EdgeInsets.symmetric(horizontal: 10),
+              height: 80.h,
+              width: 80.w,
+              child: CachedNetworkImage(
+                imageUrl: cart!.cartItems![index].voucher!.bannerImg.toString(),
+                placeholder: (context, url) => customLoading(),
+                errorWidget: (context, url, error) => Icon(
+                  Icons.image_not_supported_rounded,
+                  size: 25,
+                ),
+              ),
+            ),
             Expanded(
               flex: 7,
               child: Container(
@@ -534,7 +532,9 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                             // stringToCurrency(
                             //     double.parse(cart!.cartItems![index].price),
                             //     context),
-                            (cart!.cartItems![index].price).toString() + " Vnd",
+                            (cart!.cartItems![index].voucher!.soldPrice)
+                                    .toString() +
+                                " Vnd",
                             style: TextStyle(
                                 fontSize: responsiveFont(10),
                                 color: HexColor("960000"),

@@ -131,17 +131,10 @@ class ListItemProduct2 extends StatelessWidget {
                               style: TextStyle(color: Colors.black),
                               children: <TextSpan>[
                                 TextSpan(
-                                    text: product!.prices!.isNotEmpty
-                                        ? product!.prices!.first.price! <
-                                                product!.prices!.last.price!
-                                            ? "Từ " +
-                                                product!.prices!.first.price
-                                                    .toString() +
-                                                " Vnd"
-                                            : "Từ " +
-                                                product!.prices!.last.price
-                                                    .toString() +
-                                                " Vnd"
+                                    text: product!.soldPrice != null
+                                        ? "Từ " +
+                                            product!.soldPrice.toString() +
+                                            " Vnd"
                                         : "",
                                     style: TextStyle(
                                         fontWeight: FontWeight.w600,

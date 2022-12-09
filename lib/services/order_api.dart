@@ -59,44 +59,42 @@ class OrderAPI {
     return cart;
   }
 
-  addCartItem(Customer customer, String date, List<Price> listPrice) async {
+  addCartItem(
+      Customer customer, String date, Voucher voucher, int quantity) async {
     SharedPreferences data = await SharedPreferences.getInstance();
     String? jwt = data.getString("jwt");
     int? check;
 
-    for (var element in listPrice) {
-      Map customerData = {
-        "status": "Active",
-        "quantity": element.quantity,
-        "priceId": element.id,
-        "useDate": date,
-        "profileId": customer.profiles!.first.id
-      };
-      // sendData.add(customerData);
+    Map customerData = {
+      "status": "Active",
+      "quantity": quantity,
+      "voucherId": voucher.id,
+    };
+    // sendData.add(customerData);
 
-      var body = json.encode(customerData);
-      print("CustomerData" + body.toString());
+    var body = json.encode(customerData);
+    print("CustomerData" + body.toString());
 
-      var response = await http.post(
-          Uri.parse(
-              "https://phuquocvoucher.azurewebsites.net/api/v1/sellers/customers/" +
-                  customer.id.toString() +
-                  "/cart/items"),
-          body: body,
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + jwt.toString()
-          });
-      Map<String, dynamic> dataResponse = await json.decode(response.body);
-      print("response" + response.body);
-      print("CustomerId" + (dataResponse["customerId"] != 0).toString());
-      if (dataResponse["customerId"] != 0) {
-        check = dataResponse["customerId"];
-        print(check.toString());
-      } else {
-        check = 0;
-      }
+    var response = await http.post(
+        Uri.parse(
+            "https://phuquocvoucher.azurewebsites.net/api/v1/sellers/customers/" +
+                customer.id.toString() +
+                "/cart/items"),
+        body: body,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + jwt.toString()
+        });
+    Map<String, dynamic> dataResponse = await json.decode(response.body);
+    print("response" + response.body);
+    print("CustomerId" + (dataResponse["customerId"] != 0).toString());
+    if (dataResponse["customerId"] != 0) {
+      check = dataResponse["customerId"];
+      print(check.toString());
+    } else {
+      check = 0;
     }
+
     return check;
   }
 
@@ -247,7 +245,7 @@ class OrderAPI {
   placeOrder(int customerId) async {
     SharedPreferences data = await SharedPreferences.getInstance();
     String? jwt = data.getString("jwt");
-    List<String> result = List.empty(growable: true);
+    String? result;
     var response = await http.post(
         Uri.parse(
             "https://phuquocvoucher.azurewebsites.net/api/v1/sellers/customers/" +
@@ -261,29 +259,35 @@ class OrderAPI {
     Map<String, dynamic> dataResponse = await json.decode(response.body);
     if (dataResponse["id"].toString() != null ||
         dataResponse["id"].toString() != "") {
-      result.add(dataResponse["id"].toString());
-      print("https://phuquocvoucher.azurewebsites.net/api/v1/payment/momo/" +
-          dataResponse["id"].toString());
-      var response2 = await http.get(
-          Uri.parse(
-              "https://phuquocvoucher.azurewebsites.net/api/v1/payment/momo/" +
-                  dataResponse["id"].toString()),
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + jwt.toString()
-          });
-      print(response2.body);
-      Map<String, dynamic> dataResponse2 = await json.decode(response2.body);
-      if (dataResponse2["payUrl"] != null || dataResponse2["payUrl"] != "") {
-        result.add(dataResponse2["payUrl"].toString());
-        return result;
-      }
+      return dataResponse["id"].toString();
     }
     // Map<String, dynamic> dataResponse = await json.decode(response.body);
     // print(dataResponse.toString());
     // Map<String, dynamic> dataResponse2 = await json.decode(response.body);
     // print(dataResponse2.toString());
     return null;
+  }
+
+  getPayUrl(int orderId) async {
+    SharedPreferences data = await SharedPreferences.getInstance();
+    String? jwt = data.getString("jwt");
+    String result = "";
+    print("https://phuquocvoucher.azurewebsites.net/api/v1/payment/momo/" +
+        orderId.toString());
+    var response2 = await http.get(
+        Uri.parse(
+            "https://phuquocvoucher.azurewebsites.net/api/v1/payment/momo/" +
+                orderId.toString()),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + jwt.toString()
+        });
+    print(response2.body);
+    Map<String, dynamic> dataResponse2 = await json.decode(response2.body);
+    print(dataResponse2["payUrl"]);
+    result = dataResponse2["payUrl"].toString();
+    print("result" + result);
+    return result;
   }
 
   listMyOrder(
@@ -355,6 +359,29 @@ class OrderAPI {
     print(response.body);
     Map<String, dynamic> dataResponse = await json.decode(response.body);
     return dataResponse["data"];
+    // Order order = Order.fromJson(dataResponse["data"]);
+    // return dataResponse;
+  }
+
+  detailOrder2(String? orderId) async {
+    SharedPreferences data = await SharedPreferences.getInstance();
+    String? jwt = data.getString("jwt");
+    print("jwt " + jwt.toString());
+
+    var response = await http.get(
+        Uri.parse("https://phuquocvoucher.azurewebsites.net/api/v1/orders/" +
+            orderId.toString()),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + jwt.toString()
+        });
+    print("https://phuquocvoucher.azurewebsites.net/api/v1/orders/" +
+        orderId.toString());
+    // ignore: unused_local_variable
+    // List<dynamic> dataResponse = await json.decode(response.body);
+    print(response.body);
+    Map<String, dynamic> dataResponse = await json.decode(response.body);
+    return dataResponse;
     // Order order = Order.fromJson(dataResponse["data"]);
     // return dataResponse;
   }

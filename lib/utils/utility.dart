@@ -21,7 +21,6 @@ import '../app_localizations.dart';
 
 Color primaryColor = HexColor("ED1D1D");
 Color secondaryColor = HexColor("960000");
-// Color HexColor("960000") = HexColor("960000");
 
 double responsiveFont(double designFont) {
   return ScreenUtil().setSp(designFont + 2);

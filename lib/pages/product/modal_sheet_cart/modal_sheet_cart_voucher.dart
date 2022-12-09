@@ -19,7 +19,6 @@ import 'package:shimmer/shimmer.dart';
 import 'package:slugify/slugify.dart';
 
 import '../../order/customer_cart_screen.dart';
-import '../../order/momo_payment.dart';
 import '../../search/search_screen_customer.dart';
 
 class ModalSheetCartVoucher extends StatefulWidget {
@@ -40,7 +39,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
   int index = 0;
   int indexColor = 0;
   int counter = 1;
-  int? quantity = 1;
+  int? quantity = 0;
 
   List<int> listQuantity = List.empty(growable: true);
 
@@ -91,7 +90,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
     print('Add Cart');
     await Provider.of<OrderProvider>(context, listen: false)
         .addCartVoucher(context, widget.product, _forCallApiDate,
-            customers.first, listPrice)
+            customers.first, quantity!)
         .then((value) {
       print("add to cart return value: " + value.toString());
       if (value.toString() != "0") {
@@ -190,12 +189,6 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
   void initState() {
     super.initState();
     getListCustomerOrder();
-    // print("object " + widget.product!.prices!.length.toString());
-    for (var i = 0; i < widget.product!.prices!.length; i++) {
-      widget.product!.prices![i].quantity = 0;
-    }
-    // widget.quantity = 1;
-    // initVariation();
   }
 
   /*init variation & check if variation true*/
@@ -238,41 +231,41 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
         context, MaterialPageRoute(builder: (context) => OrderSuccess()));
   }
 
-  buyNow() async {
-    print("Buy Now");
-    this.setState(() {
-      isLoading = true;
-    });
-    await Provider.of<OrderProvider>(context, listen: false)
-        .buyNowVoucher(context, widget.product, _forCallApiDate,
-            customers.first, listPrice)
-        .then((value) {
-      // if (value != null) {
-      snackBar(context, message: "Tạo đơn hàng thành công!");
-      // widget.order!.payUrl = value[1];
-      isLoading = false;
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MoMoWebView(
-                    url: value[1],
-                    orderId: value[0],
-                  ))).then((value) => this.setState(() {}));
-      // Navigator.pushAndRemoveUntil(
-      //   context,
-      //   MaterialPageRoute(
-      //       builder: (context) => MoMoWebView(
-      //             url: value[1],
-      //             orderId: value[0],
-      //           )),
-      //   (Route<dynamic> route) => false,
-      // );
-      // Navigator.pop(context); // pop current page
-      // } else {
-      //   snackBar(context, message: "Tạo đơn hàng thất bại!");
-      // }
-    });
-  }
+  // buyNow() async {
+  //   print("Buy Now");
+  //   this.setState(() {
+  //     isLoading = true;
+  //   });
+  //   await Provider.of<OrderProvider>(context, listen: false)
+  //       .buyNowVoucher(context, widget.product, _forCallApiDate,
+  //           customers.first, listPrice, quantity)
+  //       .then((value) {
+  //     // if (value != null) {
+  //     snackBar(context, message: "Tạo đơn hàng thành công!");
+  //     // widget.order!.payUrl = value[1];
+  //     isLoading = false;
+  //     Navigator.push(
+  //         context,
+  //         MaterialPageRoute(
+  //             builder: (context) => MoMoWebView(
+  //                   url: value[1],
+  //                   orderId: value[0],
+  //                 ))).then((value) => this.setState(() {}));
+  //     // Navigator.pushAndRemoveUntil(
+  //     //   context,
+  //     //   MaterialPageRoute(
+  //     //       builder: (context) => MoMoWebView(
+  //     //             url: value[1],
+  //     //             orderId: value[0],
+  //     //           )),
+  //     //   (Route<dynamic> route) => false,
+  //     // );
+  //     // Navigator.pop(context); // pop current page
+  //     // } else {
+  //     //   snackBar(context, message: "Tạo đơn hàng thất bại!");
+  //     // }
+  //   });
+  // }
 
   getListCustomerOrder() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -348,9 +341,9 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                             //       )
                             //     :
                             SizedBox(
-                                height: widget.product!.prices!.length * 60,
+                                height: 60,
                                 child: new ListView.builder(
-                                  itemCount: widget.product!.prices!.length,
+                                  itemCount: 1,
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     return Row(
@@ -364,26 +357,14 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                               child: Text(
                                                 // AppLocalizations.of(context)!
                                                 //     .translate('qty')!
-                                                widget.product!.prices![index]
-                                                            .priceLevelName
-                                                            .toString() ==
-                                                        "AdultCustomer"
-                                                    ? "Người lớn"
-                                                    : "Trẻ em",
+                                                "Số lượng",
                                                 style: TextStyle(
                                                     fontSize:
                                                         responsiveFont(12)),
                                               ),
                                             ),
                                             SizedBox(
-                                              width: widget
-                                                          .product!
-                                                          .prices![index]
-                                                          .priceLevelName
-                                                          .toString() ==
-                                                      "AdultCustomer"
-                                                  ? 25
-                                                  : 44,
+                                              width: 22,
                                             ),
                                             Row(
                                               children: [
@@ -393,43 +374,21 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                                   child: InkWell(
                                                     onTap: () {
                                                       setState(() {
-                                                        if (widget
-                                                                .product!
-                                                                .prices![index]
-                                                                .quantity! >
-                                                            0) {
-                                                          widget
-                                                              .product!
-                                                              .prices![index]
-                                                              .quantity = (widget
-                                                                  .product!
-                                                                  .prices![
-                                                                      index]
-                                                                  .quantity! -
-                                                              1);
-                                                          print(widget
-                                                              .product!
-                                                              .prices![index]
-                                                              .quantity);
-                                                          if (widget
-                                                                  .product!
-                                                                  .prices![
-                                                                      index]
-                                                                  .quantity ==
-                                                              0) {
-                                                            listPrice.remove(
-                                                                widget.product!
-                                                                        .prices![
-                                                                    index]);
-                                                          }
+                                                        if (quantity! > 0) {
+                                                          quantity =
+                                                              (quantity! - 1);
+                                                          print(quantity);
+                                                          // if (quantity ==
+                                                          //     0) {
+                                                          //   listPrice.remove(
+                                                          //       widget.product!
+                                                          //               .prices![
+                                                          //           index]);
+                                                          // }
                                                         }
                                                       });
                                                     },
-                                                    child: widget
-                                                                .product!
-                                                                .prices![index]
-                                                                .quantity! >
-                                                            0
+                                                    child: quantity! > 0
                                                         ? Image.asset(
                                                             "images/cart/minusDark.png")
                                                         : Image.asset(
@@ -439,11 +398,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                                 SizedBox(
                                                   width: 10,
                                                 ),
-                                                Text((widget
-                                                        .product!
-                                                        .prices![index]
-                                                        .quantity)
-                                                    .toString()),
+                                                Text((quantity).toString()),
                                                 SizedBox(
                                                   width: 10,
                                                 ),
@@ -463,31 +418,21 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                                           //         .cartQuantity! +
                                                           //     1;
                                                           // if (quantity! > 1) {
-                                                          widget
-                                                              .product!
-                                                              .prices![index]
-                                                              .quantity = (widget
-                                                                  .product!
-                                                                  .prices![
-                                                                      index]
-                                                                  .quantity! +
-                                                              1);
-                                                          print(widget
-                                                              .product!
-                                                              .prices![index]
-                                                              .quantity);
-                                                          if (widget
-                                                                  .product!
-                                                                  .prices![
-                                                                      index]
-                                                                  .quantity! >
-                                                              0) {
-                                                            print("add");
-                                                            listPrice.add(widget
-                                                                    .product!
-                                                                    .prices![
-                                                                index]);
-                                                          }
+                                                          quantity =
+                                                              (quantity! + 1);
+                                                          print(quantity);
+                                                          // if (widget
+                                                          //         .product!
+                                                          //         .prices![
+                                                          //             index]
+                                                          //         .quantity! >
+                                                          //     0) {
+                                                          //   print("add");
+                                                          //   listPrice.add(widget
+                                                          //           .product!
+                                                          //           .prices![
+                                                          //       index]);
+                                                          // }
                                                           // }
                                                         });
                                                       },
@@ -513,17 +458,10 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                               //             .toString())
                                               //         .toDouble(),
                                               //     context),
-                                              widget.product!.prices!.isNotEmpty
-                                                  ? (widget
-                                                                  .product!
-                                                                  .prices![
-                                                                      index]
-                                                                  .price! *
-                                                              widget
-                                                                  .product!
-                                                                  .prices![
-                                                                      index]
-                                                                  .quantity!)
+                                              widget.product!.soldPrice != null
+                                                  ? (widget.product!
+                                                                  .soldPrice! *
+                                                              quantity!)
                                                           .toString() +
                                                       " Vnd"
                                                   : "null",
@@ -564,7 +502,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                 ),
                               )),
                     Visibility(
-                      visible: listPrice.length == 0 && !isOpen,
+                      visible: quantity == 0 && !isOpen,
                       child: Container(
                         alignment: Alignment.center,
                         margin:
@@ -576,7 +514,8 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                       ),
                     ),
                     Visibility(
-                      visible: quantity == null || quantity == 0,
+                      visible: widget.product!.inventory == 0 &&
+                          widget.product!.isCombo != true,
                       child: Container(
                         alignment: Alignment.center,
                         margin:
@@ -587,108 +526,6 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                         ),
                       ),
                     ),
-                    widget.product!.isRequireProfileInfo != false
-                        ? Container(
-                            height: 1,
-                            width: double.infinity,
-                            color: HexColor("c4c4c4"),
-                            margin: EdgeInsets.only(bottom: 15),
-                          )
-                        : Container(),
-                    widget.product!.isRequireProfileInfo != false
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    // AppLocalizations.of(context)!
-                                    //     .translate('qty')!
-                                    "   Chủ sở hữu",
-                                    style:
-                                        TextStyle(fontSize: responsiveFont(12)),
-                                  ),
-                                ),
-                              ])
-                        : Container(),
-                    widget.product!.isRequireProfileInfo != false
-                        ? Container(
-                            // height: 25.h,
-                            padding: EdgeInsets.all(10),
-                            child: Column(
-                              children: [
-                                Column(
-                                  children: customers.map((personone) {
-                                    return Container(
-                                      child: Card(
-                                        child: ListTile(
-                                          title: Text(personone.customerName
-                                              .toString()),
-                                          subtitle: Text(""),
-                                          trailing: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                primary: Colors.redAccent),
-                                            child: Icon(Icons.delete),
-                                            onPressed: () {
-                                              //delete action for this button
-                                              customers.removeWhere((element) {
-                                                return element.id ==
-                                                    personone.id;
-                                              }); //go through the loop and match content to delete from list
-                                              setState(() {
-                                                saveListCustomerOrder();
-                                                customers = [];
-                                                getListCustomerOrder();
-                                                //refresh UI after deleting element from list
-                                              });
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
-                                customers.length < 1
-                                    ? Container(
-                                        width: 400,
-                                        height: 40,
-                                        margin: const EdgeInsets.symmetric(
-                                            vertical: 10, horizontal: 5),
-                                        child: ElevatedButton.icon(
-                                          onPressed: () {
-                                            Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            SearchScreenCustomer()))
-                                                .then((result) => setState(() {
-                                                      customers = [];
-                                                      getListCustomerOrder();
-                                                    }));
-                                          },
-                                          icon: Icon(Icons.add),
-                                          label: Text(
-                                              "Bấm vào đây để thêm chủ sở hữu"),
-                                        ),
-                                      )
-                                    : Container(),
-                              ],
-                            ))
-                        : Container(),
-                    widget.product!.isRequireProfileInfo != false
-                        ? Visibility(
-                            visible: customers.length == 0 && !isOpen,
-                            child: Container(
-                              alignment: Alignment.center,
-                              margin: EdgeInsets.symmetric(
-                                  horizontal: 15, vertical: 10),
-                              child: Text(
-                                "Vui lòng chọn Chủ sở hữu!",
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            ),
-                          )
-                        : Container(),
                     Container(
                       height: 1,
                       width: double.infinity,
@@ -703,7 +540,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                             child: Text(
                               // AppLocalizations.of(context)!
                               //     .translate('qty')!
-                              "   Vui lòng chọn ngày",
+                              "   Chủ sở hữu",
                               style: TextStyle(fontSize: responsiveFont(12)),
                             ),
                           ),
@@ -711,49 +548,141 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                     Container(
                         // height: 25.h,
                         padding: EdgeInsets.all(10),
-                        child: Column(children: [
-                          Container(
-                            child: Card(
-                              child: ListTile(
-                                title: InkWell(
-                                  child: Text(_selectedDate),
-                                  onTap: () {
-                                    _selectDate(context);
-                                  },
-                                ),
-                                subtitle: Text(""),
-                                trailing: IconButton(
-                                  icon: Icon(Icons.calendar_today),
-                                  tooltip: 'Tap to open date picker',
-                                  onPressed: () {
-                                    // showDatePicker(
-                                    //   context: context,
-                                    //   initialDate: DateTime.now(),
-                                    //   firstDate: DateTime(2015, 8),
-                                    //   lastDate: DateTime(2101),
-                                    // );
-                                    _selectDate(context);
-                                  },
-                                ),
-                              ),
+                        child: Column(
+                          children: [
+                            Column(
+                              children: customers.map((personone) {
+                                return Container(
+                                  child: Card(
+                                    child: ListTile(
+                                      title: Text(
+                                          personone.customerName.toString()),
+                                      subtitle: Text(""),
+                                      trailing: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            primary: Colors.redAccent),
+                                        child: Icon(Icons.delete),
+                                        onPressed: () {
+                                          //delete action for this button
+                                          customers.removeWhere((element) {
+                                            return element.id == personone.id;
+                                          }); //go through the loop and match content to delete from list
+                                          setState(() {
+                                            saveListCustomerOrder();
+                                            customers = [];
+                                            getListCustomerOrder();
+                                            //refresh UI after deleting element from list
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
                             ),
-                          )
-                        ]
-                            // }).toList(),
-                            ))
+                            customers.length < 1
+                                ? Container(
+                                    width: 400,
+                                    height: 40,
+                                    margin: const EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 5),
+                                    child: ElevatedButton.icon(
+                                      onPressed: () {
+                                        Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        SearchScreenCustomer()))
+                                            .then((result) => setState(() {
+                                                  customers = [];
+                                                  getListCustomerOrder();
+                                                }));
+                                      },
+                                      icon: Icon(Icons.add),
+                                      label: Text(
+                                          "Bấm vào đây để thêm chủ sở hữu"),
+                                    ),
+                                  )
+                                : Container(),
+                          ],
+                        )),
+                    Visibility(
+                      visible: customers.length == 0 && !isOpen,
+                      child: Container(
+                        alignment: Alignment.center,
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                        child: Text(
+                          "Vui lòng chọn Chủ sở hữu!",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 1,
+                      width: double.infinity,
+                      color: HexColor("c4c4c4"),
+                      margin: EdgeInsets.only(bottom: 15),
+                    ),
+                    // Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //     children: [
+                    //       Container(
+                    //         alignment: Alignment.center,
+                    //         child: Text(
+                    //           // AppLocalizations.of(context)!
+                    //           //     .translate('qty')!
+                    //           "   Vui lòng chọn ngày",
+                    //           style: TextStyle(fontSize: responsiveFont(12)),
+                    //         ),
+                    //       ),
+                    //     ]),
+                    // Container(
+                    //     // height: 25.h,
+                    //     padding: EdgeInsets.all(10),
+                    //     child: Column(children: [
+                    //       Container(
+                    //         child: Card(
+                    //           child: ListTile(
+                    //             title: InkWell(
+                    //               child: Text(_selectedDate),
+                    //               onTap: () {
+                    //                 _selectDate(context);
+                    //               },
+                    //             ),
+                    //             subtitle: Text(""),
+                    //             trailing: IconButton(
+                    //               icon: Icon(Icons.calendar_today),
+                    //               tooltip: 'Tap to open date picker',
+                    //               onPressed: () {
+                    //                 // showDatePicker(
+                    //                 //   context: context,
+                    //                 //   initialDate: DateTime.now(),
+                    //                 //   firstDate: DateTime(2015, 8),
+                    //                 //   lastDate: DateTime(2101),
+                    //                 // );
+                    //                 _selectDate(context);
+                    //               },
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       )
+                    //     ]
+                    //         // }).toList(),
+                    //         ))
                   ],
                 ),
-                Visibility(
-                  visible: _selectedDate == "Bấm vào để chọn ngày" && !isOpen,
-                  child: Container(
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                    child: Text(
-                      "Vui lòng chọn ngày!",
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  ),
-                ),
+                // Visibility(
+                //   visible: _selectedDate == "Bấm vào để chọn ngày" && !isOpen,
+                //   child: Container(
+                //     alignment: Alignment.center,
+                //     margin: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                //     child: Text(
+                //       "Vui lòng chọn ngày!",
+                //       style: TextStyle(color: Colors.red),
+                //     ),
+                //   ),
+                // ),
                 Visibility(
                   visible: widget.type == 'add',
                   child: Align(
@@ -778,7 +707,8 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                         child: OutlinedButton(
                             style: OutlinedButton.styleFrom(
                                 side: BorderSide(
-                                  color: widget.product!.inventory == 0
+                                  color: widget.product!.inventory == 0 &&
+                                          widget.product!.isCombo != true
                                       ? Colors.grey
                                       : HexColor(
                                           "960000"), //Color of the border
@@ -793,9 +723,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                 //     ? null
                                 //     :
                                 () {
-                              if (listPrice.length == 0 ||
-                                  customers.length == 0 ||
-                                  _selectedDate == "Bấm vào để chọn ngày") {
+                              if (quantity == 0 || customers.length == 0) {
                                 this.setState(() {
                                   isOpen = false;
                                 });
@@ -817,7 +745,8 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                 Icon(
                                   Icons.add,
                                   size: responsiveFont(9),
-                                  color: widget.product!.inventory == 0
+                                  color: widget.product!.inventory == 0 &&
+                                          widget.product!.isCombo != true
                                       ? Colors.grey
                                       : HexColor("960000"),
                                 ),
@@ -828,10 +757,13 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: responsiveFont(9),
-                                      color: widget.product!.inventory != 0 &&
-                                              widget.product!.inventory! >= 1
-                                          ? HexColor("960000")
-                                          : Colors.grey),
+                                      color: widget.product!.isCombo != true
+                                          ? widget.product!.inventory != 0 &&
+                                                  widget.product!.inventory! >=
+                                                      1
+                                              ? HexColor("960000")
+                                              : Colors.grey
+                                          : HexColor("960000")),
                                 )
                               ],
                             )),
@@ -864,7 +796,8 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                 begin: Alignment.topCenter,
                                 end: Alignment.bottomCenter,
                                 colors: !(widget.product!.inventory != 0 &&
-                                        widget.product!.inventory! >= 1)
+                                        widget.product!.inventory! >= 1 &&
+                                        widget.product!.isCombo != true)
                                     ? [Colors.black12, Colors.grey]
                                     : [primaryColor, HexColor("960000")])),
                         width: double.infinity,
@@ -878,7 +811,7 @@ class _ModalSheetCartVoucherState extends State<ModalSheetCartVoucher> {
                                 isOpen = false;
                               });
                             } else {
-                              buyNow();
+                              addCart(widget.product!);
                             }
 
                             // if (check1) {

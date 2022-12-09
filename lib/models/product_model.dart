@@ -466,97 +466,223 @@ String voucherToJson(List<Voucher> data) =>
 
 class Voucher {
   Voucher({
-    this.createAt,
-    this.updateAt,
     this.id,
     this.voucherName,
-    this.inventory,
-    this.limitPerDay,
-    this.isRequireProfileInfo,
     this.startDate,
     this.endDate,
     this.serviceId,
+    this.serviceTypeId,
+    this.providerId,
     this.description,
     this.summary,
+    this.socialPost,
+    this.inventory,
+    this.soldNumber,
+    this.voucherValue,
+    this.revenue,
     this.bannerImg,
     this.content,
+    this.soldPrice,
+    this.isCombo,
     this.service,
     this.serviceType,
-    this.displayPrice,
-    this.prices,
-    this.slotNumber,
+    this.provider,
     this.tags,
+    this.reviews,
     this.status,
+    this.createAt,
+    this.updateAt,
+    this.deleteAt,
   });
 
-  String? createAt;
-  String? updateAt;
   int? id;
   String? voucherName;
-  int? inventory;
-  int? limitPerDay;
-  bool? isRequireProfileInfo;
   String? startDate;
   String? endDate;
   int? serviceId;
+  int? serviceTypeId;
+  int? providerId;
   String? description;
   String? summary;
+  String? socialPost;
+  int? inventory;
+  int? soldNumber;
+  int? voucherValue;
+  int? revenue;
   String? bannerImg;
   String? content;
+  int? soldPrice;
+  bool? isCombo;
   Service? service;
   ServiceType? serviceType;
-  String? displayPrice;
-  List<Price>? prices;
-  int? slotNumber;
+  ProviderForVoucher? provider;
   List<ServiceType>? tags;
+  List<dynamic>? reviews;
   String? status;
+  String? createAt;
+  String? updateAt;
+  dynamic deleteAt;
 
   factory Voucher.fromJson(Map<String, dynamic> json) => Voucher(
-        createAt: json["createAt"],
-        updateAt: json["updateAt"],
         id: json["id"],
         voucherName: json["voucherName"],
-        inventory: json["inventory"],
-        limitPerDay: json["limitPerDay"],
-        isRequireProfileInfo: json["isRequireProfileInfo"],
         startDate: json["startDate"],
         endDate: json["endDate"],
-        serviceId: json["serviceId"],
+        serviceId: json["serviceId"] == null ? null : json["serviceId"],
+        serviceTypeId: json["serviceTypeId"],
+        providerId: json["providerId"] == null ? null : json["providerId"],
         description: json["description"],
         summary: json["summary"],
-        bannerImg: json["bannerImg"] == null ? null : json["bannerImg"],
+        socialPost: json["socialPost"] == null ? null : json["socialPost"],
+        inventory: json["inventory"],
+        soldNumber: json["soldNumber"],
+        voucherValue: json["voucherValue"],
+        revenue: json["revenue"],
+        bannerImg: json["bannerImg"],
         content: json["content"],
-        service: Service.fromJson(json["service"]),
-        serviceType: ServiceType.fromJson(json["serviceType"]),
-        displayPrice: json["displayPrice"],
-        prices: List<Price>.from(json["prices"].map((x) => Price.fromJson(x))),
-        slotNumber: json["slotNumber"],
-        tags: List<ServiceType>.from(
-            json["tags"].map((x) => ServiceType.fromJson(x))),
+        soldPrice: json["soldPrice"],
+        isCombo: json["isCombo"],
+        service:
+            json["service"] == null ? null : Service.fromJson(json["service"]),
+        serviceType: json["serviceType"] == null
+            ? null
+            : ServiceType.fromJson(json["serviceType"]),
+        provider: json["provider"] == null
+            ? null
+            : ProviderForVoucher.fromJson(json["provider"]),
+        tags: json["tags"] != null
+            ? List<ServiceType>.from(
+                json["tags"].map((x) => ServiceType.fromJson(x)))
+            : null,
+        reviews: json["reviews"] != null
+            ? List<dynamic>.from(json["reviews"].map((x) => x))
+            : null,
+        status: json["status"],
+        createAt: json["createAt"],
+        updateAt: json["updateAt"] == null ? null : json["updateAt"],
+        deleteAt: json["deleteAt"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "voucherName": voucherName,
+        "startDate": startDate,
+        "endDate": endDate,
+        "serviceId": serviceId == null ? null : serviceId,
+        "serviceTypeId": serviceTypeId,
+        "providerId": providerId == null ? null : providerId,
+        "description": description,
+        "summary": summary,
+        "socialPost": socialPost == null ? null : socialPost,
+        "inventory": inventory,
+        "soldNumber": soldNumber,
+        "voucherValue": voucherValue,
+        "revenue": revenue,
+        "bannerImg": bannerImg,
+        "content": content,
+        "soldPrice": soldPrice,
+        "isCombo": isCombo,
+        "service": service == null ? null : service!.toJson(),
+        "serviceType": serviceType == null ? null : serviceType!.toJson(),
+        "provider": provider == null ? null : provider!.toJson(),
+        "tags": List<dynamic>.from(tags!.map((x) => x.toJson())),
+        "reviews": List<dynamic>.from(reviews!.map((x) => x)),
+        "status": status,
+        "createAt": createAt,
+        "updateAt": updateAt == null ? null : updateAt,
+        "deleteAt": deleteAt,
+      };
+}
+
+class ProviderForVoucher {
+  ProviderForVoucher({
+    this.id,
+    this.providerName,
+    this.address,
+    this.taxCode,
+    this.userInfo,
+    this.status,
+  });
+
+  int? id;
+  String? providerName;
+  dynamic address;
+  dynamic taxCode;
+  UserInfo? userInfo;
+  String? status;
+
+  factory ProviderForVoucher.fromJson(Map<String, dynamic> json) =>
+      ProviderForVoucher(
+        id: json["id"],
+        providerName: json["providerName"],
+        address: json["address"],
+        taxCode: json["taxCode"],
+        userInfo: UserInfo.fromJson(json["userInfo"]),
         status: json["status"],
       );
 
   Map<String, dynamic> toJson() => {
-        "createAt": createAt,
-        "updateAt": updateAt == null ? null : updateAt,
         "id": id,
-        "voucherName": voucherName,
-        "inventory": inventory,
-        "limitPerDay": limitPerDay,
-        "isRequireProfileInfo": isRequireProfileInfo,
-        "startDate": startDate,
-        "endDate": endDate,
-        "serviceId": serviceId,
-        "description": description,
-        "summary": summary,
-        "bannerImg": bannerImg == null ? null : bannerImg,
-        "content": content,
-        "service": service,
-        "serviceType": serviceType,
-        "displayPrice": displayPrice,
-        "prices": List<dynamic>.from(prices!.map((x) => x.toJson())),
-        "slotNumber": slotNumber,
-        "tags": List<dynamic>.from(tags!.map((x) => x.toJson())),
+        "providerName": providerName,
+        "address": address,
+        "taxCode": taxCode,
+        "userInfo": userInfo!.toJson(),
+        "status": status,
+      };
+}
+
+class UserInfo {
+  UserInfo({
+    this.id,
+    this.email,
+    this.avatarLink,
+    this.userName,
+    this.role,
+    this.phoneNumber,
+    this.providerId,
+    this.createAt,
+    this.updateAt,
+    this.deleteAt,
+    this.status,
+  });
+
+  int? id;
+  String? email;
+  String? avatarLink;
+  String? userName;
+  String? role;
+  String? phoneNumber;
+  int? providerId;
+  dynamic createAt;
+  dynamic updateAt;
+  dynamic deleteAt;
+  String? status;
+
+  factory UserInfo.fromJson(Map<String, dynamic> json) => UserInfo(
+        id: json["id"],
+        email: json["email"],
+        avatarLink: json["avatarLink"],
+        userName: json["userName"],
+        role: json["role"],
+        phoneNumber: json["phoneNumber"],
+        providerId: json["providerId"],
+        createAt: json["createAt"],
+        updateAt: json["updateAt"],
+        deleteAt: json["deleteAt"],
+        status: json["status"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "email": email,
+        "avatarLink": avatarLink,
+        "userName": userName,
+        "role": role,
+        "phoneNumber": phoneNumber,
+        "providerId": providerId,
+        "createAt": createAt,
+        "updateAt": updateAt,
+        "deleteAt": deleteAt,
         "status": status,
       };
 }
@@ -570,21 +696,29 @@ class Service {
     this.type,
     this.locationName,
     this.serviceLocationId,
+    this.commissionRate,
     this.providerName,
     this.providerId,
     this.status,
+    this.createAt,
+    this.updateAt,
+    this.deleteAt,
   });
 
   int? id;
   String? name;
   String? description;
-  String? typeId;
-  String? type;
-  String? locationName;
+  dynamic typeId;
+  dynamic type;
+  dynamic locationName;
   int? serviceLocationId;
-  String? providerName;
+  int? commissionRate;
+  dynamic providerName;
   int? providerId;
   String? status;
+  String? createAt;
+  dynamic updateAt;
+  dynamic deleteAt;
 
   factory Service.fromJson(Map<String, dynamic> json) => Service(
         id: json["id"],
@@ -594,9 +728,13 @@ class Service {
         type: json["type"],
         locationName: json["locationName"],
         serviceLocationId: json["serviceLocationId"],
+        commissionRate: json["commissionRate"],
         providerName: json["providerName"],
         providerId: json["providerId"],
         status: json["status"],
+        createAt: json["createAt"],
+        updateAt: json["updateAt"],
+        deleteAt: json["deleteAt"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -607,9 +745,13 @@ class Service {
         "type": type,
         "locationName": locationName,
         "serviceLocationId": serviceLocationId,
+        "commissionRate": commissionRate,
         "providerName": providerName,
         "providerId": providerId,
         "status": status,
+        "createAt": createAt,
+        "updateAt": updateAt,
+        "deleteAt": deleteAt,
       };
 }
 
@@ -617,19 +759,42 @@ class ServiceType {
   ServiceType({
     this.id,
     this.name,
+    this.defaultCommissionRate,
+    this.createAt,
+    this.updateAt,
+    this.deleteAt,
+    this.status,
   });
 
   int? id;
   String? name;
+  double? defaultCommissionRate;
+  String? createAt;
+  dynamic updateAt;
+  dynamic deleteAt;
+  String? status;
 
   factory ServiceType.fromJson(Map<String, dynamic> json) => ServiceType(
         id: json["id"],
         name: json["name"],
+        defaultCommissionRate: json["defaultCommissionRate"] == null
+            ? null
+            : json["defaultCommissionRate"].toDouble(),
+        createAt: json["createAt"],
+        updateAt: json["updateAt"],
+        deleteAt: json["deleteAt"],
+        status: json["status"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
+        "defaultCommissionRate":
+            defaultCommissionRate == null ? null : defaultCommissionRate,
+        "createAt": createAt,
+        "updateAt": updateAt,
+        "deleteAt": deleteAt,
+        "status": status,
       };
 }
 
@@ -642,121 +807,150 @@ String comboToJson(List<Combo> data) =>
 class Combo {
   Combo({
     this.id,
-    this.name,
+    this.voucherName,
     this.startDate,
     this.endDate,
+    this.serviceId,
+    this.serviceTypeId,
+    this.providerId,
     this.description,
     this.summary,
+    this.inventory,
     this.bannerImg,
     this.content,
-    this.isForKid,
-    this.type,
-    this.prices,
-    this.productId,
+    this.socialPost,
+    this.soldPrice,
+    this.isCombo,
+    this.tags,
+    this.reviews,
     this.vouchers,
-  });
-
-  int? id;
-  String? name;
-  DateTime? startDate;
-  DateTime? endDate;
-  String? description;
-  String? summary;
-  String? bannerImg;
-  String? content;
-  bool? isForKid;
-  String? type;
-  List<Price>? prices;
-  int? productId;
-  List<Voucher>? vouchers;
-
-  factory Combo.fromJson(Map<String, dynamic> json) => Combo(
-        id: json["id"],
-        name: json["name"],
-        startDate: DateTime.parse(json["startDate"]),
-        endDate: DateTime.parse(json["endDate"]),
-        description: json["description"],
-        summary: json["summary"],
-        bannerImg: json["bannerImg"],
-        content: json["content"],
-        isForKid: json["isForKid"],
-        type: json["type"],
-        prices: List<Price>.from(json["prices"].map((x) => Price.fromJson(x))),
-        productId: json["productId"],
-        vouchers: List<Voucher>.from(json["vouchers"].map((x) => x)),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "startDate": startDate,
-        "endDate": endDate,
-        "description": description,
-        "summary": summary,
-        "bannerImg": bannerImg,
-        "content": content,
-        "isForKid": isForKid,
-        "type": type,
-        "prices": List<dynamic>.from(prices!.map((x) => x.toJson())),
-        "productId": productId,
-        "vouchers": List<dynamic>.from(vouchers!.map((x) => x)),
-      };
-}
-
-List<ComboVoucher> comboVoucherFromJson(String str) => List<ComboVoucher>.from(
-    json.decode(str).map((x) => ComboVoucher.fromJson(x)));
-
-String comboVoucherToJson(List<ComboVoucher> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
-class ComboVoucher {
-  ComboVoucher({
-    this.id,
-    this.voucherName,
-    this.price,
-    this.inventory,
-    this.limitPerDay,
-    this.isRequireProfileInfo,
-    this.startDate,
-    this.endDate,
-    this.productId,
-    this.serviceId,
+    this.status,
+    this.createAt,
+    this.updateAt,
+    this.deleteAt,
+    this.voucherValue,
   });
 
   int? id;
   String? voucherName;
-  int? price;
-  int? inventory;
-  int? limitPerDay;
-  bool? isRequireProfileInfo;
   String? startDate;
   String? endDate;
-  int? productId;
   int? serviceId;
+  int? serviceTypeId;
+  int? providerId;
+  String? description;
+  String? summary;
+  int? inventory;
+  String? bannerImg;
+  String? content;
+  String? socialPost;
+  int? soldPrice;
+  bool? isCombo;
+  List<Tag>? tags;
+  List<dynamic>? reviews;
+  List<Voucher>? vouchers;
+  String? status;
+  String? createAt;
+  String? updateAt;
+  dynamic deleteAt;
+  int? voucherValue;
 
-  factory ComboVoucher.fromJson(Map<String, dynamic> json) => ComboVoucher(
+  factory Combo.fromJson(Map<String, dynamic> json) => Combo(
         id: json["id"],
         voucherName: json["voucherName"],
-        price: json["price"],
-        inventory: json["inventory"],
-        limitPerDay: json["limitPerDay"],
-        isRequireProfileInfo: json["isRequireProfileInfo"],
         startDate: json["startDate"],
         endDate: json["endDate"],
-        productId: json["productId"],
-        serviceId: json["serviceId"],
+        serviceId: json["serviceId"] == null ? null : json["serviceId"],
+        serviceTypeId: json["serviceTypeId"],
+        providerId: json["providerId"] == null ? null : json["providerId"],
+        description: json["description"],
+        summary: json["summary"],
+        inventory: json["inventory"],
+        bannerImg: json["bannerImg"],
+        content: json["content"],
+        socialPost: json["socialPost"] == null ? null : json["socialPost"],
+        soldPrice: json["soldPrice"],
+        isCombo: json["isCombo"],
+        tags: json["tags"] == null
+            ? null
+            : List<Tag>.from(json["tags"].map((x) => Tag.fromJson(x))),
+        reviews: List<dynamic>.from(json["reviews"].map((x) => x)),
+        vouchers: json["vouchers"] == null
+            ? null
+            : List<Voucher>.from(
+                json["vouchers"].map((x) => Voucher.fromJson(x))),
+        status: json["status"],
+        createAt: json["createAt"],
+        updateAt: json["updateAt"] == null ? null : json["updateAt"],
+        deleteAt: json["deleteAt"],
+        voucherValue:
+            json["voucherValue"] == null ? null : json["voucherValue"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "voucherName": voucherName,
-        "price": price,
-        "inventory": inventory,
-        "limitPerDay": limitPerDay,
-        "isRequireProfileInfo": isRequireProfileInfo,
         "startDate": startDate,
         "endDate": endDate,
-        "productId": productId,
-        "serviceId": serviceId,
+        "serviceId": serviceId == null ? null : serviceId,
+        "serviceTypeId": serviceTypeId,
+        "providerId": providerId == null ? null : providerId,
+        "description": description,
+        "summary": summary,
+        "inventory": inventory,
+        "bannerImg": bannerImg,
+        "content": content,
+        "socialPost": socialPost == null ? null : socialPost,
+        "soldPrice": soldPrice,
+        "isCombo": isCombo,
+        "tags": tags == null
+            ? null
+            : List<dynamic>.from(tags!.map((x) => x.toJson())),
+        "reviews":
+            reviews == null ? null : List<dynamic>.from(reviews!.map((x) => x)),
+        "vouchers": vouchers == null
+            ? null
+            : List<dynamic>.from(vouchers!.map((x) => x.toJson())),
+        "status": status,
+        "createAt": createAt,
+        "updateAt": updateAt == null ? null : updateAt,
+        "deleteAt": deleteAt,
+        "voucherValue": voucherValue == null ? null : voucherValue,
+      };
+}
+
+class Tag {
+  Tag({
+    this.id,
+    this.name,
+    this.createAt,
+    this.updateAt,
+    this.deleteAt,
+    this.status,
+  });
+
+  int? id;
+  String? name;
+  String? createAt;
+  dynamic updateAt;
+  dynamic deleteAt;
+  String? status;
+
+  factory Tag.fromJson(Map<String, dynamic> json) => Tag(
+        id: json["id"],
+        name: json["name"],
+        createAt: json["createAt"],
+        updateAt: json["updateAt"],
+        deleteAt: json["deleteAt"],
+        status: json["status"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "createAt": createAt,
+        "updateAt": updateAt,
+        "deleteAt": deleteAt,
+        "status": status,
       };
 }

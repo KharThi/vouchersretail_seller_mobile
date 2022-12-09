@@ -32,7 +32,7 @@ class ProductProvider with ChangeNotifier {
 
   String? message;
 
-  List<ProductModel> listFeaturedProduct = [];
+  List<Voucher> listFeaturedProduct = [];
   List<ProductModel> listMoreFeaturedProduct = [];
 
   List<ProductModel> listNewProduct = [];
@@ -61,8 +61,9 @@ class ProductProvider with ChangeNotifier {
   ProductModel? productDetail;
 
   Voucher? voucherDetail;
-
   Combo? comboDetail;
+
+  // Combo? comboDetail;
 
   ProductProvider() {
     fetchFeaturedProducts();
@@ -74,7 +75,7 @@ class ProductProvider with ChangeNotifier {
   Future<bool> fetchFeaturedProducts({int page = 1}) async {
     loadingFeatured = true;
 
-    await VoucherAPI().fetchVoucher("", "3").then((data) {
+    await VoucherAPI().fetchVoucher("", "3", "").then((data) {
       listFeaturedProduct = data;
       loadingFeatured = false;
       notifyListeners();
@@ -315,10 +316,10 @@ class ProductProvider with ChangeNotifier {
     loadingDetail = true;
     await ProductAPI().fetchDetailProductCombo(productId).then((data) {
       // if (data.statusCode == 200) {
-      print("Responsedata:" + data.toString());
+      print(data);
       // final responseJson = json.decode(data);
 
-      comboDetail = Combo.fromJson(data[0]);
+      comboDetail = Combo.fromJson(data);
 
       loadingDetail = false;
       notifyListeners();
@@ -330,6 +331,26 @@ class ProductProvider with ChangeNotifier {
     });
     return comboDetail;
   }
+
+  // Future<Combo?> fetchProductDetailCombo(String? productId) async {
+  //   loadingDetail = true;
+  //   await ProductAPI().fetchDetailProductCombo(productId).then((data) {
+  //     // if (data.statusCode == 200) {
+  //     print("Responsedata:" + data.toString());
+  //     // final responseJson = json.decode(data);
+
+  //     comboDetail = Combo.fromJson(data[0]);
+
+  //     loadingDetail = false;
+  //     notifyListeners();
+  //     // } else {
+  //     //   print("Load Failed");
+  //     //   loadingDetail = false;
+  //     //   notifyListeners();
+  //     // }
+  //   });
+  //   return comboDetail;
+  // }
 
   Future<ProductModel?> fetchProductDetailSlug(String? slug) async {
     loadingDetail = true;
