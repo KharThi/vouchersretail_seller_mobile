@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:intl/intl.dart';
 import 'package:nyoba/models/order.dart';
 import 'package:nyoba/pages/order/order_detail_screen.dart';
 import 'package:nyoba/provider/home_provider.dart';
@@ -28,6 +29,7 @@ class _MyOrderState extends State<MyOrder> {
       RefreshController(initialRefresh: false);
   List<Order> orders = List.empty(growable: true);
   bool isLoading = true;
+  final DateFormat serverFormater = DateFormat('dd-MM-yyyy');
 
   final ScrollController _scrollController = ScrollController();
 
@@ -63,7 +65,7 @@ class _MyOrderState extends State<MyOrder> {
           .read<OrderProvider>()
           .fetchOrdersV2(context, currentStatus)
           .then((value) => this.setState(() {
-                orders = value;
+                orders = value.reversed.toList();
                 isLoading = false;
                 // for (var element in orders) {
                 //   print(element.id);

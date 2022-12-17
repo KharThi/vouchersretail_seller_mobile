@@ -327,7 +327,8 @@ class _BrandProductsVoucherState extends State<BrandProductsVoucher>
       // int? stock,
       String? image,
       Voucher productDetail) {
-    bool isOutOfStock = productDetail.inventory == 0;
+    bool isOutOfStock =
+        productDetail.inventory == 0 && productDetail.isCombo != true;
     return Container(
       decoration: BoxDecoration(
           color: Colors.white, borderRadius: BorderRadius.circular(5)),
@@ -471,7 +472,22 @@ class _BrandProductsVoucherState extends State<BrandProductsVoucher>
                         shape: new RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(5))),
                     onPressed: () {
-                      if (!isOutOfStock && productDetail.inventory! >= 1) {
+                      if (productDetail.isCombo != true) {
+                        if (Session.data.getBool('isLogin')!) {
+                          showMaterialModalBottomSheet(
+                            context: context,
+                            builder: (context) => ModalSheetCartVoucher(
+                              product: productDetail,
+                              type: 'add',
+                              // loadCount: loadCartCount,
+                            ),
+                          );
+                        } else {
+                          snackBar(context,
+                              message:
+                                  "Bạn cần đăng nhập để thực hiện chức năng này!");
+                        }
+                      } else if (productDetail.inventory! >= 1) {
                         if (Session.data.getBool('isLogin')!) {
                           showMaterialModalBottomSheet(
                             context: context,

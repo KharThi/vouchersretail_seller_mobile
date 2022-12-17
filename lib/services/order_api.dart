@@ -238,7 +238,7 @@ class OrderAPI {
         });
     // Map<String, dynamic> dataResponse = await json.decode(response.body);
     bool check = response.statusCode == 200;
-    // print("sendIdToCustomer in orderApi" + dataResponse.toString());
+    print("sendIdToCustomer in orderApi" + response.body);
     return check;
   }
 
@@ -356,7 +356,7 @@ class OrderAPI {
         orderId.toString());
     // ignore: unused_local_variable
     // List<dynamic> dataResponse = await json.decode(response.body);
-    print(response.body);
+    print("Fetch ? ID");
     Map<String, dynamic> dataResponse = await json.decode(response.body);
     return dataResponse["data"];
     // Order order = Order.fromJson(dataResponse["data"]);
@@ -379,6 +379,7 @@ class OrderAPI {
         orderId.toString());
     // ignore: unused_local_variable
     // List<dynamic> dataResponse = await json.decode(response.body);
+    print("fetch /id");
     print(response.body);
     Map<String, dynamic> dataResponse = await json.decode(response.body);
     return dataResponse;

@@ -197,7 +197,7 @@ class OrderProvider with ChangeNotifier {
     var result;
     await OrderAPI().detailOrder(orderId).then((data) {
       // Order order = Order.fromJson(data);
-      print(data.toString());
+      // print(data.toString());
       detailOrder = Order.fromJson(data[0]);
       result = detailOrder;
       printLog(result.toString());
@@ -214,10 +214,10 @@ class OrderProvider with ChangeNotifier {
     var result;
     await OrderAPI().detailOrder2(orderId).then((data) {
       // Order order = Order.fromJson(data);
-      print("Hello" + data.toString());
+      // print("Hello" + data.toString());
       detailOrder2 = DetailOrder.fromJson(data);
       result = detailOrder2;
-      printLog(result.toString());
+      // printLog(result.toString());
 
       isLoading = false;
       notifyListeners();

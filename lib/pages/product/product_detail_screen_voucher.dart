@@ -117,12 +117,25 @@ class _ProductDetailStateVoucher extends State<ProductDetailVoucher>
 
   Future<void> share() async {
     RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
-
+    SharedPreferences data = await SharedPreferences.getInstance();
+    String sellerId = data.getInt("id").toString();
+    String link = "";
+    if (widget.isCombo == "false") {
+      link = "https://phuquoc-voucher.vercel.app/voucher-detail/" +
+          productModel!.id.toString() +
+          "?sellerId=" +
+          sellerId;
+    } else {
+      link = "https://phuquoc-voucher.vercel.app/combo-detail/" +
+          productModel!.id.toString() +
+          "?sellerId=" +
+          sellerId;
+    }
     // htmlText.replaceAll(exp, '');
     await FlutterShare.share(
         title: productModel!.voucherName!,
         text: productModel!.content!.replaceAll(exp, ''),
-        linkUrl: productModel!.socialPost.toString(),
+        linkUrl: link,
         chooserTitle: '');
   }
 

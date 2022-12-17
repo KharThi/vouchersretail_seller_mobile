@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final seller = sellerFromJson(jsonString);
-
 import 'dart:convert';
 
 Seller sellerFromJson(String str) => Seller.fromJson(json.decode(str));
@@ -16,8 +12,11 @@ class Seller {
     this.userInfoId,
     this.userInfo,
     this.commissionRate,
-    this.profit,
     this.orders,
+    this.kpi,
+    this.rank,
+    this.nextRank,
+    this.exp,
     this.updateAt,
     this.deleteAt,
     this.status,
@@ -29,9 +28,12 @@ class Seller {
   int? userInfoId;
   UserInfo? userInfo;
   double? commissionRate;
-  int? profit;
   dynamic orders;
-  dynamic updateAt;
+  dynamic kpi;
+  Rank? rank;
+  Rank? nextRank;
+  int? exp;
+  String? updateAt;
   dynamic deleteAt;
   String? status;
 
@@ -42,8 +44,11 @@ class Seller {
         userInfoId: json["userInfoId"],
         userInfo: UserInfo.fromJson(json["userInfo"]),
         commissionRate: json["commissionRate"].toDouble(),
-        profit: json["profit"],
         orders: json["orders"],
+        kpi: json["kpi"],
+        rank: Rank.fromJson(json["rank"]),
+        nextRank: Rank.fromJson(json["nextRank"]),
+        exp: json["exp"],
         updateAt: json["updateAt"],
         deleteAt: json["deleteAt"],
         status: json["status"],
@@ -56,11 +61,49 @@ class Seller {
         "userInfoId": userInfoId,
         "userInfo": userInfo!.toJson(),
         "commissionRate": commissionRate,
-        "profit": profit,
         "orders": orders,
+        "kpi": kpi,
+        "rank": rank!.toJson(),
+        "exp": exp,
         "updateAt": updateAt,
         "deleteAt": deleteAt,
         "status": status,
+      };
+}
+
+class Rank {
+  Rank({
+    this.id,
+    this.logo,
+    this.rank,
+    this.commissionRatePercent,
+    this.epxRequired,
+    this.numberOfSeller,
+  });
+
+  int? id;
+  String? logo;
+  String? rank;
+  double? commissionRatePercent;
+  int? epxRequired;
+  int? numberOfSeller;
+
+  factory Rank.fromJson(Map<String, dynamic> json) => Rank(
+        id: json["id"],
+        logo: json["logo"],
+        rank: json["rank"],
+        commissionRatePercent: json["commissionRatePercent"].toDouble(),
+        epxRequired: json["epxRequired"],
+        numberOfSeller: json["numberOfSeller"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "logo": logo,
+        "rank": rank,
+        "commissionRatePercent": commissionRatePercent,
+        "epxRequired": epxRequired,
+        "numberOfSeller": numberOfSeller,
       };
 }
 
