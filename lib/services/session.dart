@@ -179,13 +179,9 @@ class Session {
     data.setString("deleteAt", seller.userInfo!.deleteAt ?? '');
     data.setString("status", seller.userInfo!.status!);
     data.setString("commissionRate", seller.commissionRate.toString());
-    data.setString("profit", seller.profit.toString());
+    data.setString("rank", jsonEncode(seller.rank));
     data.setString("orders", seller.orders.toString());
-    // data.setString("busyLevel", seller.busyLevel!);
-
-    // data.setString("email", user.email!);
-    // data.setString("cookie", cookie);
-    // data.setString("role", user.role!);
+    data.setInt("exp", seller.exp!);
   }
 
   void removeUser() async {
@@ -204,8 +200,9 @@ class Session {
     data.remove("deleteAt");
     data.remove("status");
     data.remove("commissionRate");
-    data.remove("profit");
+    data.remove("rank");
     data.remove("orders");
+    data.remove("exp");
     // data.remove("busyLevel");
 
     data.remove("id");

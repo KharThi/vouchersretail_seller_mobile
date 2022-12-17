@@ -44,6 +44,32 @@ class UserProvider with ChangeNotifier {
     return result;
   }
 
+  Future<Seller?> fetchUserDetail2() async {
+    loading = true;
+    var result;
+    Seller? userModel;
+    await UserAPI().fetchDetail().then((data) {
+      result = data;
+      print(result);
+      // printLog(result.toString());
+
+      userModel = Seller.fromJson(result);
+      // if (result['poin'] != null) {
+      //   point = PointModel.fromJson(result['poin']);
+      // }
+      Session().saveUser(userModel!);
+
+      this.setUser(userModel!);
+
+      print(point.toString());
+      loading = false;
+      notifyListeners();
+    });
+    loading = false;
+    notifyListeners();
+    return userModel;
+  }
+
   Future<Map<String, dynamic>?> updateUser(
       {String? firstName,
       String? lastName,

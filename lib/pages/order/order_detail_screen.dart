@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:nyoba/models/order.dart';
 import 'package:nyoba/models/product_model.dart';
 import 'package:nyoba/provider/home_provider.dart';
@@ -41,13 +42,13 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
   Order? orderDetail;
   DetailOrder? detailOrder;
   bool isLoading = true;
+  final DateFormat serverFormater = DateFormat('dd-MM-yyyy');
 
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
     super.initState();
     loadOrder();
-    loadOrder2();
   }
 
   @override
@@ -61,7 +62,7 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
   loadOrder() async {
     await Provider.of<OrderProvider>(context, listen: false)
         .fetchDetailOrder(widget.orderId)
-        .then((value) => {orderDetail = value});
+        .then((value) => {orderDetail = value, loadOrder2()});
   }
 
   loadOrder2() async {
@@ -307,9 +308,10 @@ class _OrderDetailState extends State<OrderDetail> with WidgetsBindingObserver {
                                     Text(
                                       orderDetail!.paymentDetail!.paymentDate !=
                                               null
-                                          ? orderDetail!
-                                              .paymentDetail!.paymentDate
-                                              .toString()
+                                          ? serverFormater.format(
+                                              DateTime.parse(orderDetail!
+                                                  .paymentDetail!.paymentDate
+                                                  .toString()))
                                           : "Chưa được thanh toán",
                                       style: TextStyle(
                                           fontSize: responsiveFont(12),
